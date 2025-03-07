@@ -239,7 +239,11 @@ To use the full schema in the prompt (may improve results at the cost of more to
 ```bash
 python main.py infer --model_dir ./models --input_file auth_data.txt --full_schema
 ```
+Example:
 
+```bash
+python main.py infer --model_dir ./models --input_file auth_data\malicious\auth_data_29627150_150885.txt
+```
 ## Memory Optimization Techniques
 
 This implementation uses several techniques to run on hardware with limited memory:
