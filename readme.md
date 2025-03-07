@@ -12,45 +12,48 @@ flowchart TD
     config --> tokenizer[Initialize Tokenizer]
     tokenizer --> data_proc[Initialize Data Processor]
     
-    subgraph SFT["Supervised Fine-Tuning (SFT)"]
-        sft_data[Prepare SFT Dataset with auth logs\nand expert annotations] --> sft_model[Load Base Model]
+    subgraph SFT["Supervised Fine-Tuning SFT"]
+        sft_data[Prepare SFT Dataset] --> sft_model[Load Base Model]
         sft_model --> add_lora1[Add LoRA Adapter]
-        add_lora1 --> sft_train[Train with Custom Loop\n- Loss: Causal LM Loss\n- Optimizer: Adafactor\n- LR: config['learning_rate']]
+        add_lora1 --> sft_train[Train with Custom Loop]
+        sft_train -->|"Loss Tracking"| sft_log["Log: avg_epoch_loss"]
         sft_train --> sft_save[Save SFT Model]
-        
-        sft_train -->|"Epoch loss tracking"| sft_log["Log: avg_epoch_loss = epoch_loss / steps\n(SFT Trainer)"]
     end
     
     subgraph RM["Reward Model Training"]
-        pref_data[Prepare Preference Dataset\nwith chosen/rejected pairs] --> mem_check{Check Memory\nAvailability}
-        mem_check -->|"≥ 7GB"| rm_model[Load Base Classification Model]
-        mem_check -->|"< 7GB"| alt_rm[Create Alternative Reward Model\n(metadata-based heuristic)]
+        pref_data[Prepare Preference Dataset] --> mem_check{Memory Check}
+        mem_check -->|"Sufficient"| rm_model[Load Base Model]
+        mem_check -->|"Limited"| alt_rm[Create Alternative Model]
         
-        rm_model --> add_lora2[Add LoRA Adapter\nfor Sequence Classification]
-        add_lora2 --> rm_train[Train with Bradley-Terry Loss\n- Loss: -log(sigmoid(chosen - rejected))\n- Optimizer: AdamW\n- LR: config['learning_rate']]
+        rm_model --> add_lora2[Add LoRA Adapter]
+        add_lora2 --> rm_train[Train with Bradley-Terry]
+        rm_train -->|"Loss Tracking"| rm_log["Log: avg_loss"]
         rm_train --> rm_save[Save Reward Model]
         
         alt_rm --> rm_save
-        
-        rm_train -->|"Epoch loss tracking"| rm_log["Log: avg_loss = epoch_loss / num_batches\n(Reward Model Trainer)"]
     end
     
-    subgraph RL["Reinforcement Learning (Simplified PPO)"]
-        rl_data[Load High-Quality\nExamples] --> load_sft[Load SFT Model]
-        load_sft --> add_lora3[Load/Add LoRA Adapter]
-        add_lora3 --> direct_ft[Simplified PPO\n- Loss: Causal LM Loss\n- Optimizer: Adafactor\n- LR: config['learning_rate'] / 2]
+    subgraph RL["Reinforcement Learning"]
+        rl_data[Load High-Quality Examples] --> load_sft[Load SFT Model]
+        load_sft --> add_lora3[Add LoRA Adapter]
+        add_lora3 --> direct_ft[Simplified PPO]
+        direct_ft -->|"Loss Tracking"| rl_log["Log: avg_loss"]
         direct_ft --> rl_save[Save RL Model]
-        
-        direct_ft -->|"Step loss tracking"| rl_log["Log: avg_loss = total_loss / step\n(RL Trainer)"]
     end
     
     data_proc --> SFT
     SFT --> RM
     RM --> RL
     
-    RL --> model_ready([Trained Model Ready for Inference])
+    RL --> model_ready([Trained Model Ready])
     
-    model_ready --> inference[Run Inference\nGenerate Authentication Analysis]
+    model_ready --> inference[Run Inference]
+    
+    classDef memory fill:#f9f,stroke:#333,stroke-width:1px;
+    class mem_check memory;
+    
+    classDef losses fill:#bbf,stroke:#333,stroke-width:1px;
+    class sft_log,rm_log,rl_log losses;
 ```
 
 ### Training Steps
