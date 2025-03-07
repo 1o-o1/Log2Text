@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most source computers are initiating authentication events using machine accounts, which is typical in a domain environment. However, the presence of NTLM authentication (C365) in a predominantly Kerberos environment could be an anomaly worth noting.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C247",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are aggregated under a single timestamp <273>, indicating a lack of temporal granularity in the data.",
+      "bursts": "No specific bursts can be identified due to the single timestamp used for all events.",
+      "off_hours_activity": "Cannot determine due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated LogOn and LogOff actions are seen, but they are consistent with typical domain operations.",
+      "lateral_movement": "The presence of TGS and TGT requests, especially involving C2134, C247, and C3750, could suggest lateral movement, but this is common in domain environments.",
+      "privilege_escalation": "No direct evidence of privilege escalation based on the available data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The use of NTLM by C365 in a Kerberos environment is unusual and could indicate a fallback or misconfiguration.",
+      "affected_entities": [
+        "C365"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are behaving typically, but the rapid succession of multiple accounts logging off from a single source (e.g., C612, C528) could be worth monitoring.",
+      "affected_accounts": [
+        "C2203$@DOM1",
+        "C348$@DOM1",
+        "C466$@DOM1",
+        "C3219$@DOM1",
+        "C3587$@DOM1",
+        "C3701$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events are present for multiple accounts from single sources, which is expected in a domain environment.",
+      "affected_entities": [
+        "C612",
+        "C528"
+      ]
+    },
+    "anomalies": {
+      "description": "The overall pattern of authentication events appears typical for a domain environment with machine accounts.",
+      "deviation_details": "The primary deviation is the use of NTLM by C365, which should be further investigated."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs with precise timestamps to determine if there are any unusual sequences or patterns over time.",
+    "behavioral_context": "Compare the observed NTLM usage by C365 with historical data to determine if this is a new behavior.",
+    "permission_analysis": "Verify if the accounts involved in NTLM authentication have legitimate reasons to use this protocol.",
+    "ioc_checks": "Check for known NTLM fallback scenarios or misconfigurations that could lead to this authentication type being used."
+  },
+  "conclusion": {
+    "summary": "The authentication events largely reflect typical domain operations with machine accounts. However, the use of NTLM by C365 in a Kerberos environment is unusual and warrants further investigation.",
+    "recommended_actions": "Investigate the NTLM authentication by C365 to ensure it is not indicative of a fallback or misconfiguration. Monitor the accounts involved in rapid LogOff sequences to ensure they are behaving as expected."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

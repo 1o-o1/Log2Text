@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, notably C2381, C26, C3632, C4589, and C1862. The presence of machine accounts (e.g., C2380$, C26$, C3632$) initiating events is observed, which may be typical in a domain environment but should be monitored for unusual patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a single time period, suggesting batch processing or automated scripts.",
+      "bursts": "No significant bursts in authentication volume detected beyond the clustered timing.",
+      "off_hours_activity": "All events appear to be clustered within a single time period, potentially indicating off-hours activity but requires time context for confirmation."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are noted from C3632 to multiple destinations, suggesting potential lateral movement.",
+      "lateral_movement": "Sequential logons from C3632 to C467, C529, and C612 suggest lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation detected from the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unspecified types and NTLM in a Kerberos-preferred environment.",
+      "affected_entities": [
+        "C2381",
+        "C26",
+        "C4589",
+        "C5919"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts authenticating to multiple destinations and rapid successive logons.",
+      "affected_accounts": [
+        "C2380$@DOM1",
+        "C26$@DOM1",
+        "C3632$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some logon events lack corresponding logoff events, and there are multiple TGS requests without clear context.",
+      "affected_entities": [
+        "C3632",
+        "C1848"
+      ]
+    },
+    "anomalies": {
+      "description": "Anomalies include unspecified authentication types and rapid successive logons from single sources.",
+      "deviation_details": "The presence of unspecified authentication types and multiple logons from C3632 to different destinations without corresponding logoffs."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the timing of C3632's logons to determine if they align with known attack patterns or legitimate batch processes.",
+    "behavioral_context": "Compare C3632's activity with historical data to determine if this pattern is typical for this account or system.",
+    "permission_analysis": "Verify if C3632$@DOM1 and other machine accounts have legitimate reasons to access the targeted systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of NTLM and multiple TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication events show potential indicators of lateral movement and suspicious authentication types, particularly involving machine accounts and NTLM usage in a Kerberos environment. These patterns may suggest malicious activity or misconfigurations.",
+    "recommended_actions": "Investigate the source and intent of C3632's logons to multiple destinations, validate the necessity of NTLM in the environment, and ensure machine accounts are not being misused for lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

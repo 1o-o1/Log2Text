@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C528, C529, C12611, and C1909 are initiating authentication events with ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C743"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around the same timestamp <1078070>, indicating a possible scripted or automated process.",
+      "bursts": "No specific bursts detected, but consistent activity across multiple systems.",
+      "off_hours_activity": "Activity is consistent without specific timestamps, making it difficult to determine if it's outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions from the same source computers, such as C528 and C529, with ANONYMOUS LOGON.",
+      "lateral_movement": "Potential lateral movement indicated by multiple TGS requests from C19787 to different destination computers.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but the presence of ANONYMOUS LOGON could indicate an attempt to hide identity."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, which is often used in unauthorized access attempts.",
+      "affected_entities": [
+        "C528",
+        "C529",
+        "C12611",
+        "C1909"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts using ANONYMOUS LOGON and rapid authentication requests from single sources.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C528",
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C12611",
+        "ANONYMOUS LOGON@C1909"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events with ANONYMOUS LOGON without clear corresponding LogOff events, indicating potential session hijacking.",
+      "affected_entities": [
+        "C528",
+        "C529",
+        "C12611",
+        "C1909"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON and unknown authentication types indicate potential unauthorized access attempts.",
+      "deviation_details": "Multiple unknown authentication types and ANONYMOUS LOGON events deviate from normal authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events around <1078070> for potential attack chains.",
+    "behavioral_context": "Compare these patterns against normal baseline activities to identify deviations.",
+    "permission_analysis": "Verify if the accounts using ANONYMOUS LOGON should have access to the systems they are authenticating against.",
+    "ioc_checks": "Investigate for potential Pass-the-Hash or other credential theft techniques given the presence of NTLM and ANONYMOUS LOGON."
+  },
+  "conclusion": {
+    "summary": "The authentication log reveals suspicious patterns, particularly the use of ANONYMOUS LOGON and unknown authentication types, suggesting potential unauthorized access or lateral movement.",
+    "recommended_actions": "Conduct a detailed investigation into the systems and accounts involved in ANONYMOUS LOGON events, and consider implementing stricter authentication policies to prevent unauthorized access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

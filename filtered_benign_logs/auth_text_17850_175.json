@@ -1,0 +1,102 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The primary source computer initiating authentication events is C1677, which is responsible for a significant number of authentication requests to various destination computers including C467, C528, C529, and C586. This pattern is consistent with a service account or a system performing routine operations.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C528",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are clustered around a single timestamp <175>, suggesting batch processing or scheduled tasks.",
+      "bursts": "No sudden spikes in authentication volume are observed beyond the clustered timestamp.",
+      "off_hours_activity": "All events are recorded at the same timestamp, making it difficult to determine if they occurred outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are observed from C1677 to multiple destination computers, indicating routine operations.",
+      "lateral_movement": "No clear indication of lateral movement as the authentication events are primarily service account logons.",
+      "privilege_escalation": "No patterns indicating privilege escalation are detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types (indicated by '?') is noted, which could be benign or indicative of misconfigured logging.",
+      "affected_entities": [
+        "C1677",
+        "C528",
+        "C529",
+        "C586",
+        "C1828",
+        "C25240",
+        "C27137",
+        "C2320",
+        "C2442",
+        "C2446",
+        "C457",
+        "C2547",
+        "C612",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., C1677$@DOM1) are authenticating frequently, which is typical for service accounts.",
+      "affected_accounts": [
+        "C1677$@DOM1",
+        "C1827$@DOM1",
+        "C2319$@DOM1",
+        "C2445$@DOM1",
+        "C3265$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are generally followed by LogOff events, maintaining expected sequences.",
+      "affected_entities": [
+        "C1677",
+        "C529",
+        "C586",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of a failed TGT request from C25240 with an unknown domain is noted as an anomaly.",
+      "deviation_details": "C25240 shows a failed TGT request with an unknown domain, which deviates from the pattern of successful authentications."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analysis of the timing and sequence of events should be conducted to ensure that the clustered timestamp does not mask potential anomalies.",
+    "behavioral_context": "Compare the observed patterns with baseline behavior for these systems to confirm if the activities are expected.",
+    "permission_analysis": "Verify that the accounts involved, particularly C1677$@DOM1, have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in relation to the failed TGT request from C25240."
+  },
+  "conclusion": {
+    "summary": "The authentication events primarily reflect routine operations by service accounts, with no immediate indicators of compromise. However, the presence of unknown authentication types and a failed TGT request from C25240 warrant further investigation.",
+    "recommended_actions": "Investigate the failed TGT request from C25240 and verify the configuration of logging to ensure all authentication types are correctly captured. Review access permissions for service accounts to ensure they align with expected operations."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

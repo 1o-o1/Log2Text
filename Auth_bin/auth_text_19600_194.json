@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C1795, C625, C528, C311, and others are initiating authentication events. Notably, C625 and C528 are using unknown authentication types, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C311"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated under a single timestamp <194>, indicating a potential batch or automated process.",
+      "bursts": "No specific bursts detected beyond the clustered timestamp.",
+      "off_hours_activity": "Cannot be determined from the provided data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C311 shows repetitive TGS requests and LogOn events to multiple destinations, suggesting potential credential harvesting or lateral movement.",
+      "lateral_movement": "C311's sequential authentications to C1065, C586, and C625 suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the pattern of TGS requests could indicate preparation for such an attempt."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unknown authentication types are being used by C625 and C528, which could indicate attempts to bypass standard authentication protocols.",
+      "affected_entities": [
+        "C625",
+        "C528"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating from a single source (e.g., C625), which is unusual and could indicate automated scripts or compromised systems.",
+      "affected_accounts": [
+        "C181$@DOM1",
+        "C1857$@DOM1",
+        "C1890$@DOM1",
+        "C2075$@DOM1",
+        "C2399$@DOM1",
+        "C2985$@DOM1",
+        "C3144$@DOM1",
+        "C480$@DOM1",
+        "C523$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "C311 shows multiple TGS requests without corresponding logoffs, indicating potential ticket harvesting.",
+      "affected_entities": [
+        "C311"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and repetitive TGS requests are significant anomalies.",
+      "deviation_details": "The use of unknown authentication types and the pattern of TGS requests by C311 deviate from normal behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events for C311 and C625 to identify any potential attack chains or automated scripts.",
+    "behavioral_context": "Compare the observed patterns of C311 and C625 with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts used by C311 and C625 should have access to the targeted systems, especially C1065 and C586.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in relation to C311's activity."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals suspicious authentication patterns involving unknown authentication types and repetitive TGS requests, particularly by C311, suggesting potential lateral movement and credential harvesting.",
+    "recommended_actions": "Investigate the source of unknown authentication types from C625 and C528. Monitor C311 for potential lateral movement and credential harvesting. Implement stricter authentication monitoring and consider isolating affected systems for further analysis."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

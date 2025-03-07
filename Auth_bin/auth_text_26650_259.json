@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C2203, C2323, and C2442 are initiating multiple authentication events, including some using NTLM in a Kerberos-preferred environment.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C529",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are aggregated under a single timestamp placeholder <259>, indicating a lack of specific temporal distribution data.",
+      "bursts": "No specific burst patterns can be identified due to the placeholder timestamp.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are noted, especially with machine accounts like C2203$@DOM1 and C2322$@DOM1.",
+      "lateral_movement": "Potential lateral movement is suggested by multiple logon events from C1619 to different destinations using both NTLM and Kerberos.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed, but the use of NTLM could indicate potential for credential theft."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "NTLM authentication is detected in a Kerberos environment, and unknown authentication types are present.",
+      "affected_entities": [
+        "C2203",
+        "C1619"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to multiple destinations, and some accounts are using NTLM unexpectedly.",
+      "affected_accounts": [
+        "C2203$@DOM1",
+        "C599$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events are often followed by immediate logoff, particularly with machine accounts, which could indicate automated processes or scripted actions.",
+      "affected_entities": [
+        "C2203",
+        "C2323",
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "The environment shows a mix of Kerberos and NTLM authentications, with some accounts accessing multiple systems rapidly.",
+      "deviation_details": "Accounts like C599$@DOM1 are using NTLM to access multiple destinations, which is unusual in a Kerberos-preferred environment."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analysis is needed with actual timestamps to determine if events are occurring in rapid succession, indicating potential attack chains.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication logs to identify deviations that may indicate malicious activity.",
+    "permission_analysis": "Verify if accounts such as C599$@DOM1 and C2203$@DOM1 have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for techniques like Pass-the-Hash, especially with NTLM usage, and monitor for Kerberoasting attempts."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several unusual patterns, including the use of NTLM in a Kerberos environment and rapid authentication sequences by machine accounts. These could indicate potential lateral movement or automated processes.",
+    "recommended_actions": "Investigate the use of NTLM in this environment, especially by accounts like C599$@DOM1. Review access permissions and monitor for any signs of credential theft or lateral movement. Consider implementing stricter authentication policies to prevent NTLM usage."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

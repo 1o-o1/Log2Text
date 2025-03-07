@@ -1,0 +1,85 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C586 and C457 are initiating multiple authentication events. Notably, C586 is associated with ANONYMOUS LOGONs, which could be suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around timestamp <363>.",
+      "bursts": "There is a noticeable burst of activity involving C586 with multiple ANONYMOUS LOGONs.",
+      "off_hours_activity": "No specific off-hours activity is noted as timestamps are abstracted."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGONs from C586 and C457 indicate potential probing or scanning activity.",
+      "lateral_movement": "Sequential logon events from different computers to C457 suggest lateral movement patterns.",
+      "privilege_escalation": "No direct evidence of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGONs and NTLM authentications in Kerberos environments detected.",
+      "affected_entities": [
+        "C586",
+        "C1909",
+        "C988"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating in rapid succession, which is unusual.",
+      "affected_accounts": [
+        "C586",
+        "C988",
+        "C457"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are present, particularly with ANONYMOUS LOGONs.",
+      "affected_entities": [
+        "C586",
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "Several anomalies detected including ANONYMOUS LOGONs and rapid authentication sequences.",
+      "deviation_details": "ANONYMOUS LOGONs on C586 and rapid machine account authentications on C988 and C457 deviate from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events involving C586 and C457 to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved in suspicious activities have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting activities given the presence of NTLM and Kerberos authentications."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals potential security concerns with ANONYMOUS LOGONs and rapid machine account authentications, suggesting possible reconnaissance or lateral movement.",
+    "recommended_actions": "Investigate the source and purpose of ANONYMOUS LOGONs on C586, and review access permissions for machine accounts showing unusual activity. Implement monitoring for NTLM usage in Kerberos environments."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

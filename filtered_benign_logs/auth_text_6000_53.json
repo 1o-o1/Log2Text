@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events. Notably, C1618 and C2215 are accessing multiple destinations, which could suggest lateral movement or a service account behavior.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C625",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The data indicates a cluster of authentication events occurring at the same timestamp <53>, suggesting a batch process or automated task.",
+      "bursts": "No specific bursts are identified beyond the clustered timing.",
+      "off_hours_activity": "The data does not specify exact timestamps beyond <53>, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed, particularly with machine accounts like C1617$ and C2214$.",
+      "lateral_movement": "Potential lateral movement is suggested by C1618 and C2215 accessing multiple systems.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed, but the presence of NTLM in a Kerberos environment could be indicative of an attempt."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "NTLM usage is detected in a predominantly Kerberos environment, which is unusual and potentially risky.",
+      "affected_entities": [
+        "C1866",
+        "C623"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to multiple systems, which could indicate automated tasks or potential misuse.",
+      "affected_accounts": [
+        "C1617$",
+        "C2214$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are frequently followed by LogOff events without significant delay, which is typical for automated processes.",
+      "affected_entities": [
+        "C528",
+        "C625",
+        "C529",
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and NTLM in a Kerberos environment are notable anomalies.",
+      "deviation_details": "Unknown authentication types are seen in several logoff events, and NTLM is used by C1866 and C623."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the exact timestamps of events to identify any sequential patterns that could indicate an attack chain.",
+    "behavioral_context": "Compare these patterns against baseline behaviors for these accounts and systems to identify deviations.",
+    "permission_analysis": "Verify whether the accounts, especially machine accounts, have legitimate reasons to access the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM presence."
+  },
+  "conclusion": {
+    "summary": "The authentication events show potential indicators of lateral movement and misuse of authentication protocols, particularly NTLM in a Kerberos environment. Machine accounts accessing multiple systems could indicate automated tasks or potential misuse.",
+    "recommended_actions": "Investigate the use of NTLM in the environment, review permissions for machine accounts, and monitor for any further lateral movement patterns. Consider implementing stricter authentication controls and monitoring for NTLM usage."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

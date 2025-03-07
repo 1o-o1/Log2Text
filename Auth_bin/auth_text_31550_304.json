@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers include C1062, C2106, C368, C2303, C612, C452, C477, C506, C528, C586, C2769, C1697, C7, C419, C1581, C1644, C1755, C2193, C61, C1710, C683, C1681, C621, C101, C1025, C1065, C1115, C1137. Notably, C1062 and C452 are initiating multiple authentications to different destinations.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C586",
+        "C988",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C2106",
+        "C586",
+        "C988",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at time <304> with a few at <305>.",
+      "bursts": "No significant spikes in authentication volume are observed.",
+      "off_hours_activity": "No data provided to determine business hours, but multiple events occur at time <305>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "User U22@DOM1 shows repetitive logon and logoff actions across different systems.",
+      "lateral_movement": "User U22@DOM1's activity across C452, C477, C528, C586 suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentications are present, especially concerning in Kerberos environments.",
+      "affected_entities": [
+        "C621",
+        "C1062"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts show repeated logon and logoff sequences, especially U22@DOM1 and ANONYMOUS LOGON accounts.",
+      "affected_accounts": [
+        "U22@DOM1",
+        "ANONYMOUS LOGON"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some logon events do not have corresponding logoff events, particularly involving ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C621",
+        "C1062"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON and NTLM in a Kerberos environment is unusual.",
+      "deviation_details": "ANONYMOUS LOGON events and NTLM usage in a Kerberos-preferred environment are deviations from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events around timestamps <304> and <305> to identify any suspicious chains.",
+    "behavioral_context": "Compare the observed patterns, especially for U22@DOM1 and ANONYMOUS LOGON, against typical behavior baselines.",
+    "permission_analysis": "Verify if ANONYMOUS LOGON and U22@DOM1 have legitimate access to the systems they are interacting with.",
+    "ioc_checks": "Check for Pass-the-Hash attacks due to NTLM presence and Kerberoasting due to TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication events show potential anomalies with ANONYMOUS LOGON and NTLM usage in a Kerberos environment, suggesting a medium risk of suspicious activity.",
+    "recommended_actions": "Investigate ANONYMOUS LOGON events, review NTLM usage, and monitor U22@DOM1's activities for lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

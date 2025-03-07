@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with some using machine accounts (e.g., C1114$@DOM1) and ANONYMOUS LOGON detected from C586.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are clustered around timestamps <151> and <152>.",
+      "bursts": "No significant bursts detected, but consistent activity across multiple systems.",
+      "off_hours_activity": "Not explicitly indicated, but timestamps suggest continuous activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions observed, particularly from machine accounts.",
+      "lateral_movement": "Potential lateral movement indicated by multiple logons from machine accounts across different systems.",
+      "privilege_escalation": "No clear indication of privilege escalation, but some machine accounts are accessing multiple systems."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unknown authentication types detected.",
+      "affected_entities": [
+        "C586",
+        "C1732",
+        "C1952",
+        "C72"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts showing unusual authentication patterns, including rapid logons and logoffs.",
+      "affected_accounts": [
+        "C1114$@DOM1",
+        "C1727$@DOM1",
+        "C1827$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events and excessive LogOffs detected.",
+      "affected_entities": [
+        "C529",
+        "C625",
+        "C467"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of unknown authentication types and machine account anomalies.",
+      "deviation_details": "Machine accounts are authenticating across multiple systems without clear purpose."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze sequences around <151> and <152> to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behavior for these systems.",
+    "permission_analysis": "Verify if machine accounts like C1114$@DOM1 should have access to systems like C529 and C625.",
+    "ioc_checks": "Check for techniques like Pass-the-Hash or Kerberoasting, especially with NTLM and TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal potential anomalies, including ANONYMOUS LOGON, unknown authentication types, and unusual machine account activity, suggesting possible lateral movement or reconnaissance.",
+    "recommended_actions": "Investigate the purpose of machine account activities, especially those involving C529 and C625. Review permissions and authentication methods to ensure compliance with security policies."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

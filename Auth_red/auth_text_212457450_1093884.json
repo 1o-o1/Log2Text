@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C529, C586, and C1065 are initiating numerous authentication requests using ANONYMOUS LOGON, which is highly suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C625",
+        "C585"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Significant cluster of activity around timestamps <1093884> and <1093885>.",
+      "bursts": "Sudden spikes in authentication requests, particularly involving ANONYMOUS LOGON accounts.",
+      "off_hours_activity": "Potential off-hours activity indicated by the volume of requests around <1093885>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGON attempts across multiple systems, particularly to C586 and C529.",
+      "lateral_movement": "Sequential authentications from ANONYMOUS LOGON accounts suggest potential lateral movement.",
+      "privilege_escalation": "No direct privilege escalation detected, but ANONYMOUS LOGON usage is concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are prevalent, indicating potential malicious activity.",
+      "affected_entities": [
+        "C529",
+        "C586",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "ANONYMOUS LOGON accounts are used extensively, which is unusual and suspicious.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C1065"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Frequent LogOn events without corresponding LogOff events, particularly involving ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C529",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "High volume of ANONYMOUS LOGON and NTLM requests in a Kerberos-preferred environment.",
+      "deviation_details": "The presence of NTLM in a Kerberos environment and excessive ANONYMOUS LOGON attempts are significant deviations from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON events to identify potential attack chains.",
+    "behavioral_context": "Compare current ANONYMOUS LOGON patterns with historical baselines to assess anomalies.",
+    "permission_analysis": "Verify if ANONYMOUS LOGON accounts should have access to the targeted systems, particularly C586 and C529.",
+    "ioc_checks": "Check for Pass-the-Hash and other credential theft techniques given the NTLM and ANONYMOUS LOGON usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal significant anomalies, particularly the extensive use of ANONYMOUS LOGON and NTLM in a Kerberos environment, suggesting potential malicious activity and lateral movement.",
+    "recommended_actions": "Immediate investigation into the source of ANONYMOUS LOGON attempts is recommended. Review access permissions and consider implementing stricter authentication protocols to mitigate risks."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

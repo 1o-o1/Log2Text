@@ -1,0 +1,43 @@
+Aggregated Authentication Events:
+source_computer,destination_computer,auth_type,logon_type,times,source_users,destination_users,orientations,statuses
+C612,C612,?,Network,<271, 271, 271, 271>,C538$@DOM1,C612$@DOM1,C83$@DOM1,U635@DOM1,C538$@DOM1,C612$@DOM1,C83$@DOM1,U635@DOM1,LogOff,Success
+C553,C553,?,Network,<271>,C567$@DOM1,C567$@DOM1,LogOff,Success
+C574,C553,Kerberos,Network,<271>,C567$@DOM1,C567$@DOM1,LogOn,Success
+C574,C988,Kerberos,Network,<271>,C567$@DOM1,C567$@DOM1,LogOn,Success
+C585,C586,Kerberos,Network,<271>,C585$@DOM1,C585$@DOM1,LogOn,Success
+C586,C586,?,Network,<271, 271, 271>,C585$@DOM1,C743$@DOM1,U22@DOM1,C585$@DOM1,C743$@DOM1,U22@DOM1,LogOff,Success
+C612,C612,Kerberos,Network,<271>,C612$@DOM1,C612$@DOM1,LogOn,Success
+C743,C586,Kerberos,Network,<271>,C743$@DOM1,C743$@DOM1,LogOn,Success
+C529,C529,?,Network,<271>,C768$@DOM1,C768$@DOM1,LogOff,Success
+C981,C612,Kerberos,Network,<271>,C981$@DOM1,C981$@DOM1,LogOn,Success
+C990,C612,Kerberos,Network,<271>,C990$@DOM1,C990$@DOM1,LogOn,Success
+C62,C528,Kerberos,Network,<271>,U125@DOM1,U125@DOM1,LogOn,Success
+C1929,C1929,?,?,<271>,U1825@?,U1825@?,TGT,Fail
+C612,C612,?,?,<271>,U1825@?,U1825@?,TGT,Fail
+C229,C229,?,Network,<271>,U19@DOM1,U19@DOM1,LogOff,Success
+C229,C229,Kerberos,Network,<271>,U19@DOM1,U19@DOM1,LogOn,Success
+C1972,C1972,?,?,<271>,U202@DOM1,C1972$@DOM1,AuthMap,Success
+C1972,C1972,?,Network,<271>,U202@DOM1,U202@DOM1,LogOff,Success
+C452,C528,Kerberos,Network,<271>,U22@DOM1,U22@DOM1,LogOn,Success
+C452,C586,Kerberos,Network,<271>,U22@DOM1,U22@DOM1,LogOn,Success
+C477,C625,Kerberos,Network,<271>,U22@DOM1,U22@DOM1,LogOn,Success
+C528,C528,?,Network,<271, 271, 271>,U22@DOM1,U365@DOM1,U904@DOM1,U22@DOM1,U365@DOM1,U904@DOM1,LogOff,Success
+C625,C625,?,Network,<271>,U22@DOM1,U22@DOM1,LogOff,Success
+C457,C457,?,Network,<271, 271>,U274@DOM1,U992@DOM1,U274@DOM1,U992@DOM1,LogOff,Success
+C807,C457,?,?,<271>,U274@DOM1,U274@DOM1,TGS,Success
+C807,C457,Kerberos,Network,<271>,U274@DOM1,U274@DOM1,LogOn,Success
+C3050,C3050,?,?,<271>,U306@DOM1,U306@DOM1,TGT,Fail
+C1666,C1666,?,?,<271, 271>,U63@DOM1,U63@DOM1,TGS,TGT,Success
+C1666,C1666,?,Batch,<271>,U63@DOM1,U63@DOM1,LogOff,Success
+C1666,C1666,Negotiate,Batch,<271>,U63@DOM1,U63@DOM1,LogOn,Success
+C1697,C1697,?,Network,<271>,U66@DOM1,U66@DOM1,LogOff,Success
+C1697,C1697,Kerberos,Network,<271>,U66@DOM1,U66@DOM1,LogOn,Success
+C1732,C1732,?,Network,<271>,U66@DOM1,U66@DOM1,LogOff,Success
+C1732,C1732,Kerberos,Network,<271>,U66@DOM1,U66@DOM1,LogOn,Success
+C245,C245,?,Network,<271>,U66@DOM1,U66@DOM1,LogOff,Success
+C72,C72,?,Network,<271>,U66@DOM1,U66@DOM1,LogOff,Success
+C72,C72,Kerberos,Network,<271>,U66@DOM1,U66@DOM1,LogOn,Success
+C467,C467,?,Network,<271>,U745@DOM1,U745@DOM1,LogOff,Success
+C61,C61,?,Network,<271>,U7@DOM1,U7@DOM1,LogOff,Success
+C76,C457,Kerberos,Network,<271>,U904@DOM1,U904@DOM1,LogOn,Success
+C76,C467,Kerberos,Network,<271>,U904@DOM1,U904@DOM1,LogOn,Success

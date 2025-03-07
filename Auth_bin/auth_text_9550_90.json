@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C586, C457, and C1065 are initiating ANONYMOUS LOGONs, which is unusual and potentially suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C988",
+        "C457"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are clustered around timestamps <90> and <91>, indicating potential coordinated activity.",
+      "bursts": "There are sudden spikes in authentication volume at times <90> and <91>.",
+      "off_hours_activity": "No specific off-hours activity is noted, but the clustering of events suggests potential automated processes."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGONs from systems like C586 and C457.",
+      "lateral_movement": "Potential lateral movement is suggested by the use of multiple authentication types (NTLM, Kerberos) across different systems, especially involving C586.",
+      "privilege_escalation": "No clear indication of privilege escalation, but the presence of ANONYMOUS LOGONs could imply reconnaissance."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGONs and unspecified authentication types are detected, which are often used in reconnaissance or unauthorized access attempts.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C1065",
+        "C2881"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and ANONYMOUS LOGONs are used in unusual patterns, indicating possible misuse or automated scripts.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C457",
+        "C104$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are multiple LogOn events without corresponding LogOff events, especially involving ANONYMOUS LOGONs.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGONs and unspecified authentication types are significant anomalies.",
+      "deviation_details": "These patterns deviate from normal authentication behavior, suggesting possible reconnaissance or lateral movement attempts."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence and timing of ANONYMOUS LOGONs and unspecified authentication types to identify potential attack chains.",
+    "behavioral_context": "Compare observed ANONYMOUS LOGON patterns with known baseline behaviors to assess deviations.",
+    "permission_analysis": "Verify if accounts involved in ANONYMOUS LOGONs have legitimate reasons to access targeted systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might explain the observed patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several anomalies, including ANONYMOUS LOGONs and unspecified authentication types, which could indicate reconnaissance or lateral movement attempts. These patterns, especially when involving critical systems like C586, warrant further investigation.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGONs and unspecified authentication types. Review access permissions for involved accounts and systems, and monitor for any further suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

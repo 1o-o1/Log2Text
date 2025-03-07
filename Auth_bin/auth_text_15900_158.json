@@ -1,0 +1,104 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C3105, C3181, C3189, and others are initiating authentication events. Some computers like C5527 are using both Kerberos and NTLM, which is unusual in a Kerberos-preferred environment.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C2106"
+      ],
+      "sporadic_targets": [
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are provided, but multiple events occur at time <158>.",
+      "bursts": "No sudden spikes are evident from the data provided.",
+      "off_hours_activity": "The data does not specify business hours, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are seen, especially with machine accounts.",
+      "lateral_movement": "Potential lateral movement is suggested by the use of TGS and TGT operations, particularly with accounts like U113 and U699.",
+      "privilege_escalation": "No clear evidence of privilege escalation is observed from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types (e.g., '?') and NTLM in a Kerberos environment is suspicious.",
+      "affected_entities": [
+        "C612",
+        "C1065",
+        "C467",
+        "C625",
+        "C457",
+        "C529",
+        "C586",
+        "C101",
+        "C2106",
+        "C528",
+        "C1710",
+        "C749"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating in patterns that may be unusual, such as C5527 using both Kerberos and NTLM.",
+      "affected_accounts": [
+        "C5526$@DOM1",
+        "C4146$@DOM1",
+        "C5778$@DOM1",
+        "C585$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are LogOn events without corresponding LogOff events, and multiple LogOffs without prior LogOns.",
+      "affected_entities": [
+        "C612",
+        "C1065",
+        "C467",
+        "C625",
+        "C457",
+        "C529",
+        "C586",
+        "C101",
+        "C2106",
+        "C528",
+        "C1710"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, there are several anomalies such as mixed authentication types and unusual sequences.",
+      "deviation_details": "The use of NTLM in a Kerberos environment and unknown authentication types are notable deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events at time <158> to identify any potential attack chains or patterns.",
+    "behavioral_context": "Compare these authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if machine accounts like C5526$@DOM1 should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially where NTLM is used."
+  },
+  "conclusion": {
+    "summary": "The authentication data shows several anomalies, including the use of unknown authentication types, NTLM in a Kerberos environment, and unusual LogOn/LogOff sequences. These patterns could indicate potential security risks.",
+    "recommended_actions": "Investigate the use of NTLM and unknown authentication types, especially in Kerberos-preferred settings. Review access permissions for machine accounts and monitor for lateral movement indicators."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C2087, C528, C2101, C2224, C2230, C586, C2321, C2446, C467, C2986, C3060, C3476, C3526, C3544, C3548, C3694, C625, C3869, C1065, C5224, C5799, C585, C1619, C612, C698, and C457. There are no suspicious naming conventions or unexpected systems observed.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C586",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C457",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur at the same timestamp <258>, indicating a possible time aggregation for analysis.",
+      "bursts": "No sudden spikes in authentication volume are detected.",
+      "off_hours_activity": "No specific off-hours activity is identified due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Multiple logons and logoffs from the same source to the same destination are observed, but these are consistent with normal operations.",
+      "lateral_movement": "No clear patterns indicating lateral movement are detected.",
+      "privilege_escalation": "No evidence of privilege escalation patterns is observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several instances of authentication events with unknown types (?).",
+      "affected_entities": [
+        "C528",
+        "C2101",
+        "C2224",
+        "C2446",
+        "C586",
+        "C467",
+        "C529",
+        "C625",
+        "C1065",
+        "C457"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are used for authentication, which is typical in domain environments.",
+      "affected_accounts": [
+        "C2087$@DOM1",
+        "C2100$@DOM1",
+        "C2223$@DOM1",
+        "C2230$@DOM1",
+        "C2294$@DOM1",
+        "C2445$@DOM1",
+        "C3526$@DOM1",
+        "C3543$@DOM1",
+        "C3776$@DOM1",
+        "C4210$@DOM1",
+        "C5268$@DOM1",
+        "C5799$@DOM1",
+        "C585$@DOM1",
+        "C599$@DOM1",
+        "C612$@DOM1",
+        "C698$@DOM1",
+        "C720$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear consistent, with no missing pairs identified.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types is the primary anomaly.",
+      "deviation_details": "Unknown authentication types (?) are present in multiple events, which may require further investigation to ensure they are benign."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the specific timestamps of events to ensure they align with expected operational patterns.",
+    "behavioral_context": "Compare these authentication patterns with historical baselines to confirm they are typical for this environment.",
+    "permission_analysis": "Verify that the accounts used in these authentication events have legitimate access to the target systems.",
+    "ioc_checks": "Check for any known indicators of compromise related to the use of unknown authentication types and ensure NTLM usage is justified in this environment."
+  },
+  "conclusion": {
+    "summary": "The authentication events analyzed do not show strong indicators of compromise. However, the presence of unknown authentication types (?) should be reviewed to ensure they are not indicative of misconfigurations or potential security gaps.",
+    "recommended_actions": "Investigate the unknown authentication types to determine their cause and ensure they are benign. Validate that NTLM usage is appropriate and consistent with security policies. Continue monitoring for any changes in authentication patterns that may indicate emerging threats."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

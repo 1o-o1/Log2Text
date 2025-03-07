@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most source computers are authenticating to themselves or a small set of other computers, which is typical for a benign environment. However, C1641 shows activity across multiple destinations, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at the same timestamp, indicating batch processing or synchronized activities.",
+      "bursts": "No significant bursts detected beyond normal operations.",
+      "off_hours_activity": "All events occur at the same timestamp, making it difficult to determine if they are outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated successful LogOn and LogOff events from the same source to the same destination, consistent with normal operations.",
+      "lateral_movement": "C1641 shows potential lateral movement by authenticating to multiple destinations in a single timestamp.",
+      "privilege_escalation": "No clear patterns of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown type (?).",
+      "affected_entities": [
+        "C612",
+        "C586",
+        "C1065",
+        "C101",
+        "C529",
+        "C1641",
+        "C467",
+        "C528",
+        "C1828",
+        "C625"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating across multiple systems, which can be normal in a domain environment but should be monitored.",
+      "affected_accounts": [
+        "C1641$@DOM1",
+        "C1065$@DOM1",
+        "C1827$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear consistent, with no missing pairs detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The use of unknown authentication types and multiple destination authentications by C1641 are notable.",
+      "deviation_details": "C1641's activity across multiple systems in a single timestamp is unusual."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs for additional timestamps to determine if the activity is consistent or anomalous over time.",
+    "behavioral_context": "Compare C1641's activity with historical data to determine if this pattern is new or recurring.",
+    "permission_analysis": "Verify if C1641$@DOM1 should have access to all authenticated systems.",
+    "ioc_checks": "Check for known lateral movement techniques, such as Pass-the-Hash, that might explain C1641's behavior."
+  },
+  "conclusion": {
+    "summary": "The authentication events largely reflect typical domain activity, but C1641's pattern of accessing multiple systems in a single timestamp with unknown authentication types warrants further investigation.",
+    "recommended_actions": "Investigate C1641's access permissions and historical activity. Monitor for any additional unknown authentication types and ensure machine accounts are behaving as expected."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

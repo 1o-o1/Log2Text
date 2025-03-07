@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C586, C467, and C1710 are initiating authentication events. Notably, C586 shows ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C625",
+        "C457"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "There is a concentration of authentication events at timestamps 291 and 292.",
+      "bursts": "No significant bursts detected beyond the clustered timestamps.",
+      "off_hours_activity": "No specific off-hours activity detected as timestamps are not detailed with specific hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns observed for machine accounts such as C123$@DOM1 across multiple systems.",
+      "lateral_movement": "Potential lateral movement indicated by C123$@DOM1 accessing multiple systems like C101 and C625.",
+      "privilege_escalation": "No clear patterns of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are present, which are suspicious.",
+      "affected_entities": [
+        "C586",
+        "C467",
+        "C1710"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to multiple systems in a short timeframe, which is unusual.",
+      "affected_accounts": [
+        "C123$@DOM1",
+        "C1912$@DOM1",
+        "C2350$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some systems show LogOn without corresponding LogOff, but no excessive TGS/TGT requests detected.",
+      "affected_entities": [
+        "C123$@DOM1",
+        "C1912$@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of ANONYMOUS LOGON and rapid authentication between systems is anomalous.",
+      "deviation_details": "The deviations include ANONYMOUS LOGON events and machine accounts accessing multiple systems rapidly."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps 291 and 292 to identify potential attack chains.",
+    "behavioral_context": "Compare the observed authentication patterns with baseline behavior for systems like C586 and C1065.",
+    "permission_analysis": "Verify if machine accounts like C123$@DOM1 should have access to systems such as C625.",
+    "ioc_checks": "Check for Pass-the-Hash or similar techniques given the NTLM usage and rapid authentication patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show several anomalies, including ANONYMOUS LOGON events, rapid cross-system authentication by machine accounts, and potential lateral movement. These patterns suggest a moderate risk of compromise.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, validate the legitimacy of machine account access, and monitor for potential lateral movement or credential abuse."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

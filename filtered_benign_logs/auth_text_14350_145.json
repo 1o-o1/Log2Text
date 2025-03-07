@@ -1,0 +1,98 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C529, C528, C586, and C457 are initiating authentication events. Notably, C529 and C528 are involved in multiple LogOff events with unspecified authentication types, which could be worth further investigation.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C457"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around the same timestamp <145>, suggesting a batch of activities occurring simultaneously.",
+      "bursts": "No significant bursts detected beyond the clustered timestamp.",
+      "off_hours_activity": "All events occur at the same timestamp, making it difficult to determine if they are outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOff actions from computers like C529, C528, and C457 with unspecified authentication types.",
+      "lateral_movement": "Potential lateral movement indicated by sequential LogOn events from C2384 to C457 and C2392 to C457.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types (marked as '?') are prevalent in LogOff events from multiple computers.",
+      "affected_entities": [
+        "C529",
+        "C528",
+        "C586",
+        "C457",
+        "C1065",
+        "C585",
+        "C3640",
+        "C101"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to multiple destinations, but this is typical in domain environments.",
+      "affected_accounts": [
+        "C123$@DOM1",
+        "C1349$@DOM1",
+        "C1766$@DOM1",
+        "C2383$@DOM1",
+        "C2391$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events without corresponding LogOn events for the same session are noted, but they may not be unusual if they are part of normal operations.",
+      "affected_entities": [
+        "C529",
+        "C528",
+        "C586",
+        "C457",
+        "C1065",
+        "C585",
+        "C3640",
+        "C101"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of unspecified authentication types and potential lateral movement patterns.",
+      "deviation_details": "The use of '?' for authentication types in multiple events deviates from expected Kerberos or NTLM usage."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs around timestamp <145> to determine if these events are part of a scheduled task or batch process.",
+    "behavioral_context": "Compare current authentication patterns with historical data to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved in lateral movement patterns should have access to the target systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals multiple authentication events with unspecified types and potential lateral movement patterns. While these may be benign, further investigation is warranted due to the presence of '?' in authentication types and clustered timing.",
+    "recommended_actions": "Investigate the use of unspecified authentication types and validate the legitimacy of lateral movement patterns. Consider implementing stricter monitoring for systems frequently targeted by these events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

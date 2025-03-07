@@ -1,0 +1,92 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication requests are primarily machine accounts, which is typical in a domain environment. However, there are instances of NTLM usage and unspecified authentication types, which could be noteworthy if they deviate from expected configurations.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur at the same timestamp, indicating a potential batch processing or system synchronization event.",
+      "bursts": "No sudden spikes observed due to uniform timestamp.",
+      "off_hours_activity": "All events are logged at the same time, making it difficult to determine if they occur outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff sequences are observed, especially with machine accounts, which is typical in automated processes.",
+      "lateral_movement": "No clear indicators of lateral movement due to lack of sequence variation.",
+      "privilege_escalation": "No signs of privilege escalation detected in the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types and NTLM usage detected, which may be unusual if the environment is primarily Kerberos-based.",
+      "affected_entities": [
+        "C625",
+        "C467",
+        "C529",
+        "C4057",
+        "C539",
+        "C5483",
+        "C586",
+        "C101",
+        "C1056",
+        "C1710"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating as expected, but the use of NTLM by C893 may need further investigation.",
+      "affected_accounts": [
+        "C893$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon and logoff sequences appear normal, but the presence of TGS/TGT requests without corresponding logon/logoff events could be noteworthy.",
+      "affected_entities": [
+        "C4057",
+        "C539",
+        "C5483"
+      ]
+    },
+    "anomalies": {
+      "description": "The uniform timestamp across all events is unusual and may indicate batch processing or a logging anomaly.",
+      "deviation_details": "All events occurring at timestamp 351 suggest synchronized logging or a potential issue with time settings."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Check system logs for synchronization events or batch processes that could explain the uniform timestamps.",
+    "behavioral_context": "Compare the observed NTLM and unspecified authentication types against the expected authentication protocols for the environment.",
+    "permission_analysis": "Verify if the accounts, especially those using NTLM, have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Investigate the NTLM usage on C893 for potential Pass-the-Hash attacks or other credential misuse."
+  },
+  "conclusion": {
+    "summary": "The authentication events show uniform timestamps and a mix of authentication types, including NTLM, which may be unusual in a Kerberos-preferred environment. No direct indicators of compromise are evident, but the anomalies warrant further investigation.",
+    "recommended_actions": "Investigate the NTLM authentication on C893 and the uniform timestamps across events. Validate the environment's authentication protocol configuration to ensure NTLM is expected and secure."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

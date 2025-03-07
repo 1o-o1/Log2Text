@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C2444, C2450, C1065, and C4147 are initiating multiple authentication events, some with machine accounts (e.g., C2443$@DOM1, C2449$@DOM1) which could be normal but should be verified for legitimacy.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C743",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume are observed.",
+      "off_hours_activity": "Cannot determine due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are noted, particularly from machine accounts, which may be indicative of automated processes.",
+      "lateral_movement": "Potential lateral movement is suggested by the sequential access to multiple systems by accounts such as C4146$@DOM1.",
+      "privilege_escalation": "No clear patterns of privilege escalation are observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events have unspecified types, and NTLM is used in some instances where Kerberos is also present.",
+      "affected_entities": [
+        "C2444",
+        "C2450",
+        "C1065",
+        "C4147",
+        "C1823"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating across multiple systems, which could be normal but warrants verification.",
+      "affected_accounts": [
+        "C2443$@DOM1",
+        "C2449$@DOM1",
+        "C3260$@DOM1",
+        "C4146$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, particularly with machine accounts.",
+      "affected_entities": [
+        "C2444",
+        "C2450",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns show some deviations from typical behavior, particularly with machine accounts and unspecified authentication types.",
+      "deviation_details": "Unspecified authentication types and machine accounts accessing multiple systems suggest possible misconfigurations or unauthorized access attempts."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine detailed timestamps for authentication events to identify potential attack chains or patterns of misuse.",
+    "behavioral_context": "Compare observed authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify the permissions of machine accounts to ensure they are not accessing unauthorized systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, particularly where NTLM is used or where there are unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several anomalies, including unspecified authentication types, potential lateral movement, and machine accounts accessing multiple systems. These patterns may indicate misconfigurations or unauthorized access attempts.",
+    "recommended_actions": "Investigate the use of unspecified authentication types and NTLM in Kerberos environments. Verify the legitimacy of machine account activities and ensure proper permissions are in place. Monitor for potential lateral movement and consider implementing stricter authentication protocols."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

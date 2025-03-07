@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with some using suspicious naming conventions such as ANONYMOUS LOGON or machine accounts (e.g., C1026$@DOM1).",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "U20",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are clustered around timestamps 762845 and 762846, indicating potential coordinated activity.",
+      "bursts": "There is a burst of activity at timestamp 762846, suggesting a potential attack window.",
+      "off_hours_activity": "The data does not specify business hours, but the clustering of events suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication attempts from C16809 to multiple destinations (C1065, C467, C586) suggest potential lateral movement.",
+      "lateral_movement": "Sequential authentication from C16809 to C1065, C467, and C586 indicates possible lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but machine accounts accessing multiple destinations could suggest reconnaissance."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentications are detected, which are suspicious in a Kerberos-preferred environment.",
+      "affected_entities": [
+        "C467",
+        "C586",
+        "C612",
+        "C743"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts and ANONYMOUS LOGONs are authenticating, which is unusual.",
+      "affected_accounts": [
+        "C1026$@DOM1",
+        "C10380$@DOM1",
+        "ANONYMOUS LOGON@C467",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, particularly with ANONYMOUS LOGONs.",
+      "affected_entities": [
+        "C467",
+        "C586",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns indicate potential reconnaissance and lateral movement.",
+      "deviation_details": "The use of ANONYMOUS LOGON and NTLM in a Kerberos environment, along with clustered and burst activity, deviates from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps 762845 and 762846 to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if machine accounts and ANONYMOUS LOGONs should have access to the targeted systems.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, given the use of NTLM and ANONYMOUS LOGON."
+  },
+  "conclusion": {
+    "summary": "The authentication logs exhibit suspicious patterns indicative of potential lateral movement and reconnaissance, with a high risk of compromise due to the use of ANONYMOUS LOGON and NTLM in a Kerberos environment.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGONs and machine account activities, review access permissions, and monitor for further suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

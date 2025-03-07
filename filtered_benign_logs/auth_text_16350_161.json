@@ -1,0 +1,101 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers are initiating authentication requests, including C586, C612, and C419, which show multiple authentication events in a short period. The presence of machine accounts (e.g., C4181$@DOM1) is noted, which is typical but should be monitored for unusual patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612",
+        "C2106"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C553"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are provided, but multiple events occur at time 161.",
+      "bursts": "C586 shows a burst of authentication events with multiple source users.",
+      "off_hours_activity": "No specific off-hours activity can be determined from the provided data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are seen in systems like C612 and C419.",
+      "lateral_movement": "Potential lateral movement is indicated by multiple systems accessing C2106.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type (?).",
+      "affected_entities": [
+        "C529",
+        "C586",
+        "C528",
+        "C988",
+        "C612",
+        "C2106",
+        "C1056",
+        "C229",
+        "C419",
+        "C246",
+        "C1710"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts are authenticating from single sources like C586 and C419, which could indicate credential stuffing or similar attacks.",
+      "affected_accounts": [
+        "C4181$@DOM1",
+        "C419$@DOM1",
+        "C480$@DOM1",
+        "C4891$@DOM1",
+        "C585$@DOM1",
+        "C743$@DOM1",
+        "C753$@DOM1",
+        "C927$@DOM1",
+        "U201@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are sequences of LogOn without corresponding LogOff events, particularly on systems like C586 and C612.",
+      "affected_entities": [
+        "C586",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and multiple rapid authentications from single sources are notable.",
+      "deviation_details": "The use of unknown authentication types and rapid authentication sequences from single sources deviate from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events at time 161 to determine if there are any suspicious patterns or chains of activity.",
+    "behavioral_context": "Compare the observed authentication patterns against historical baselines to identify deviations.",
+    "permission_analysis": "Verify whether the accounts involved in the unknown authentication types have legitimate access to the target systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of unknown authentication types and rapid authentication sequences."
+  },
+  "conclusion": {
+    "summary": "The authentication data shows several unusual patterns, including the use of unknown authentication types, rapid authentication sequences from single sources, and potential lateral movement. These patterns warrant further investigation to rule out malicious activity.",
+    "recommended_actions": "Investigate the unknown authentication types and rapid authentication sequences for potential security incidents. Conduct a thorough review of permissions and access rights for involved accounts and systems."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

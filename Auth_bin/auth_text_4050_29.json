@@ -1,0 +1,114 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C528, C529, and C473 are initiating multiple authentication events. Notably, C473 is accessing multiple destinations, which could indicate lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C529",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are visible from the data provided.",
+      "bursts": "There are no evident bursts of activity; however, multiple logons from C473 could indicate a burst if they occurred in a short timeframe.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C529 and C473 show repetitive logon actions to multiple systems, which could indicate automated processes or lateral movement attempts.",
+      "lateral_movement": "C473 accessing multiple systems like C529 and C612 suggests possible lateral movement.",
+      "privilege_escalation": "There is no direct evidence of privilege escalation in the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use unknown or unspecified types, which can be suspicious.",
+      "affected_entities": [
+        "C625",
+        "C529",
+        "C988",
+        "C1065",
+        "C473",
+        "C1964",
+        "C2022",
+        "C421",
+        "C426",
+        "C229",
+        "C965",
+        "C2127",
+        "C7",
+        "C832",
+        "C1025",
+        "C419"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts are authenticating from single sources rapidly, and machine accounts are authenticating to unusual systems.",
+      "affected_accounts": [
+        "C528$@DOM1",
+        "C529$@DOM1",
+        "C586$@DOM1",
+        "C599$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are several LogOn events without corresponding LogOff events, and vice versa, which can indicate incomplete sessions.",
+      "affected_entities": [
+        "C528",
+        "C529",
+        "C988",
+        "C1065",
+        "C473",
+        "C1964",
+        "C2022",
+        "C421",
+        "C426",
+        "C229",
+        "C965",
+        "C2127",
+        "C7",
+        "C832",
+        "C1025",
+        "C419"
+      ]
+    },
+    "anomalies": {
+      "description": "The authentication logs show deviations from typical patterns, such as unusual authentication types and rapid successive logons.",
+      "deviation_details": "The presence of unknown authentication types and rapid logons from single sources are significant deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of events for C473 and C529 to identify potential attack chains.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behaviors to identify anomalies.",
+    "permission_analysis": "Verify if the accounts like C528$@DOM1 and C529$@DOM1 should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially for accounts showing rapid logon patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several anomalies, including unknown authentication types, potential lateral movement by C473, and rapid logons from machine accounts. These patterns warrant further investigation.",
+    "recommended_actions": "Investigate the authentication chains of C473 and C529 for potential lateral movement. Review access permissions for machine accounts like C528$@DOM1 and C529$@DOM1. Consider implementing stricter monitoring for unknown authentication types."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C7, C332, C965, C921, C1065, C61, C1958, C467, C523, C1382, C586, C529, C528, C101, C1795, C2123, C2168, C2174, C1781, C3145, C3147, C3276, C3484. Notably, C1958 initiated an ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C1056",
+        "C3468"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are clustered around timestamps <219> and <220>.",
+      "bursts": "There is a noticeable spike in authentication events at timestamp <220>.",
+      "off_hours_activity": "No specific off-hours activity detected, but the exact time of day is not provided."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are seen on systems like C7 and C921, where users log on and off frequently.",
+      "lateral_movement": "Potential lateral movement is suggested by C332 accessing multiple destinations (C1056, C3468) using NTLM.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but multiple TGS/TGT requests could indicate preparation for such actions."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, which is typically high-risk. NTLM is used in some instances, which might be unusual if the environment prefers Kerberos.",
+      "affected_entities": [
+        "C1958"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and multiple accounts from a single source show atypical behavior, such as C332 accessing multiple destinations rapidly.",
+      "affected_accounts": [
+        "C332",
+        "C1958"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some systems show logon events without corresponding logoff events, and vice versa, which could indicate incomplete session handling.",
+      "affected_entities": [
+        "C1958",
+        "C332"
+      ]
+    },
+    "anomalies": {
+      "description": "Anomalies include the use of ANONYMOUS LOGON and NTLM in potentially Kerberos-preferred settings.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and NTLM in a potentially Kerberos-preferred environment deviates from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events, particularly around timestamps <219> and <220>, to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns against a baseline of typical authentication behavior within the environment.",
+    "permission_analysis": "Verify if accounts like ANONYMOUS LOGON and those using NTLM have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash attacks and other known techniques that exploit NTLM and ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals some potentially suspicious patterns, including ANONYMOUS LOGON and NTLM usage, which could indicate security risks, especially if Kerberos is the preferred protocol.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON event on C1958, review the use of NTLM by C332, and ensure all authentication events align with expected behaviors and permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": false,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

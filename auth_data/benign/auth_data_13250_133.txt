@@ -1,0 +1,44 @@
+Aggregated Authentication Events:
+source_computer,destination_computer,auth_type,logon_type,times,source_users,destination_users,orientations,statuses
+C2337,C457,Kerberos,Network,<133>,C2336$@DOM1,C2336$@DOM1,LogOn,Success
+C457,C457,?,Network,<133, 133>,C2336$@DOM1,C2702$@DOM1,C2336$@DOM1,C2702$@DOM1,LogOff,Success
+C528,C528,?,Network,<133, 133>,C2389$@DOM1,C3042$@DOM1,C2389$@DOM1,C3042$@DOM1,LogOff,Success
+C1065,C1065,?,Network,<133, 133>,C2710$@DOM1,C411$@DOM1,C2710$@DOM1,C411$@DOM1,LogOff,Success
+C2710,C1065,?,?,<133>,C2710$@DOM1,C2710$@DOM1,TGS,Success
+C2710,C1065,NTLM,Network,<133>,C2710$@DOM1,C2710$@DOM1,LogOn,Success
+C2710,C1640,?,?,<133>,C2710$@DOM1,C2710$@DOM1,TGS,Success
+C2710,C2710,?,?,<133>,C2710$@DOM1,C2710$@DOM1,TGS,Success
+C2710,C467,?,?,<133>,C2710$@DOM1,C2710$@DOM1,TGS,Success
+C2786,C457,Kerberos,Network,<133>,C2786$@DOM1,C2786$@DOM1,LogOn,Success
+C625,C625,?,Network,<133, 133, 133>,C2941$@DOM1,C2978$@DOM1,C645$@DOM1,C2941$@DOM1,C2978$@DOM1,C645$@DOM1,LogOff,Success
+C467,C467,?,Network,<133, 133>,C3027$@DOM1,C3598$@DOM1,C3027$@DOM1,C3598$@DOM1,LogOff,Success
+C3524,C457,Kerberos,Network,<133>,C3524$@DOM1,C3524$@DOM1,LogOn,Success
+C3524,C586,Kerberos,Network,<133>,C3524$@DOM1,C3524$@DOM1,LogOn,Success
+C3524,C612,Kerberos,Network,<133>,C3524$@DOM1,C3524$@DOM1,LogOn,Success
+C612,C612,?,Network,<133>,C3524$@DOM1,C3524$@DOM1,LogOff,Success
+C3554,C529,Kerberos,Network,<133>,C3554$@DOM1,C3554$@DOM1,LogOn,Success
+C529,C529,?,Network,<133>,C3554$@DOM1,C3554$@DOM1,LogOff,Success
+C3598,C467,?,?,<133>,C3598$@DOM1,C3598$@DOM1,TGS,Success
+C3598,C467,Kerberos,Network,<133>,C3598$@DOM1,C3598$@DOM1,LogOn,Success
+C411,C612,NTLM,Network,<133>,C411$@DOM1,C411$@DOM1,LogOn,Success
+C1798,C457,Kerberos,Network,<133>,C457$@DOM1,C457$@DOM1,LogOn,Success
+C1085,C1085,?,Network,<133>,C523$@DOM1,C523$@DOM1,LogOff,Success
+C523,C1085,Kerberos,Network,<133>,C523$@DOM1,C523$@DOM1,LogOn,Success
+C523,C457,Kerberos,Network,<133>,C523$@DOM1,C523$@DOM1,LogOn,Success
+C523,C553,Kerberos,Network,<133>,C523$@DOM1,C523$@DOM1,LogOn,Success
+C523,C625,Kerberos,Network,<133>,C523$@DOM1,C523$@DOM1,LogOn,Success
+C523,C988,Kerberos,Network,<133>,C523$@DOM1,C523$@DOM1,LogOn,Success
+C553,C553,?,Network,<133, 133, 133>,C523$@DOM1,C567$@DOM1,C599$@DOM1,C523$@DOM1,C567$@DOM1,C599$@DOM1,LogOff,Success
+C988,C988,?,Network,<133>,C523$@DOM1,C523$@DOM1,LogOff,Success
+C524,C528,Kerberos,Network,<133>,C524$@DOM1,C524$@DOM1,LogOn,Success
+C539,C553,Kerberos,Network,<133>,C538$@DOM1,C538$@DOM1,LogOn,Success
+C574,C553,Kerberos,Network,<133>,C567$@DOM1,C567$@DOM1,LogOn,Success
+C5778,C5778,?,Network,<133>,C5778$@DOM1,C5778$@DOM1,LogOff,Success
+C1619,C599,?,?,<133>,C599$@DOM1,C599$@DOM1,TGS,Success
+C1798,C645,Kerberos,Network,<133>,C645$@DOM1,C645$@DOM1,LogOn,Success
+C645,C1065,?,?,<133>,C645$@DOM1,C645$@DOM1,TGS,Success
+C645,C1065,Kerberos,Network,<133>,C645$@DOM1,C645$@DOM1,LogOn,Success
+C645,C528,?,?,<133>,C645$@DOM1,C645$@DOM1,TGS,Success
+C645,C528,Kerberos,Network,<133>,C645$@DOM1,C645$@DOM1,LogOn,Success
+C645,C529,?,?,<133>,C645$@DOM1,C645$@DOM1,TGS,Success
+C645,C586,NTLM,Network,<133>,C645$@DOM1,C645$@DOM1,LogOn,Success

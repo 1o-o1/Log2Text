@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C4020 and C6804, initiated ANONYMOUS LOGON events, which is suspicious. Computers like C19092 and C13262 show multiple successful logons to different systems, indicating potential lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C1065",
+        "C801"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C3173"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around the timestamp 2536079, indicating a high volume of activity at this time.",
+      "bursts": "There is a sudden spike in authentication requests from computers like C19092 and C13262.",
+      "off_hours_activity": "The presence of ANONYMOUS LOGON events at timestamp 2536080 suggests potential malicious activity outside normal business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff sequences are observed on systems like C1755 and C2483.",
+      "lateral_movement": "Computers such as C19092 are accessing multiple systems (C1065, C467, C612) in quick succession, suggesting lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation was detected, but the use of NTLM in a Kerberos environment could suggest attempts to bypass standard authentication protocols."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events and NTLM usage in a Kerberos environment are suspicious.",
+      "affected_entities": [
+        "C4020",
+        "C6804",
+        "C8986"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source and rapid access to multiple destinations were noted.",
+      "affected_accounts": [
+        "U8999@DOM1",
+        "U66@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular logon/logoff sequences were observed, with some systems showing logons without corresponding logoffs.",
+      "affected_entities": [
+        "C1755",
+        "C2483"
+      ]
+    },
+    "anomalies": {
+      "description": "The data shows several anomalies, including ANONYMOUS LOGON events and NTLM usage where Kerberos is expected.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and NTLM in a Kerberos environment deviates from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps 2536079 and 2536080 to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if accounts like U8999@DOM1 and U66@DOM1 should have access to systems like C1065 and C625.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM usage."
+  },
+  "conclusion": {
+    "summary": "The authentication data reveals several high-risk indicators, including ANONYMOUS LOGON events and NTLM usage in a Kerberos environment, suggesting potential security compromises.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, review NTLM usage, and monitor systems for lateral movement. Consider implementing stricter authentication controls and reviewing access permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

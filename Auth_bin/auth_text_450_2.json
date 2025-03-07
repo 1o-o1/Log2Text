@@ -1,0 +1,71 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most source computers are authenticating to themselves, which is typical for service logons using machine accounts.",
+    "targets": {
+      "frequent_targets": [
+        "C586"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume were observed.",
+      "off_hours_activity": "No specific off-hours activity identified due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive service logons from machine accounts to themselves, which is normal behavior for service accounts.",
+      "lateral_movement": "No clear evidence of lateral movement; most authentications are local to the source computer.",
+      "privilege_escalation": "No indications of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "No suspicious authentication types detected; most are using Negotiate, which is typical for service logons.",
+      "affected_entities": []
+    },
+    "account_patterns": {
+      "description": "No suspicious account usage patterns detected; machine accounts are logging onto themselves, which is expected.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "No suspicious logon/logoff sequences detected; all events are successful logons without corresponding logoffs, typical for service accounts.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "No significant anomalies detected in the authentication patterns.",
+      "deviation_details": "The authentication patterns appear normal with machine accounts logging onto themselves using Negotiate."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analysis could include detailed timestamp examination if available to identify any potential attack chains.",
+    "behavioral_context": "Compare these patterns against a baseline of normal service account behavior to confirm normalcy.",
+    "permission_analysis": "Verify that the machine accounts should have legitimate access to the systems they are logging onto, although current patterns suggest normal service logons.",
+    "ioc_checks": "No specific IOC checks needed based on current observations, as patterns appear normal."
+  },
+  "conclusion": {
+    "summary": "The authentication events analyzed do not indicate any immediate risk or suspicious activity. The patterns observed are consistent with normal service account behavior, with machine accounts logging onto themselves using the Negotiate protocol.",
+    "recommended_actions": "No immediate actions are necessary. Continue monitoring for any deviations from this established baseline, particularly looking for any cross-system authentications or changes in authentication types."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": false,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

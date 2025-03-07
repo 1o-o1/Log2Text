@@ -1,0 +1,175 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily machine accounts (e.g., C67$, C612$, etc.) performing self-authentication, which is typical for service logons.",
+    "targets": {
+      "frequent_targets": [
+        "C67",
+        "C612",
+        "C679",
+        "C681",
+        "C689",
+        "C690",
+        "C692",
+        "C694",
+        "C700",
+        "C701",
+        "C708",
+        "C711",
+        "C718",
+        "C720",
+        "C721",
+        "C733",
+        "C735",
+        "C737",
+        "C746",
+        "C747",
+        "C753",
+        "C769",
+        "C77",
+        "C771",
+        "C780",
+        "C79",
+        "C790",
+        "C797",
+        "C799",
+        "C8",
+        "C800",
+        "C807",
+        "C814",
+        "C816",
+        "C817",
+        "C819",
+        "C82",
+        "C825",
+        "C830",
+        "C835",
+        "C837",
+        "C845",
+        "C847",
+        "C852",
+        "C854",
+        "C855",
+        "C859",
+        "C866",
+        "C870"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are clustered around service logons, which are expected to occur frequently.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "No specific off-hours activity was indicated in the data provided."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "The repetitive pattern of service logons by machine accounts is observed, which is typical for automated processes.",
+      "lateral_movement": "No patterns suggestive of lateral movement were detected.",
+      "privilege_escalation": "No indications of privilege escalation were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of an unknown authentication type ('?') in some events is notable.",
+      "affected_entities": [
+        "C612",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are performing self-authentication, which is typical in service contexts.",
+      "affected_accounts": [
+        "C67$",
+        "C612$",
+        "C679$",
+        "C681$",
+        "C689$",
+        "C690$",
+        "C692$",
+        "C694$",
+        "C700$",
+        "C701$",
+        "C708$",
+        "C711$",
+        "C718$",
+        "C720$",
+        "C721$",
+        "C733$",
+        "C735$",
+        "C737$",
+        "C746$",
+        "C747$",
+        "C753$",
+        "C769$",
+        "C77$",
+        "C771$",
+        "C780$",
+        "C79$",
+        "C790$",
+        "C797$",
+        "C799$",
+        "C8$",
+        "C800$",
+        "C807$",
+        "C814$",
+        "C816$",
+        "C817$",
+        "C819$",
+        "C82$",
+        "C825$",
+        "C830$",
+        "C835$",
+        "C837$",
+        "C845$",
+        "C847$",
+        "C852$",
+        "C854$",
+        "C855$",
+        "C859$",
+        "C866$",
+        "C870$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events are primarily service logons, with no irregular sequences detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear typical for service logons, with the exception of unknown authentication types.",
+      "deviation_details": "The use of '?' as an authentication type is unusual and should be investigated further."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs for the specific times when '?' authentication types were used to determine if they correlate with any known issues or changes.",
+    "behavioral_context": "Compare the observed authentication patterns with baseline data to ensure they align with expected service logon behavior.",
+    "permission_analysis": "Verify that the machine accounts performing self-authentication have the appropriate permissions and are expected to perform these actions.",
+    "ioc_checks": "Investigate the use of '?' authentication types for potential misconfigurations or security issues, and check for any known vulnerabilities or attack patterns that might exploit such configurations."
+  },
+  "conclusion": {
+    "summary": "The authentication events primarily involve machine accounts performing service logons, which is typical behavior. However, the presence of unknown authentication types ('?') warrants further investigation.",
+    "recommended_actions": "Investigate the unknown authentication types ('?') to determine their cause and ensure they do not represent a security risk. Confirm that all machine accounts have appropriate permissions and are expected to perform the observed actions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C2475, C586, C467, and C3500 are initiating authentication events. Notably, C3500 is involved in multiple TGS requests, which could indicate ticket-granting service activity.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C1065",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "There are no specific time clusters provided, but multiple events occur within short timeframes, suggesting potential bursts.",
+      "bursts": "Multiple authentication attempts occur within short periods, particularly involving C586 and C612.",
+      "off_hours_activity": "No specific off-hours data is provided, but the frequency of events suggests possible non-standard activity times."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication attempts are seen from C3500 to multiple destinations, indicating possible automated or scripted activity.",
+      "lateral_movement": "The sequence of authentications from C3500 to different targets suggests potential lateral movement.",
+      "privilege_escalation": "There is no direct evidence of privilege escalation, but the use of multiple TGS requests by C3500 could indicate preparation for such actions."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include '?' and NTLM in a Kerberos environment.",
+      "affected_entities": [
+        "C586",
+        "C467",
+        "C1065",
+        "C529",
+        "C540"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include multiple accounts authenticating from a single source and machine accounts authenticating atypically.",
+      "affected_accounts": [
+        "C2475$@DOM1",
+        "C3500$@DOM1",
+        "U1024@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are instances of LogOn without corresponding LogOff events, and multiple TGS requests from the same source.",
+      "affected_entities": [
+        "C3500",
+        "C586",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall analysis indicates unusual authentication patterns, particularly involving C3500 and C586.",
+      "deviation_details": "The use of NTLM in a Kerberos environment and multiple TGS requests from C3500 are significant deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events involving C3500 and C586 to determine if they form part of a larger attack chain.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behaviors to identify anomalies.",
+    "permission_analysis": "Verify if the accounts, particularly C3500 and U1024@DOM1, should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially given the NTLM usage and TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several anomalies, including the use of NTLM in a Kerberos-preferred environment, multiple TGS requests, and potential lateral movement patterns. These suggest a moderate to high risk of compromise.",
+    "recommended_actions": "Investigate the activities of C3500 and U1024@DOM1 further, particularly their access to multiple systems. Consider implementing stricter access controls and monitoring for NTLM usage in Kerberos environments."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

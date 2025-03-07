@@ -1,0 +1,125 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C3301, C3307, C390, C457, C625, C423, C467, C516, C480, C1521, C528, C539, C540, C1065, C5502, C529, C612, C585, C586, C101, C1619, C1868, C552, C1703, C2650, C1870, C415, C4210, C1581. No suspicious naming conventions or unexpected systems were identified.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C457",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C625",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified due to the placeholder timestamp <178>.",
+      "bursts": "No sudden spikes detected due to the placeholder timestamp <178>.",
+      "off_hours_activity": "Cannot determine due to the placeholder timestamp <178>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns were noted between C5502 and multiple destinations (C528, C612).",
+      "lateral_movement": "Potential lateral movement indicated by C5502 accessing multiple systems (C528, C612).",
+      "privilege_escalation": "No clear indication of privilege escalation from the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple instances of unknown authentication types (indicated by '?') were detected.",
+      "affected_entities": [
+        "C457",
+        "C625",
+        "C467",
+        "C528",
+        "C540",
+        "C1065",
+        "C529",
+        "C612",
+        "C101",
+        "C1619",
+        "C1703",
+        "C2650",
+        "C1870",
+        "C1581"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., C3301$, C3307$, etc.) are authenticating to systems, which is typical for service accounts. However, no unusual patterns detected.",
+      "affected_accounts": [
+        "C3301$",
+        "C3307$",
+        "C390$",
+        "C457$",
+        "C4156$",
+        "C480$",
+        "C423$",
+        "C467$",
+        "C516$",
+        "C480$",
+        "C528$",
+        "C539$",
+        "C540$",
+        "C5502$",
+        "C561$",
+        "C585$",
+        "C599$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events were noted, which might indicate incomplete session tracking.",
+      "affected_entities": [
+        "C457",
+        "C625",
+        "C467",
+        "C528",
+        "C540",
+        "C1065",
+        "C529",
+        "C612",
+        "C101",
+        "C1619",
+        "C1703",
+        "C2650",
+        "C1870",
+        "C1581"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and incomplete session tracking are the primary anomalies.",
+      "deviation_details": "Unknown authentication types and LogOn without corresponding LogOff events."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence and timing of authentication events, particularly those with unknown types, to identify potential attack chains.",
+    "behavioral_context": "Compare these authentication patterns with known baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts, especially those with unknown authentication types, should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in cases with NTLM usage."
+  },
+  "conclusion": {
+    "summary": "The analysis identified multiple instances of unknown authentication types and incomplete session tracking, which could indicate potential misconfigurations or anomalies. No definitive malicious patterns were detected, but the presence of these anomalies warrants further investigation.",
+    "recommended_actions": "Investigate the systems and accounts involved in unknown authentication types and incomplete session tracking. Ensure proper configuration and monitoring of authentication protocols and review access permissions for the involved accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

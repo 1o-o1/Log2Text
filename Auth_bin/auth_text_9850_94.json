@@ -1,0 +1,106 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C2614, C457, C467, C612, C2783, C3263, C625, C2794, C2796, C586, C2857, C430, C480, C101, C539, C574, C1619, C529, C2106, C762, C892, C3500, C1710, C2300, C585, C1065, C1703, C506, C1968, C7, C921. No suspicious naming conventions were observed, but some machines like C467 and C457 appear frequently.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C467",
+        "C2106",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C599",
+        "C1766"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around the same timestamp <94>, indicating a potential batch process or automated task.",
+      "bursts": "No significant bursts were observed beyond the clustered events.",
+      "off_hours_activity": "No specific off-hours activity was detected as all events are recorded at the same timestamp."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Frequent authentication attempts from C2614 to C457 and C529 suggest a repetitive pattern.",
+      "lateral_movement": "Potential lateral movement is indicated by C457 accessing C467 and C467 accessing itself, but no clear sequence suggests compromise.",
+      "privilege_escalation": "No clear patterns of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types (?) and NTLM in a predominantly Kerberos environment is noted.",
+      "affected_entities": [
+        "C457",
+        "C467",
+        "C612",
+        "C625",
+        "C101",
+        "C529",
+        "C2106",
+        "C3500",
+        "C1710",
+        "C1968",
+        "C7",
+        "C921"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts like C2614$ and C467$ are authenticating frequently, which may be normal in a benign environment but should be monitored.",
+      "affected_accounts": [
+        "C2614$@DOM1",
+        "C467$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events without preceding LogOn events for some accounts may indicate incomplete session tracking.",
+      "affected_entities": [
+        "C457",
+        "C467",
+        "C612",
+        "C625",
+        "C101",
+        "C529",
+        "C2106",
+        "C3500",
+        "C1710",
+        "C1968",
+        "C7",
+        "C921"
+      ]
+    },
+    "anomalies": {
+      "description": "The overall pattern shows consistent usage of Kerberos, but the presence of NTLM and unknown types is anomalous.",
+      "deviation_details": "The deviation from expected Kerberos-only authentication is noted with NTLM and unknown types."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around the <94> timestamp to determine if they are part of a batch process or automated task.",
+    "behavioral_context": "Compare these patterns with historical data to see if such clustering is typical in this environment.",
+    "permission_analysis": "Verify if the machine accounts and user accounts have legitimate reasons to access the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash that might exploit NTLM or unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events primarily show consistent Kerberos usage with some anomalies in authentication types and frequent machine account activity. No immediate high-risk indicators of compromise are evident, but the environment should be monitored for any changes in these patterns.",
+    "recommended_actions": "Monitor for any increase in NTLM or unknown authentication types, especially if they begin to correlate with failed attempts or off-hours activity. Validate permissions for frequently authenticating machine accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

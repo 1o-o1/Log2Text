@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C4061 and C924 are initiating multiple authentication events, with C4061 involved in both TGS and LogOn operations across different systems, suggesting potential lateral movement or service account activity.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C1604"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at the same timestamp <44>, indicating a potential batch operation or synchronized activity.",
+      "bursts": "No sudden spikes detected beyond the synchronized timestamp.",
+      "off_hours_activity": "No specific off-hours activity identified due to lack of detailed timestamp data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOff events from systems like C467, C625, and C586 suggest automated processes or service account usage.",
+      "lateral_movement": "C4061 and C924 show patterns of accessing multiple systems, which could indicate lateral movement.",
+      "privilege_escalation": "No explicit privilege escalation patterns detected, but multiple TGS/TGT requests from C4061 and C924 warrant further investigation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events using unknown (?) types were detected, particularly from C467, C625, and C586.",
+      "affected_entities": [
+        "C467",
+        "C625",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts such as those ending in $ are authenticating frequently, which is typical but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C2288$@DOM1",
+        "C2453$@DOM1",
+        "C4061$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events without corresponding LogOn events are notable, especially from systems like C467 and C625.",
+      "affected_entities": [
+        "C467",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and the clustering of events at a single timestamp are anomalies.",
+      "deviation_details": "Unknown authentication types and synchronized timestamps suggest potential automated or scripted activity."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around the <44> timestamp to determine if they are part of a coordinated activity.",
+    "behavioral_context": "Compare the observed patterns with historical data to determine if these are normal operations or deviations.",
+    "permission_analysis": "Verify if the accounts, particularly those with machine accounts, have legitimate reasons to access the targeted systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show synchronized activity across multiple systems, with unknown authentication types and potential lateral movement indicators, posing a moderate risk.",
+    "recommended_actions": "Investigate the source and purpose of the unknown authentication types, and monitor the accounts showing lateral movement patterns. Consider implementing stricter monitoring or alerts for these activities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C2689, C467, and C3159 are initiating multiple authentication events. Notably, C3159 is involved in multiple TGS requests and logons, which could suggest a pattern of interest.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events seem to occur at a similar timestamp, <164>, indicating a potential batch processing or synchronized activity.",
+      "bursts": "No specific bursts identified beyond the clustered time frame.",
+      "off_hours_activity": "No specific off-hours activity identified due to lack of detailed timestamp data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive TGS requests from C3159 and C645 are noted, which could be indicative of service ticket requests for lateral movement.",
+      "lateral_movement": "Potential lateral movement suggested by C3159 accessing multiple systems (C1640, C467, C528) and C645 accessing multiple systems (C528, C625).",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the repetitive TGS requests could be a precursor to such attempts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events lack specified authentication types, which could indicate misconfiguration or obfuscation attempts.",
+      "affected_entities": [
+        "C2689",
+        "C467",
+        "C586",
+        "C1065",
+        "C2905",
+        "C3159",
+        "C645"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from single sources like C467 and C529 are authenticating rapidly, which could indicate automated processes or compromised systems.",
+      "affected_accounts": [
+        "C2708$@DOM1",
+        "C2962$@DOM1",
+        "C3159$@DOM1",
+        "C457$@DOM1",
+        "C2963$@DOM1",
+        "C3147$@DOM1",
+        "C625$@DOM1",
+        "U140@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are generally followed by LogOff events, but the rapid succession and lack of detailed timestamps make it difficult to ascertain anomalies.",
+      "affected_entities": [
+        "C467",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and repetitive TGS requests are notable anomalies.",
+      "deviation_details": "Unspecified authentication types and repetitive TGS requests from C3159 and C645 deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine detailed timestamps to determine if events are occurring in rapid succession, indicating potential automated or scripted activity.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations in frequency and source-destination pairs.",
+    "permission_analysis": "Review the permissions of accounts involved in repetitive TGS requests to ensure they align with expected access levels.",
+    "ioc_checks": "Investigate potential Pass-the-Ticket or Kerberoasting activities due to repetitive TGS requests."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals potential anomalies in authentication patterns, particularly around unspecified authentication types and repetitive TGS requests, which could suggest lateral movement or automated processes.",
+    "recommended_actions": "Investigate the systems and accounts involved in unspecified authentication types and repetitive TGS requests. Validate the necessity of these authentication patterns and consider implementing stricter monitoring and alerting for similar activities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": false
+  }
+}

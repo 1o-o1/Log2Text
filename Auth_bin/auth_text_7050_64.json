@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C529, C101, and C586, are initiating multiple authentication events, some using unknown authentication types, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C101"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around certain computers like C612 and C586, indicating frequent access.",
+      "bursts": "There are bursts of authentication events from computers like C529 and C101, which could indicate automated processes or potential brute force attempts.",
+      "off_hours_activity": "No specific off-hours activity is noted, but the presence of multiple rapid authentications suggests potential automated or scripted activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Computers like C529 and C101 show repetitive authentication patterns with multiple accounts in a short time frame.",
+      "lateral_movement": "Potential lateral movement is suggested by the use of multiple accounts from single sources like C529 and C101.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of multiple accounts and unknown authentication types could indicate attempts to escalate privileges."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple instances of unknown authentication types (indicated by '?') were detected, which is suspicious.",
+      "affected_entities": [
+        "C529",
+        "C101",
+        "C612",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include multiple accounts being authenticated from single sources rapidly.",
+      "affected_accounts": [
+        "C1218$@DOM1",
+        "C1424$@DOM1",
+        "C1899$@DOM1",
+        "C1969$@DOM1",
+        "C608$@DOM1",
+        "C123$@DOM1",
+        "C538$@DOM1",
+        "C567$@DOM1",
+        "C599$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Several logon events are followed by immediate logoff events without significant activity in between, which is unusual.",
+      "affected_entities": [
+        "C529",
+        "C101",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and rapid authentication sequences suggests anomalies.",
+      "deviation_details": "The use of '?' for authentication types and the rapid succession of logon-logoff events deviate from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events from computers like C529 and C101 to determine if they form part of a coordinated attack.",
+    "behavioral_context": "Compare the observed patterns with baseline activity to identify deviations that suggest malicious intent.",
+    "permission_analysis": "Verify whether the accounts used in these authentication events have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential security concerns, particularly with the use of unknown authentication types and rapid authentication sequences from certain computers. These patterns suggest possible automated attacks or lateral movement attempts.",
+    "recommended_actions": "Investigate the source computers C529 and C101 for potential compromise. Review account permissions and monitor for further unusual activity. Consider implementing stricter authentication protocols and logging for better visibility."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

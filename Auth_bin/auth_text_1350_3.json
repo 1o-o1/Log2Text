@@ -1,0 +1,125 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily machine accounts (e.g., C610$@DOM1) performing self-authentication, which is typical for service accounts.",
+    "targets": {
+      "frequent_targets": [
+        "C610",
+        "C613",
+        "C617",
+        "C618",
+        "C620",
+        "C622",
+        "C623",
+        "C627",
+        "C63",
+        "C634",
+        "C640",
+        "C645",
+        "C647",
+        "C648",
+        "C653",
+        "C656",
+        "C660",
+        "C661",
+        "C662",
+        "C664",
+        "C667",
+        "C668",
+        "C670",
+        "C676",
+        "C677",
+        "C680",
+        "C682",
+        "C683",
+        "C684",
+        "C688",
+        "C69",
+        "C693",
+        "C695",
+        "C697",
+        "C702",
+        "C705",
+        "C71",
+        "C712",
+        "C713",
+        "C714",
+        "C717",
+        "C725",
+        "C727",
+        "C729",
+        "C73",
+        "C730",
+        "C731",
+        "C732",
+        "C734"
+      ],
+      "sporadic_targets": [
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated as <3>, indicating a small number of events per source, which is typical for service operations.",
+      "bursts": "No sudden spikes in authentication volume were observed.",
+      "off_hours_activity": "No specific off-hours activity was noted, as the data lacks detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "The repetitive pattern of self-authentication by machine accounts is consistent with normal service operations.",
+      "lateral_movement": "No evidence of lateral movement was detected, as each source computer is authenticating to itself.",
+      "privilege_escalation": "No indications of privilege escalation were observed in the data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "One instance of an unknown authentication type (?) was detected.",
+      "affected_entities": [
+        "C528"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are self-authenticating, which is typical for service accounts.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "One LogOff event with an unknown authentication type was detected, which is unusual.",
+      "affected_entities": [
+        "C528"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of an unknown authentication type and a LogOff event from a machine account is atypical.",
+      "deviation_details": "The event from C528 with an unknown authentication type and a LogOff orientation is unusual compared to the other events."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the specific timing of the event with unknown authentication type to determine if it correlates with any known issues or changes.",
+    "behavioral_context": "Compare the behavior of C528 with baseline behaviors for similar systems to identify any deviations.",
+    "permission_analysis": "Verify if the account C735$@DOM1 should have legitimate access and whether the unknown authentication type is expected.",
+    "ioc_checks": "Check for known attack techniques that might involve unknown authentication types or unusual LogOff events."
+  },
+  "conclusion": {
+    "summary": "The majority of authentication events appear normal for service account operations, with one anomaly involving an unknown authentication type and LogOff event from C528.",
+    "recommended_actions": "Investigate the event from C528 with unknown authentication type for potential misconfiguration or security issue, and verify the legitimacy of the involved account and system."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

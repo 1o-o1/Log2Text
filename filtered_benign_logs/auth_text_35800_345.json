@@ -1,0 +1,101 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C61, C1065, C529, C113, C1220, C1368, C1481, C1618, C523, C625, C1795, C2232, C2444, C528, C3814, C3983, C1798, C4100, C457, C2191, C480, C551, C467, C101, C1619, C586. No suspicious naming conventions or unexpected systems observed.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around the timestamp <346>.",
+      "bursts": "No significant bursts detected beyond the clustered timing.",
+      "off_hours_activity": "No specific off-hours activity detected as the data is aggregated and lacks specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are noted, especially on systems like C529 and C612.",
+      "lateral_movement": "No clear sequential authentication patterns suggesting lateral movement identified.",
+      "privilege_escalation": "No patterns indicating privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include '?' which is unspecified.",
+      "affected_entities": [
+        "C61",
+        "C1065",
+        "C529",
+        "C612",
+        "C523",
+        "C625",
+        "C528",
+        "C457",
+        "C467",
+        "C101",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source computer are authenticating, particularly on C529 and C612.",
+      "affected_accounts": [
+        "C108$@DOM1",
+        "C1368$@DOM1",
+        "C2443$@DOM1",
+        "C4100$@DOM1",
+        "C1220$@DOM1",
+        "C1310$@DOM1",
+        "C3575$@DOM1",
+        "C3794$@DOM1",
+        "C4016$@DOM1",
+        "C4023$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, but no significant irregularities in sequences.",
+      "affected_entities": [
+        "C529",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns show some use of unspecified authentication types and multiple accounts from single sources.",
+      "deviation_details": "The use of '?' for authentication type and multiple accounts authenticating from C529 and C612 deviate from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events around timestamp <346> to identify any potential attack chains.",
+    "behavioral_context": "Compare observed authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts authenticating to C529 and C612 have legitimate access.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially where '?' authentication types are used."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some anomalies, particularly the use of unspecified authentication types and multiple accounts authenticating from the same source. However, these patterns do not strongly indicate malicious activity in this benign environment.",
+    "recommended_actions": "Monitor systems C529 and C612 for any changes in authentication patterns. Investigate the use of '?' authentication types to ensure they align with expected behavior."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

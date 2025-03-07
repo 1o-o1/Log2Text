@@ -1,0 +1,101 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C2317, C2359, C1065, C528, C2577, C2693, C2106, C2829, C2871, C3137, C3724, C231, C395, C586, C467, C523, C5487, C574, C942, C97, C3025, C1710, C433, C743, C2086, C229, C1191, C477, C506, C1590, C616, and C555. Notably, some systems like C1065 and C2106 have multiple events with unknown authentication types, which could be worth further investigation.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C2106",
+        "C1065",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C529",
+        "C553",
+        "C3025",
+        "C1772",
+        "C1722"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are aggregated under a single time identifier <95>, suggesting a batch of events analyzed together without specific time differentiation.",
+      "bursts": "There are no specific bursts identified due to lack of detailed timestamps.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific time details."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed, particularly with systems like C1065 and C2106, which may indicate automated processes or scripts.",
+      "lateral_movement": "Potential lateral movement could be indicated by multiple authentications from single accounts like U22@DOM1 across different systems (C477, C506, C586).",
+      "privilege_escalation": "No clear indications of privilege escalation are apparent from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several instances of authentication events with unknown (?) types, which could indicate misconfigured or unsupported authentication methods.",
+      "affected_entities": [
+        "C1065",
+        "C528",
+        "C2106",
+        "C3724",
+        "C231",
+        "C586",
+        "C467",
+        "C523",
+        "C1710",
+        "C433",
+        "C743",
+        "C229"
+      ]
+    },
+    "account_patterns": {
+      "description": "Some accounts, such as U22@DOM1, are seen authenticating across multiple systems, which could be normal for administrative accounts but should be verified.",
+      "affected_accounts": [
+        "U22@DOM1",
+        "U356@DOM1",
+        "U1@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Multiple logon and logoff sequences are observed, particularly from systems like C1065 and C2106, which might indicate automated tasks or scripts.",
+      "affected_entities": [
+        "C1065",
+        "C2106"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and multiple authentications from single accounts across different systems are notable.",
+      "deviation_details": "The deviation from expected authentication types and the spread of single accounts across multiple systems could indicate potential misconfigurations or unauthorized access attempts."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Since all events are marked with <95>, further investigation should include obtaining precise timestamps to analyze the sequence and timing of events.",
+    "behavioral_context": "Compare current patterns with baseline authentication behaviors, focusing on systems with unknown authentication types and accounts like U22@DOM1.",
+    "permission_analysis": "Verify the roles and permissions of accounts like U22@DOM1 to ensure they are authorized to access the systems they are authenticating to.",
+    "ioc_checks": "Perform checks for known attack techniques such as Pass-the-Hash or Kerberoasting, especially on systems showing unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis of authentication events reveals some unusual patterns, such as unknown authentication types and accounts accessing multiple systems. While these could be benign, they warrant further investigation to rule out potential misconfigurations or unauthorized access.",
+    "recommended_actions": "Investigate systems with unknown authentication types for misconfigurations. Verify the legitimacy of account access patterns, particularly for accounts like U22@DOM1. Consider implementing stricter authentication protocols and monitoring for accounts with widespread access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

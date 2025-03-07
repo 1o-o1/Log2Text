@@ -1,0 +1,125 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events are initiated by machine accounts (e.g., C312$, C3148$) on their respective systems, which is typical for service logons.",
+    "targets": {
+      "frequent_targets": [
+        "C312",
+        "C3148",
+        "C315",
+        "C3237",
+        "C3279",
+        "C3311",
+        "C335",
+        "C340",
+        "C3412",
+        "C344",
+        "C3442",
+        "C351",
+        "C352",
+        "C3520",
+        "C3522",
+        "C358",
+        "C369",
+        "C371",
+        "C3718",
+        "C373",
+        "C3748",
+        "C376",
+        "C378",
+        "C382",
+        "C3854",
+        "C3859",
+        "C389",
+        "C3890",
+        "C394",
+        "C403",
+        "C407",
+        "C412",
+        "C413",
+        "C415",
+        "C420",
+        "C436",
+        "C44",
+        "C442",
+        "C443",
+        "C444",
+        "C445",
+        "C453",
+        "C454",
+        "C455",
+        "C463",
+        "C468",
+        "C469"
+      ],
+      "sporadic_targets": [
+        "C457"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are uniformly distributed with no significant clustering.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "The data does not provide specific timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive service logons using the Negotiate protocol are observed, which is typical for machine accounts.",
+      "lateral_movement": "No clear patterns of lateral movement are detected, except for a potential anomaly involving C395 and C457.",
+      "privilege_escalation": "No patterns indicating privilege escalation are observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "A '?' authentication type was detected, which is unusual and warrants further investigation.",
+      "affected_entities": [
+        "C457"
+      ]
+    },
+    "account_patterns": {
+      "description": "Atypical behavior where C395 authenticates to C457 using Kerberos, which is different from the typical Negotiate protocol used by other systems.",
+      "affected_accounts": [
+        "C395$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "An unusual LogOff event with a '?' authentication type was detected.",
+      "affected_entities": [
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "The authentication pattern involving C395 and C457 deviates from the norm.",
+      "deviation_details": "C395 uses Kerberos to authenticate to C457, whereas other systems use Negotiate for service logons. Additionally, C457 has a '?' authentication type during a LogOff event."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events involving C395 and C457 to determine if they indicate an attack chain.",
+    "behavioral_context": "Compare the authentication patterns of C395 and C457 against known baselines to identify deviations.",
+    "permission_analysis": "Verify if C395$@DOM1 should have legitimate access to C457 and if the Kerberos authentication is expected.",
+    "ioc_checks": "Investigate the '?' authentication type on C457 for potential Pass-the-Hash or other credential misuse techniques."
+  },
+  "conclusion": {
+    "summary": "The authentication events are largely benign, with typical service logons using the Negotiate protocol. However, anomalies involving C395 and C457 suggest potential misuse or misconfiguration, particularly with the '?' authentication type and Kerberos usage.",
+    "recommended_actions": "Investigate the authentication events involving C395 and C457, focusing on the '?' authentication type and Kerberos usage. Verify access permissions and check for potential credential misuse."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

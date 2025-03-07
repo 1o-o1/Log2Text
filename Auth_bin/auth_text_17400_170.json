@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C457, C516, C4585, C466, C528, C5190, C523, C1798, C5902, C595, C1065, C597, C1619, C737, C586, C743, C785, C788, C885, C368, C3682, C612, C1823, C17, C1618, C5051, C679, C87, C105, C553, C988, C529, C1085, C1727. Notably, there are multiple instances of ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C528",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C612",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "There are clusters of activity around timestamps <170> and <171>.",
+      "bursts": "There is a noticeable spike in authentication attempts around timestamp <171>.",
+      "off_hours_activity": "Some authentication events occur at <171>, which might be outside typical business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed, particularly involving C457 and C586.",
+      "lateral_movement": "Potential lateral movement is suggested by sequential logons from C5190 to multiple destinations and ANONYMOUS LOGON activities.",
+      "privilege_escalation": "No clear patterns of privilege escalation detected, but ANONYMOUS LOGON events could indicate attempts to access privileged information."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are present, which are suspicious.",
+      "affected_entities": [
+        "C586",
+        "C467"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source and ANONYMOUS LOGONs are concerning.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C467"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are logon events without corresponding logoff events, and vice versa.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Numerous anomalies detected, including ANONYMOUS LOGONs and unspecified authentication types.",
+      "deviation_details": "The presence of ANONYMOUS LOGONs and unspecified authentication types deviates from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps <170> and <171> to identify any attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline behaviors to identify deviations.",
+    "permission_analysis": "Verify if accounts involved in ANONYMOUS LOGONs should have access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash and Kerberoasting, especially in relation to ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several suspicious patterns, particularly involving ANONYMOUS LOGONs and unspecified authentication types. These patterns suggest potential lateral movement and unauthorized access attempts, warranting further investigation.",
+    "recommended_actions": "Investigate the source and intent of ANONYMOUS LOGON events, especially those targeting C586 and C467. Review access permissions for accounts involved in suspicious activities and consider implementing stricter authentication protocols."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

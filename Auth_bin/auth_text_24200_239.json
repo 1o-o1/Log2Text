@@ -1,0 +1,81 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events originate from computers with machine accounts (e.g., C1635$@DOM1), which is typical in automated environments. However, the use of NTLM by C2955 and C3666 in an environment that predominantly uses Kerberos is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C529",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around a single timestamp <239>, suggesting batch processing or synchronized operations.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "All events are recorded under the same timestamp, making it difficult to determine if they occurred outside typical business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed, which is typical in automated systems.",
+      "lateral_movement": "There are no clear indications of lateral movement as most authentications are self-contained within single source-destination pairs.",
+      "privilege_escalation": "No clear signs of privilege escalation detected, as most authentications are successful with expected machine accounts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of NTLM authentication in an environment that predominantly uses Kerberos could indicate misconfiguration or potential fallback to less secure protocols.",
+      "affected_entities": [
+        "C2955",
+        "C3666"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are used consistently, which is typical for automated processes. However, the use of NTLM by certain accounts is noteworthy.",
+      "affected_accounts": [
+        "C2955$@DOM1",
+        "C3666$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences are consistent with expected operations, with no missing LogOff events detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of NTLM in a Kerberos environment, which could suggest fallback or misconfiguration.",
+      "deviation_details": "NTLM authentication by C2955 and C3666 is unexpected given the predominant use of Kerberos."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the batch processing or scheduled tasks that might explain the clustering of events at <239>.",
+    "behavioral_context": "Compare the NTLM usage by C2955 and C3666 against baseline configurations to determine if this is a known exception or misconfiguration.",
+    "permission_analysis": "Verify if C2955 and C3666 should be using NTLM and if they have legitimate access to the systems they authenticated against.",
+    "ioc_checks": "Investigate potential misconfigurations or fallback scenarios that allow NTLM in a Kerberos environment, and check for any related vulnerabilities."
+  },
+  "conclusion": {
+    "summary": "The primary risk identified is the use of NTLM authentication by C2955 and C3666 in an otherwise Kerberos-preferred environment. This could indicate misconfiguration or fallback to less secure protocols.",
+    "recommended_actions": "Investigate the NTLM authentication events for potential misconfigurations or fallback scenarios. Ensure that all systems are configured to use Kerberos where possible and review security policies for NTLM usage."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "C2029 is initiating multiple authentication requests to different destination computers (C457, C528, C586) using Kerberos and unspecified authentication types. C3068 and C1136 are using NTLM with ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around timestamps <105> and <106>.",
+      "bursts": "There is a burst of activity from C2029 during <105>.",
+      "off_hours_activity": "No specific off-hours activity identified, but clustering suggests potential automation."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C2029 repeatedly accesses C457, C528, and C586.",
+      "lateral_movement": "C3068 and C1136 show potential lateral movement by using NTLM with ANONYMOUS LOGON to C467 and C586.",
+      "privilege_escalation": "No clear privilege escalation patterns detected, but ANONYMOUS LOGON usage is concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected with NTLM authentication, which is suspicious.",
+      "affected_entities": [
+        "C3068",
+        "C1136"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating across systems, which is unusual.",
+      "affected_accounts": [
+        "C2057$@DOM1",
+        "C2577$@DOM1",
+        "C2873$@DOM1",
+        "C2929$@DOM1",
+        "C2945$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are followed by LogOff events without intermediate activity, suggesting automated processes.",
+      "affected_entities": [
+        "C586",
+        "C467"
+      ]
+    },
+    "anomalies": {
+      "description": "Unusual authentication patterns detected, particularly with ANONYMOUS LOGON and NTLM usage.",
+      "deviation_details": "ANONYMOUS LOGON usage with NTLM is not typical in a Kerberos environment, suggesting potential misuse."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events from C2029 to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM and ANONYMOUS LOGON usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal suspicious patterns, particularly with ANONYMOUS LOGON and NTLM usage, indicating potential security risks.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, especially those using NTLM. Review permissions and access logs for C2029 and other involved systems."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

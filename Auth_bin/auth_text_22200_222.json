@@ -1,0 +1,122 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication requests are initiated by machine accounts (e.g., C3116$, C3157$, etc.) which is typical in a domain environment where machine accounts authenticate to services.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated with a timestamp placeholder <222>, suggesting a single time period of interest.",
+      "bursts": "No specific bursts can be identified due to the placeholder timestamp.",
+      "off_hours_activity": "Cannot be determined due to lack of specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Machine accounts repeatedly authenticate to their respective systems, which is normal for network operations.",
+      "lateral_movement": "No clear patterns of lateral movement detected as most authentications are self-contained or within expected machine account behavior.",
+      "privilege_escalation": "No evidence of privilege escalation as all operations are successful and typical for machine accounts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of '?' as an authentication type indicates missing or unknown authentication data, which could be a misconfiguration or logging issue.",
+      "affected_entities": [
+        "C625",
+        "C586",
+        "C612",
+        "C467",
+        "C1065",
+        "C3600",
+        "C529",
+        "C2106",
+        "C528",
+        "C523"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating as expected, but the use of '?' in authentication types might indicate a need for further investigation.",
+      "affected_accounts": [
+        "C3139$@DOM1",
+        "C3511$@DOM1",
+        "C3584$@DOM1",
+        "C3591$@DOM1",
+        "C480$@DOM1",
+        "C3157$@DOM1",
+        "C5333$@DOM1",
+        "C585$@DOM1",
+        "C586$@DOM1",
+        "C651$@DOM1",
+        "C743$@DOM1",
+        "C3440$@DOM1",
+        "C3526$@DOM1",
+        "C612$@DOM1",
+        "C3448$@DOM1",
+        "C3554$@DOM1",
+        "C467$@DOM1",
+        "C3465$@DOM1",
+        "C599$@DOM1",
+        "C4055$@DOM1",
+        "C4146$@DOM1",
+        "C3600$@DOM1",
+        "C3601$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal for machine accounts, though '?' authentication type needs verification.",
+      "affected_entities": [
+        "C625",
+        "C586",
+        "C612",
+        "C467",
+        "C1065",
+        "C3600",
+        "C529",
+        "C2106",
+        "C528",
+        "C523"
+      ]
+    },
+    "anomalies": {
+      "description": "The use of '?' for authentication type is the primary anomaly detected.",
+      "deviation_details": "The '?' type suggests incomplete logging or potential misconfigurations in authentication protocols."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Verify the actual timestamps for these events to ensure they align with expected operational hours and patterns.",
+    "behavioral_context": "Compare current authentication patterns with historical data to confirm consistency or identify deviations.",
+    "permission_analysis": "Ensure that the accounts, particularly those with '?', have the necessary permissions and are not exhibiting unauthorized access.",
+    "ioc_checks": "Investigate the use of '?' in authentication types to rule out potential misconfigurations or malicious activity."
+  },
+  "conclusion": {
+    "summary": "The authentication events primarily involve machine accounts performing expected operations. However, the use of '?' as an authentication type warrants further investigation to ensure it is not indicative of a misconfiguration or security issue.",
+    "recommended_actions": "Investigate the logging configuration to resolve '?' authentication types, and ensure all systems are properly configured to log authentication events accurately. Monitor for any changes in authentication patterns that could indicate emerging threats."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily self-authenticating, with each source computer matching the destination computer, suggesting routine service logons.",
+    "targets": {
+      "frequent_targets": [
+        "C1193",
+        "C1199",
+        "C12",
+        "C1205",
+        "C1212",
+        "C1216",
+        "C1219",
+        "C1222",
+        "C1224",
+        "C1225",
+        "C1230",
+        "C1238",
+        "C124",
+        "C1240",
+        "C1243",
+        "C1246",
+        "C1263",
+        "C1265",
+        "C1272",
+        "C1277",
+        "C1282",
+        "C1283",
+        "C1287",
+        "C1295",
+        "C1298",
+        "C131",
+        "C1311",
+        "C1313",
+        "C1318",
+        "C1323",
+        "C1325",
+        "C1330",
+        "C1332",
+        "C1338",
+        "C1339",
+        "C1342",
+        "C1343",
+        "C1350",
+        "C1354",
+        "C1356",
+        "C1375",
+        "C1381",
+        "C1395",
+        "C1396",
+        "C1403",
+        "C1405",
+        "C142",
+        "C1422"
+      ],
+      "sporadic_targets": [
+        "C101",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters observed due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume detected.",
+      "off_hours_activity": "No indication of off-hours activity due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive service logons from machine accounts to themselves, indicating normal system behavior.",
+      "lateral_movement": "No evidence of lateral movement as all authentications are self-contained within each system.",
+      "privilege_escalation": "No indication of privilege escalation as all actions are service logons by machine accounts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unknown authentication types detected in two instances, which could indicate misconfiguration or an anomaly.",
+      "affected_entities": [
+        "C101",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are self-authenticating, which is typical for service operations.",
+      "affected_accounts": [
+        "C1193$@DOM1",
+        "C1199$@DOM1",
+        "C12$@DOM1",
+        "C1205$@DOM1",
+        "C1212$@DOM1",
+        "C1216$@DOM1",
+        "C1219$@DOM1",
+        "C1222$@DOM1",
+        "C1224$@DOM1",
+        "C1225$@DOM1",
+        "C1230$@DOM1",
+        "C1238$@DOM1",
+        "C124$@DOM1",
+        "C1240$@DOM1",
+        "C1243$@DOM1",
+        "C1246$@DOM1",
+        "C1263$@DOM1",
+        "C1265$@DOM1",
+        "C1272$@DOM1",
+        "C1277$@DOM1",
+        "C1282$@DOM1",
+        "C1283$@DOM1",
+        "C1287$@DOM1",
+        "C1295$@DOM1",
+        "C1298$@DOM1",
+        "C131$@DOM1",
+        "C1311$@DOM1",
+        "C1313$@DOM1",
+        "C1318$@DOM1",
+        "C1323$@DOM1",
+        "C1325$@DOM1",
+        "C1330$@DOM1",
+        "C1332$@DOM1",
+        "C1338$@DOM1",
+        "C1339$@DOM1",
+        "C1342$@DOM1",
+        "C1343$@DOM1",
+        "C1350$@DOM1",
+        "C1354$@DOM1",
+        "C1356$@DOM1",
+        "C1375$@DOM1",
+        "C1381$@DOM1",
+        "C1395$@DOM1",
+        "C1396$@DOM1",
+        "C1403$@DOM1",
+        "C1405$@DOM1",
+        "C142$@DOM1",
+        "C1422$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events with unknown authentication type detected, which could indicate incomplete session handling.",
+      "affected_entities": [
+        "C101",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear normal for service operations, with minor anomalies in authentication types.",
+      "deviation_details": "The use of unknown authentication types in two instances is the primary deviation from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further examine the sequence and timing of the unknown authentication type events to determine if they correlate with any known issues or misconfigurations.",
+    "behavioral_context": "Compare the observed machine account self-authentication patterns with baseline data to confirm they align with expected service operations.",
+    "permission_analysis": "Verify the permissions and configurations of the systems using unknown authentication types to ensure no misconfigurations exist.",
+    "ioc_checks": "Check for any known vulnerabilities or misconfigurations related to the use of unknown authentication types, potentially indicating a need for patching or configuration updates."
+  },
+  "conclusion": {
+    "summary": "The authentication events primarily reflect routine service operations with machine accounts self-authenticating. However, the presence of unknown authentication types in two instances warrants further investigation to rule out misconfigurations or potential security issues.",
+    "recommended_actions": "Investigate the systems using unknown authentication types to ensure they are correctly configured and patched. Monitor these systems for any further anomalies and consider implementing stricter authentication logging to capture more detailed data for future analysis."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

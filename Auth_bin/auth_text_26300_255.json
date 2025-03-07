@@ -1,0 +1,75 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most source computers are authenticating within expected patterns, but C436 shows ANONYMOUS LOGON usage, which is typically suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C529"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "No specific clusters identified, but consistent activity across various computers.",
+      "bursts": "No significant bursts detected.",
+      "off_hours_activity": "No specific off-hours activity noted, but ANONYMOUS LOGON could indicate suspicious behavior regardless of time."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are seen in systems like C1727, which accesses multiple destinations.",
+      "lateral_movement": "Potential lateral movement suggested by C1727 accessing C2516 and C529.",
+      "privilege_escalation": "No clear patterns of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, which is often used in suspicious activities.",
+      "affected_entities": [
+        "C436"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating as expected, but ANONYMOUS LOGON is concerning.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some LogOn events without corresponding LogOff, but generally within expected behavior for machine accounts.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON and unknown authentication types.",
+      "deviation_details": "Unknown authentication types and ANONYMOUS LOGON are deviations from standard secure practices."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of ANONYMOUS LOGON events to determine if they correlate with any known attack patterns.",
+    "behavioral_context": "Compare the observed ANONYMOUS LOGON and unknown auth types against baseline authentication behavior to identify anomalies.",
+    "permission_analysis": "Verify if the accounts associated with ANONYMOUS LOGON have legitimate reasons to access the systems targeted.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially in systems with ANONYMOUS LOGON or unknown auth types."
+  },
+  "conclusion": {
+    "summary": "The environment generally appears benign, but the presence of ANONYMOUS LOGON and unknown authentication types warrants further investigation.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON events on C436 and review authentication policies to prevent unknown authentication types."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

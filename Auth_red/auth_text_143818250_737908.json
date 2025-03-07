@@ -1,0 +1,85 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C12618, C482, and C527 are initiating numerous authentication requests, indicating potential automated or scripted activity. Notably, C12618 is accessing multiple destination computers, which could suggest lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C1065",
+        "C625",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C18872",
+        "C2162"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are concentrated around the timestamp <737908>, indicating a burst of activity.",
+      "bursts": "A noticeable spike in authentication requests is observed from C12618 and C482.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive TGS requests from C12618 and C482 to multiple destinations suggest possible ticket harvesting.",
+      "lateral_movement": "Sequential TGS requests from C12618 and C482 to different targets suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the pattern of access suggests potential reconnaissance."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events detected, and unspecified authentication types are prevalent.",
+      "affected_entities": [
+        "C2127",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from single sources like C12618 and C482 accessing various destinations rapidly.",
+      "affected_accounts": [
+        "U5268@DOM1",
+        "U6910@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOffs are not directly visible, but rapid successive sessions suggest incomplete session handling.",
+      "affected_entities": [
+        "C12618",
+        "C482"
+      ]
+    },
+    "anomalies": {
+      "description": "Unusual authentication patterns with high frequency and multiple destinations accessed by single sources.",
+      "deviation_details": "The use of NTLM in some instances where Kerberos is available also indicates potential misconfigurations or fallback scenarios."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of authentication events from C12618 and C482 to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare the observed patterns against baseline authentication behaviors to identify deviations.",
+    "permission_analysis": "Verify if accounts like U5268@DOM1 and U6910@DOM1 have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially given the TGS request patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show a high risk of lateral movement and potential credential harvesting, particularly involving systems like C12618 and C482.",
+    "recommended_actions": "Investigate the source computers C12618 and C482 for signs of compromise. Review account permissions and monitor for further suspicious activity. Consider implementing stricter authentication protocols and monitoring for ANONYMOUS LOGON attempts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

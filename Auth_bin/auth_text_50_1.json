@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are primarily machine accounts, which is typical for service operations. However, there are multiple instances of unknown authentication types, which could be indicative of misconfigurations or potential obfuscation attempts.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C467",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "There are no significant clusters of authentication events indicating a burst of activity within a short timeframe.",
+      "bursts": "No sudden spikes in authentication volume were observed.",
+      "off_hours_activity": "The data does not provide specific timestamps to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are repetitive LogOn and LogOff actions on the same machines, which is typical for service accounts.",
+      "lateral_movement": "Potential lateral movement is suggested by the same source user (e.g., C567$@DOM1) accessing multiple destination computers (C101, C553, C988).",
+      "privilege_escalation": "No clear patterns of privilege escalation are detected from the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several authentication events with unknown types, marked as '?', which could be suspicious.",
+      "affected_entities": [
+        "C612",
+        "C528",
+        "C467",
+        "C529",
+        "C1065",
+        "C586",
+        "C457",
+        "C101",
+        "C553",
+        "C625"
+      ]
+    },
+    "account_patterns": {
+      "description": "The account C567$@DOM1 is accessing multiple destinations, which could indicate credential usage across systems.",
+      "affected_accounts": [
+        "C567$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are multiple LogOn events without corresponding LogOff events, which could indicate incomplete session management.",
+      "affected_entities": [
+        "C574",
+        "C608"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and machine accounts accessing multiple systems are notable anomalies.",
+      "deviation_details": "The use of '?' as an authentication type and the multiple accesses by C567$@DOM1 deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence and timing of events for C567$@DOM1 to determine if these indicate a coordinated attack or legitimate activity.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if the accounts, especially C567$@DOM1, have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting in relation to the observed authentication patterns."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals potential anomalies with unknown authentication types and possible lateral movement by account C567$@DOM1. These could indicate misconfigurations or malicious activity.",
+    "recommended_actions": "Investigate the unknown authentication types and verify the legitimacy of C567$@DOM1's access to multiple systems. Consider implementing stricter monitoring and logging to capture detailed authentication events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

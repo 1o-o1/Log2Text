@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C679, C1005, C1065, C101, C1115, C1294, C625, C1484, C1727, C1968, C1795, C612, C1828, C1986, C2358, C2398, C457, C586, C528, C2811, C2886, C3013, and C3015. Notably, C1065 and C2358 are involved in multiple authentication events, suggesting they may be central nodes in the network.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C1065",
+        "C529",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C625",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The data shows a clustering of authentication events at timestamp <172>, indicating a high volume of activity during this period.",
+      "bursts": "There are no significant bursts outside the observed cluster at <172>.",
+      "off_hours_activity": "No specific off-hours activity can be determined from the given data as timestamps are aggregated."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1065 and C2358 show repetitive authentication actions, suggesting they are heavily utilized systems.",
+      "lateral_movement": "The sequence of authentication events from C1065 to multiple destinations and from C2358 to multiple destinations suggests potential lateral movement.",
+      "privilege_escalation": "No clear patterns of privilege escalation are evident from the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of ANONYMOUS LOGON and unspecified authentication types ('?') are noted as suspicious.",
+      "affected_entities": [
+        "C679",
+        "C1065",
+        "C101",
+        "C625",
+        "C612",
+        "C529",
+        "C457",
+        "C586",
+        "C528"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source (e.g., C1065) and machine accounts authenticating to multiple destinations rapidly are observed.",
+      "affected_accounts": [
+        "C1065$@DOM1",
+        "C2358$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are several logon events without corresponding logoff events, particularly involving C1065 and C2358.",
+      "affected_entities": [
+        "C1065",
+        "C2358"
+      ]
+    },
+    "anomalies": {
+      "description": "The data reveals anomalies in authentication patterns, particularly involving unspecified authentication types and potential lateral movement.",
+      "deviation_details": "The use of NTLM in some cases where Kerberos is expected, and the presence of multiple logon events from a single source without corresponding logoffs, are deviations from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events at <172> to determine if there are any attack chains or coordinated activities.",
+    "behavioral_context": "Compare the observed patterns with historical baseline data to identify deviations.",
+    "permission_analysis": "Verify if accounts like C1065$@DOM1 and C2358$@DOM1 should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM and Kerberos usage."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential anomalies in authentication patterns, such as the use of ANONYMOUS LOGON, unspecified authentication types, and possible lateral movement. These suggest a medium risk of compromise.",
+    "recommended_actions": "Investigate the authentication patterns of C1065 and C2358 for potential lateral movement. Review the use of NTLM and unspecified authentication types for any misconfigurations or unauthorized access attempts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

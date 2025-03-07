@@ -1,0 +1,69 @@
+{
+  "log_type": "Authentication",
+  "observations": {
+    "source_actor": "Analysis of computers and accounts initiating authentication events, noting suspicious naming patterns or unexpected systems",
+    "targets": {
+      "frequent_targets": [
+        "example-system1",
+        "example-system2"
+      ],
+      "sporadic_targets": [
+        "example-system3"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Time periods with concentrated authentication activity",
+      "bursts": "Sudden spikes in authentication volume",
+      "off_hours_activity": "Authentication events occurring outside business hours"
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Recurring authentication patterns between systems",
+      "lateral_movement": "Sequential authentication patterns suggesting movement between systems",
+      "privilege_escalation": "Authentication patterns indicating escalation to higher privilege accounts"
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Analysis of suspicious authentication types detected (ANONYMOUS LOGON, NTLM, unknown types)",
+      "affected_entities": [
+        "example-system1"
+      ]
+    },
+    "account_patterns": {
+      "description": "Analysis of suspicious account usage patterns",
+      "affected_accounts": [
+        "example-account1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Analysis of suspicious logon/logoff sequences or TGS/TGT request patterns",
+      "affected_entities": [
+        "example-system1"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall analysis of authentication anomalies detected",
+      "deviation_details": "Specific details about deviations from normal authentication patterns"
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Steps to analyze the sequence and timing of authentication events to identify attack chains",
+    "behavioral_context": "Methods to compare observed authentication patterns with known baselines",
+    "permission_analysis": "Process to verify whether authenticated accounts should have legitimate access to target systems",
+    "ioc_checks": "Specific techniques to check (Pass-the-Hash, Kerberoasting, etc.) based on observed authentication patterns"
+  },
+  "conclusion": {
+    "summary": "Summary assessment of authentication anomalies with risk classification",
+    "recommended_actions": "Specific recommendations for investigation and remediation of suspicious authentication events"
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": "Boolean",
+    "unknown_auth_type": "Boolean",
+    "ntlm_in_kerberos_env": "Boolean",
+    "machine_account_anomalies": "Boolean",
+    "multiple_accounts_single_source": "Boolean",
+    "lateral_movement_indicators": "Boolean",
+    "excessive_ticket_requests": "Boolean",
+    "incomplete_session_pairs": "Boolean"
+  }
+}

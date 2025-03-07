@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1618 and C2384 are initiating multiple authentication events, some using NTLM and unspecified authentication types, which could be suspicious in a Kerberos-preferred environment.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp (26), indicating a potential batch operation or synchronized activity.",
+      "bursts": "There are no clear bursts outside the identified cluster, but the synchronized timing itself is unusual.",
+      "off_hours_activity": "All events appear to occur at the same time, which could be outside normal business hours depending on the organization's timezone."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated LogOn and LogOff events from the same source to multiple destinations, such as C3935 accessing multiple systems.",
+      "lateral_movement": "Sequential access patterns from single accounts to multiple systems, such as C599$@DOM1 accessing both C101 and C523.",
+      "privilege_escalation": "No clear privilege escalation patterns observed, but the use of machine accounts in unusual sequences could indicate attempts to escalate privileges."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Detected use of unspecified authentication types and NTLM in a potentially Kerberos-preferred environment.",
+      "affected_entities": [
+        "C612",
+        "C1618",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts authenticating atypically and multiple accounts from a single source.",
+      "affected_accounts": [
+        "C1282$@DOM1",
+        "C1617$@DOM1",
+        "C509$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Unusual LogOn and LogOff sequences, particularly with unspecified authentication types.",
+      "affected_entities": [
+        "C612",
+        "C523",
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall anomalies include synchronized authentication events and unusual account behaviors.",
+      "deviation_details": "The synchronized timing of events and the use of unspecified authentication types deviate from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the synchronized timing of events to determine if they align with known batch operations or unauthorized scripts.",
+    "behavioral_context": "Compare the observed authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts, especially machine accounts, should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM usage in a Kerberos environment."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal synchronized events with suspicious authentication types and account behaviors, suggesting potential unauthorized activity or lateral movement.",
+    "recommended_actions": "Investigate the source of the synchronized events, review access permissions for involved accounts, and monitor for further suspicious activity. Consider implementing stricter authentication protocols and reviewing network segmentation to limit lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

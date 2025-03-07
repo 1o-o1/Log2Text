@@ -1,0 +1,125 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "All authentication events are initiated by machine accounts (e.g., C736$, C738$) on their respective systems, which is typical for service logons.",
+    "targets": {
+      "frequent_targets": [
+        "C736",
+        "C738",
+        "C739",
+        "C74",
+        "C740",
+        "C741",
+        "C748",
+        "C749",
+        "C75",
+        "C756",
+        "C760",
+        "C761",
+        "C762",
+        "C766",
+        "C767",
+        "C770",
+        "C772",
+        "C773",
+        "C774",
+        "C777",
+        "C782",
+        "C785",
+        "C786",
+        "C787",
+        "C789",
+        "C796",
+        "C803",
+        "C804",
+        "C81",
+        "C811",
+        "C812",
+        "C813",
+        "C820",
+        "C823",
+        "C826",
+        "C839",
+        "C84",
+        "C842",
+        "C843",
+        "C846",
+        "C848",
+        "C85",
+        "C851",
+        "C853",
+        "C856",
+        "C857",
+        "C858",
+        "C86",
+        "C863"
+      ],
+      "sporadic_targets": [
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated and do not show specific clustering in the data provided.",
+      "bursts": "No sudden spikes in authentication volume are evident from the data.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "The repetitive pattern of machine accounts logging into their own systems is observed, which is typical for service accounts.",
+      "lateral_movement": "No evidence of lateral movement is observed as all logons are local to the source systems.",
+      "privilege_escalation": "No indications of privilege escalation are observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "One instance of an unknown authentication type ('?') was detected.",
+      "affected_entities": [
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are logging into their own systems, which is normal behavior for service accounts.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "A LogOff event with an unknown authentication type was detected, which is unusual.",
+      "affected_entities": [
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear normal except for the unknown authentication type on C529.",
+      "deviation_details": "The presence of an unknown authentication type ('?') on C529 is the only deviation."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events on C529 to determine if the unknown authentication type correlates with any specific activity or anomaly.",
+    "behavioral_context": "Compare the authentication pattern of C529 with baseline behavior to determine if the unknown type is a recurring anomaly.",
+    "permission_analysis": "Verify if the machine account C78$ should have legitimate access to perform the observed LogOff operation on C529.",
+    "ioc_checks": "Check for known attack techniques that might exploit unknown authentication types or unusual LogOff events, such as potential misconfigurations or unauthorized access attempts."
+  },
+  "conclusion": {
+    "summary": "The authentication events largely reflect normal service account activity, with the exception of an unknown authentication type on C529, which warrants further investigation.",
+    "recommended_actions": "Investigate the unknown authentication type on C529 for potential misconfigurations or unauthorized access. Ensure that all machine accounts are operating within expected parameters and have appropriate permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

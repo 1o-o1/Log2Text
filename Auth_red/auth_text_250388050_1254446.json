@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C15244 and C10283 are initiating numerous authentication attempts, with C15244 attempting multiple failed logons to different destination computers, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C10809",
+        "C18637",
+        "C18727",
+        "C20089",
+        "C20151",
+        "C6449",
+        "C9516"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur around the same timestamp <1254446> or <1254447>, indicating a potential coordinated attack or automated script.",
+      "bursts": "There is a burst of failed NTLM logon attempts from C15244 to various destinations, indicating a possible brute force or credential stuffing attack.",
+      "off_hours_activity": "The timestamps are not specified in detail, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated failed logon attempts from C15244 to multiple destinations using NTLM.",
+      "lateral_movement": "Potential lateral movement indicated by C15244 attempting to access multiple different computers in quick succession.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but the use of ANONYMOUS LOGON could indicate attempts to access resources without proper credentials."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM usage in a potentially Kerberos-preferred environment detected.",
+      "affected_entities": [
+        "C586",
+        "C15244"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account behavior with multiple failed logon attempts from a single source (C15244) and ANONYMOUS LOGON attempts from multiple sources.",
+      "affected_accounts": [
+        "U6836@C15244",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events and excessive TGS requests from certain computers.",
+      "affected_entities": [
+        "C15244",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and NTLM in a potentially Kerberos environment, along with clustered authentication attempts, suggests anomalies.",
+      "deviation_details": "The deviation from expected authentication types and the clustering of events suggest automated or scripted attacks."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events to determine if there is a coordinated attack pattern, especially focusing on the clustering of timestamps.",
+    "behavioral_context": "Compare these patterns against normal authentication baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts used in these attempts should have legitimate access to the targeted systems, especially those involving ANONYMOUS LOGON.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, given the NTLM and ANONYMOUS LOGON usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs indicate potential malicious activity, including possible brute force attacks, lateral movement attempts, and suspicious use of ANONYMOUS LOGON and NTLM protocols.",
+    "recommended_actions": "Investigate the source of the ANONYMOUS LOGON attempts, review failed logon attempts from C15244, and consider implementing stricter authentication protocols and monitoring for NTLM usage."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

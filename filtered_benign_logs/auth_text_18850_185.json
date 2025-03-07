@@ -1,0 +1,120 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are primarily machine accounts (e.g., C2179$, C2710$) which is typical in automated processes or services.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C988",
+        "C395"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "There is a consistent pattern of authentication events occurring at a similar timestamp <185>, suggesting batch processing or scheduled tasks.",
+      "bursts": "No significant bursts detected beyond the clustered timing.",
+      "off_hours_activity": "No specific off-hours activity was identified from the data provided."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are noted, especially with machine accounts, which is typical in service account operations.",
+      "lateral_movement": "No clear patterns of lateral movement detected as most authentications are to self or expected targets.",
+      "privilege_escalation": "No indications of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several instances of authentication with unknown types (marked as '?').",
+      "affected_entities": [
+        "C457",
+        "C586",
+        "C467",
+        "C395",
+        "C528",
+        "C1065",
+        "C988",
+        "C2109",
+        "C105",
+        "C1618",
+        "C1795",
+        "C539"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently authenticating, which is normal for service operations.",
+      "affected_accounts": [
+        "C2179$@DOM1",
+        "C2710$@DOM1",
+        "C2759$@DOM1",
+        "C2775$@DOM1",
+        "C2783$@DOM1",
+        "C2945$@DOM1",
+        "C3079$@DOM1",
+        "C3157$@DOM1",
+        "C3320$@DOM1",
+        "C3336$@DOM1",
+        "C3554$@DOM1",
+        "C395$@DOM1",
+        "C4181$@DOM1",
+        "C528$@DOM1",
+        "C567$@DOM1",
+        "C5850$@DOM1",
+        "C625$@DOM1",
+        "C743$@DOM1",
+        "C850$@DOM1",
+        "C988$@DOM1",
+        "LOCAL SERVICE@C1878",
+        "U10770@DOM1",
+        "U1129@DOM1",
+        "U1244@DOM1",
+        "U292@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon and Logoff sequences appear normal with corresponding pairs for most events.",
+      "affected_entities": [
+        "C457",
+        "C586",
+        "C467",
+        "C528",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types is the primary anomaly.",
+      "deviation_details": "Unknown authentication types are present in multiple events, which could indicate logging issues or misconfigured systems."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the timing of authentication events to ensure they align with expected operational schedules.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify that machine accounts and users have appropriate permissions for the systems they are accessing.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in systems with unknown auth types."
+  },
+  "conclusion": {
+    "summary": "The authentication data shows typical patterns for machine accounts and service operations. However, the presence of unknown authentication types warrants further investigation to rule out misconfigurations or potential security issues.",
+    "recommended_actions": "Investigate the cause of unknown authentication types and ensure logging configurations are correct. Validate permissions for machine accounts accessing critical systems."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

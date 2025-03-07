@@ -1,0 +1,104 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C926, C990, C1, C1191, C456, C1065, C626, C1570, C365, C1025, C561, C229, C36, C464, C568, C657, C868, C62, C423. Notably, C1 and C1191 are involved in multiple authentication events, suggesting they may be significant actors in the network.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C990",
+        "C1",
+        "C1191",
+        "C456",
+        "C1065",
+        "C586",
+        "C625",
+        "C1025",
+        "C464",
+        "C657"
+      ],
+      "sporadic_targets": [
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U10"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are aggregated with timestamps <3>, indicating a potential clustering of events around this time.",
+      "bursts": "There are no explicit bursts noted, but the clustering suggests a concentration of activity.",
+      "off_hours_activity": "The data does not specify exact times, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are observed from C1 and C1191, frequently interacting with multiple systems.",
+      "lateral_movement": "Potential lateral movement is suggested by C1 and C1191 accessing multiple systems, including TGS requests.",
+      "privilege_escalation": "No explicit privilege escalation is detected, but the use of TGS requests by U3@DOM1 and U4@DOM1 could indicate preparation for such actions."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unspecified authentication type (?), which could indicate misconfiguration or obfuscation attempts.",
+      "affected_entities": [
+        "C990",
+        "C1065",
+        "C1025",
+        "C1",
+        "C1191",
+        "C62",
+        "C464",
+        "C657"
+      ]
+    },
+    "account_patterns": {
+      "description": "Accounts such as U3@DOM1, U4@DOM1, and U5@DOM1 are involved in multiple authentication events across different systems, which could indicate credential sharing or misuse.",
+      "affected_accounts": [
+        "U3@DOM1",
+        "U4@DOM1",
+        "U5@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are sequences where LogOn events are followed by TGS requests without corresponding LogOff events, which could indicate persistent sessions or credential caching.",
+      "affected_entities": [
+        "C1",
+        "C1191",
+        "C423"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and frequent TGS requests are notable anomalies.",
+      "deviation_details": "The use of unspecified authentication types and frequent TGS requests deviates from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events for C1 and C1191 to determine if there is a pattern of lateral movement or coordinated access.",
+    "behavioral_context": "Compare the observed authentication patterns against historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify the access permissions for accounts U3@DOM1, U4@DOM1, and U5@DOM1 to ensure they align with their access patterns.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the frequent TGS requests and unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication data reveals potential anomalies, including unspecified authentication types and frequent TGS requests, which could indicate lateral movement or misconfiguration. Accounts U3@DOM1, U4@DOM1, and U5@DOM1 show suspicious patterns that warrant further investigation.",
+    "recommended_actions": "Investigate the use of unspecified authentication types and frequent TGS requests. Validate the access permissions and usage patterns of accounts U3@DOM1, U4@DOM1, and U5@DOM1. Consider monitoring C1 and C1191 for potential lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily self-authenticating, which is typical for internal processes. However, there are instances of ANONYMOUS LOGON, which can be suspicious if not expected.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C988",
+        "C553"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around timestamps 184 and 185, indicating a concentrated period of authentication activity.",
+      "bursts": "There is a noticeable spike in authentication activity at timestamp 185.",
+      "off_hours_activity": "No specific off-hours activity was noted, as timestamps do not specify actual times of day."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed, which is typical in automated processes.",
+      "lateral_movement": "There is no clear evidence of lateral movement as most authentications are self-contained within the same source and destination.",
+      "privilege_escalation": "No clear indications of privilege escalation were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentications were detected, which can be suspicious if not expected.",
+      "affected_entities": [
+        "C528",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "ANONYMOUS LOGON accounts are used in several instances, which could be benign but warrant further investigation.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C528"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon and LogOff sequences appear normal, with corresponding pairs.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and NTLM in a potentially Kerberos-preferred environment is notable.",
+      "deviation_details": "The use of NTLM and ANONYMOUS LOGON in a Kerberos environment could indicate misconfigurations or potential reconnaissance."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the specific times of day for timestamps 184 and 185 to identify any off-hours activity.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication logs to identify deviations.",
+    "permission_analysis": "Verify if the accounts, especially those using ANONYMOUS LOGON, should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash or Kerberoasting that might exploit NTLM or Kerberos."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show typical internal authentication patterns with some anomalies such as ANONYMOUS LOGON and NTLM usage that require further investigation.",
+    "recommended_actions": "Investigate the use of ANONYMOUS LOGON and NTLM authentications, especially in systems where Kerberos is preferred. Ensure that these authentications are expected and legitimate."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

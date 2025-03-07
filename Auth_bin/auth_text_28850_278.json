@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C625, C101, C467, and C1993 are initiating multiple authentication events. The presence of machine accounts (e.g., C1085$, C1114$) is noted, but no suspicious naming conventions are immediately apparent.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C101",
+        "C467",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at the same timestamp <278>, indicating batch processing or synchronized activity.",
+      "bursts": "No sudden spikes in authentication volume are apparent beyond the synchronized timestamps.",
+      "off_hours_activity": "All events occur at the same timestamp, making it difficult to determine if they are outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are noted, especially from machine accounts, but they appear consistent with automated processes.",
+      "lateral_movement": "No clear sequential authentication patterns suggestive of lateral movement are detected.",
+      "privilege_escalation": "No patterns indicating privilege escalation attempts are observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events use an unknown authentication type ('?'), which is unusual.",
+      "affected_entities": [
+        "C625",
+        "C101",
+        "C467",
+        "C1993",
+        "C457",
+        "C2134",
+        "C2247",
+        "C586",
+        "C529",
+        "C3548"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating frequently, which could be normal in this environment.",
+      "affected_accounts": [
+        "C1085$@DOM1",
+        "C1114$@DOM1",
+        "C1766$@DOM1",
+        "C1215$@DOM1",
+        "C2373$@DOM1",
+        "C2962$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon and logoff sequences appear regular, with no missing logoffs noted.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The consistent use of unknown authentication types ('?') and synchronized timestamps are the main anomalies.",
+      "deviation_details": "The use of '?' for authentication type across multiple events is unusual and should be clarified."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine if the synchronized timestamps correspond to scheduled tasks or batch processes.",
+    "behavioral_context": "Compare the observed authentication patterns with historical data to determine normalcy.",
+    "permission_analysis": "Check if the machine accounts have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Investigate the use of '?' as an authentication type to ensure it is not indicative of a misconfiguration or security issue."
+  },
+  "conclusion": {
+    "summary": "The authentication events show synchronized activity and the use of unknown authentication types ('?'), which are unusual but not immediately indicative of a compromise. The presence of machine accounts is consistent with automated processes.",
+    "recommended_actions": "Investigate the use of '?' for authentication type to ensure it is not a misconfiguration. Verify that the synchronized timestamps align with expected scheduled tasks."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

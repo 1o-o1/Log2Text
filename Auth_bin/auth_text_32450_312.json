@@ -1,0 +1,100 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events are varied, with no single computer showing an unusually high number of initiations. However, C308 is noted for multiple LogOn events to different destinations, which might indicate a service account or a system with broad access requirements.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C467",
+        "C101"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C586",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered at the same timestamp (312), indicating a batch processing or synchronized activity.",
+      "bursts": "No significant bursts outside the clustered timestamp were noted.",
+      "off_hours_activity": "All events occur at the same timestamp, suggesting no off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C308 is involved in multiple LogOn events to different systems, suggesting a pattern of repeated access.",
+      "lateral_movement": "C308's repeated LogOn events to different systems could suggest lateral movement if not typical for its role.",
+      "privilege_escalation": "No clear indications of privilege escalation were detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple events with unknown authentication types were detected, but all were successful and likely benign in this context.",
+      "affected_entities": [
+        "C523",
+        "C625",
+        "C1065",
+        "C528",
+        "C101",
+        "C1085",
+        "C191",
+        "C457",
+        "C529",
+        "C2106",
+        "C467",
+        "C308"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) are authenticating across systems, which is expected in a benign environment for service accounts.",
+      "affected_accounts": [
+        "C104$@DOM1",
+        "C1065$@DOM1",
+        "C1108$@DOM1",
+        "C123$@DOM1",
+        "C1617$@DOM1",
+        "C247$@DOM1",
+        "C2545$@DOM1",
+        "C2908$@DOM1",
+        "C308$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear complete, with no missing pairs detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and synchronized timestamps are noted, but likely benign.",
+      "deviation_details": "The synchronized timestamps and unknown authentication types are unusual but consistent across events, suggesting a controlled environment."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the processes or scheduled tasks that might explain the synchronized timestamps (312) across multiple systems.",
+    "behavioral_context": "Compare the observed authentication patterns against known baselines to confirm if the activity is typical for the environment.",
+    "permission_analysis": "Ensure that machine accounts have appropriate permissions for the systems they are accessing, especially C308's broad access.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, although no direct indicators were found."
+  },
+  "conclusion": {
+    "summary": "The authentication events show synchronized activity with unknown authentication types, likely due to a controlled or batch process. No direct indicators of compromise were found, but C308's behavior warrants further review to ensure it aligns with expected roles.",
+    "recommended_actions": "Investigate C308's role and access requirements to confirm its broad access is justified. Review scheduled tasks or processes that might explain synchronized timestamps."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

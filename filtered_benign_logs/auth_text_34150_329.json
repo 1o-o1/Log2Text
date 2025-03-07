@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events show a mix of user and machine accounts. Notably, C3031 is initiating multiple authentication requests, which could indicate a service account or automated process.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C1403"
+      ],
+      "sporadic_targets": [
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur around the same time, indicating a potential batch process or scheduled task.",
+      "bursts": "No significant bursts detected, suggesting a steady flow of authentication requests.",
+      "off_hours_activity": "No specific off-hours activity noted; timestamps are consistent with normal operational hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C3031 repeatedly authenticates to various systems, suggesting a potential automated task or service account.",
+      "lateral_movement": "No clear lateral movement patterns detected; most authentications are within expected source-destination pairs.",
+      "privilege_escalation": "No privilege escalation patterns detected; most authentications use consistent accounts and protocols."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentications were detected, which can be risky, especially if unexpected.",
+      "affected_entities": [
+        "C2660",
+        "C1122"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to multiple systems, which is typical for service accounts but should be monitored for anomalies.",
+      "affected_accounts": [
+        "C108$@DOM1",
+        "C1122$@DOM1",
+        "C1136$@DOM1",
+        "C1220$@DOM1",
+        "C1368$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some logon events without corresponding logoff events, but this is not unusual in a benign environment with persistent connections.",
+      "affected_entities": [
+        "C3031",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the environment shows typical authentication patterns for a benign setting, with some machine accounts and service-like behavior.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and NTLM authentications should be reviewed to ensure they are expected and configured securely."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the timing of events for C3031 to ensure they align with expected automated tasks or service account operations.",
+    "behavioral_context": "Compare the authentication patterns of C3031 and machine accounts against known baselines to confirm legitimacy.",
+    "permission_analysis": "Verify that machine accounts like C108$@DOM1 have appropriate permissions for the systems they access.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash in environments where NTLM is used unexpectedly."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear typical for a benign environment, with some machine accounts and service-like behavior. However, the presence of ANONYMOUS LOGON and NTLM authentications warrants further review.",
+    "recommended_actions": "Investigate the source and necessity of ANONYMOUS LOGON and NTLM authentications. Ensure all machine accounts have appropriate permissions and are used securely."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

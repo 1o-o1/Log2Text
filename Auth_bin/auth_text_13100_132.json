@@ -1,0 +1,146 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1065, C1115, C101, C529, C1247, C16, C1085, C523, C1655, C1968, C1795, C181, C1810, C1846, C1909, C1997, C2077, C2233, C457, C2399, C2479, C467, C2710, C2755, C2768, C612, C1798, and C411 are initiating authentication events. Notably, C411 is involved in multiple authentication events, suggesting it might be a hub for activity.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C457",
+        "C586",
+        "C411"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C529",
+        "C101",
+        "C1085",
+        "C523",
+        "C1065",
+        "C1114",
+        "C1247",
+        "C16",
+        "C1655",
+        "C1968",
+        "C1795",
+        "C181",
+        "C1810",
+        "C1846",
+        "C1909",
+        "C1997",
+        "C2077",
+        "C2233",
+        "C2399",
+        "C2479",
+        "C467",
+        "C2710",
+        "C2755",
+        "C2768",
+        "C612",
+        "C1798"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are provided, but multiple events are happening simultaneously.",
+      "bursts": "There are no explicit bursts of activity, but multiple logons and logoffs occur in quick succession.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed, especially from machine accounts.",
+      "lateral_movement": "Potential lateral movement is indicated by multiple logons from C411 to different systems such as C586 and C612.",
+      "privilege_escalation": "No explicit privilege escalation patterns are identified, but the presence of TGS and TGT requests could suggest ticket-based attacks."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unknown authentication types are present, and NTLM is used in some unspecified contexts.",
+      "affected_entities": [
+        "C1115",
+        "C101",
+        "C529",
+        "C625",
+        "C1085",
+        "C523",
+        "C586",
+        "C1997",
+        "C2233",
+        "C411",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating in unusual patterns, and multiple accounts are rapidly authenticating from single sources.",
+      "affected_accounts": [
+        "C1065$@DOM1",
+        "C1114$@DOM1",
+        "C123$@DOM1",
+        "C1238$@DOM1",
+        "C1247$@DOM1",
+        "C16$@DOM1",
+        "C1617$@DOM1",
+        "C1655$@DOM1",
+        "C1766$@DOM1",
+        "C1794$@DOM1",
+        "C181$@DOM1",
+        "C1810$@DOM1",
+        "C1846$@DOM1",
+        "C1909$@DOM1",
+        "C1996$@DOM1",
+        "C2077$@DOM1",
+        "C2233$@DOM1",
+        "C2311$@DOM1",
+        "C2399$@DOM1",
+        "C2480$@DOM1",
+        "C2696$@DOM1",
+        "C2710$@DOM1",
+        "C2755$@DOM1",
+        "C2768$@DOM1",
+        "C3640$@DOM1",
+        "C411$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events without corresponding logoff events are noted, and there are excessive TGS/TGT requests.",
+      "affected_entities": [
+        "C1115",
+        "C1997",
+        "C2233",
+        "C411"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, multiple anomalies are detected, including unknown authentication types and potential lateral movement.",
+      "deviation_details": "The presence of unknown authentication types and rapid authentication sequences deviates from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of authentication events, focusing on systems like C411 and C625, which show multiple logons and logoffs.",
+    "behavioral_context": "Compare observed patterns with historical data to identify deviations, especially for systems like C411 and C625.",
+    "permission_analysis": "Verify if accounts such as C411$@DOM1 and C1996$@DOM1 should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication events show several anomalies, including unknown authentication types, potential lateral movement, and unusual machine account activity. These patterns suggest a medium to high risk of compromise.",
+    "recommended_actions": "Investigate the systems and accounts involved in unknown authentication types and rapid authentication sequences. Monitor for lateral movement and validate permissions for involved accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

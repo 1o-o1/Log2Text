@@ -1,0 +1,92 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1913, C1997, and C2710 are initiating multiple authentication events, including TGT and TGS requests, which could indicate service account activities or potential lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C528",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at a single timestamp <111>, suggesting batch processing or synchronized activity.",
+      "bursts": "No sudden spikes detected beyond the consistent timestamp <111>.",
+      "off_hours_activity": "All events are recorded at the same timestamp <111>, making it difficult to determine if they occurred outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are noted, particularly with machine accounts like C528$@DOM1.",
+      "lateral_movement": "Sequential TGT and TGS requests from C1913 and C1997 suggest potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation detected, but the presence of TGT and TGS requests is notable."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events with unknown (?) types detected, which could indicate misconfigured systems or attempts to obscure authentication methods.",
+      "affected_entities": [
+        "C457",
+        "C612",
+        "C1065",
+        "C1913",
+        "C1997",
+        "C2710",
+        "C4061",
+        "C4449"
+      ]
+    },
+    "account_patterns": {
+      "description": "Several machine accounts are authenticating in unusual patterns, such as C528$@DOM1 and C2892$@DOM1 accessing multiple destinations.",
+      "affected_accounts": [
+        "C528$@DOM1",
+        "C2892$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not prevalent, but the presence of multiple TGS and TGT requests is notable.",
+      "affected_entities": [
+        "C1913",
+        "C1997",
+        "C2710"
+      ]
+    },
+    "anomalies": {
+      "description": "The authentication data shows several anomalies, particularly with unknown authentication types and repeated TGS/TGT requests.",
+      "deviation_details": "The consistent use of unknown authentication types and the presence of multiple TGS/TGT requests deviate from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of TGT and TGS requests from computers like C1913 and C1997 to identify potential attack chains.",
+    "behavioral_context": "Compare the observed authentication patterns with historical data to establish a baseline for normal activity.",
+    "permission_analysis": "Verify whether the accounts involved in TGT and TGS requests have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several anomalies, including unknown authentication types and potential lateral movement through TGS/TGT requests. These patterns warrant further investigation to rule out malicious activity.",
+    "recommended_actions": "Conduct a detailed investigation into the accounts and systems involved in TGS/TGT requests, validate the legitimacy of unknown authentication types, and monitor for any signs of credential misuse or lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": false
+  }
+}

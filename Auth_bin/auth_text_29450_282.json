@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C924, C467, and C384 are initiating multiple authentication events. Notably, C384 is accessing multiple destination computers rapidly, which could be indicative of lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1065",
+        "C5919"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at timestamp 282, indicating a potential scheduled task or batch process.",
+      "bursts": "No significant bursts outside the clustered time at 282.",
+      "off_hours_activity": "Activity at timestamp 283 could indicate off-hours activity, particularly involving ANONYMOUS LOGON."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C384 shows repetitive authentication to multiple destinations, suggesting potential lateral movement.",
+      "lateral_movement": "C384's access pattern across C467, C529, C586, and C625 suggests lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM usage detected, which are typically considered high-risk.",
+      "affected_entities": [
+        "C1065",
+        "C5919"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts (e.g., C924$, C957$) are performing LogOn and LogOff operations, which could be normal but should be verified.",
+      "affected_accounts": [
+        "C924$@DOM1",
+        "C957$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Several LogOn events without corresponding LogOff events, particularly involving C384.",
+      "affected_entities": [
+        "C384"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON and NTLM in a potentially Kerberos-preferred environment.",
+      "deviation_details": "Unusual authentication types and sequences, especially involving ANONYMOUS LOGON and NTLM."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamp 282 and 283 to identify any attack chains or scheduled tasks.",
+    "behavioral_context": "Compare C384's behavior with baseline patterns to determine if this is typical for the environment.",
+    "permission_analysis": "Verify if accounts like C924$@DOM1 and C957$@DOM1 should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for Pass-the-Hash or other credential abuse techniques due to NTLM and ANONYMOUS LOGON presence."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential lateral movement and suspicious authentication types, such as ANONYMOUS LOGON and NTLM, which could signify a security risk.",
+    "recommended_actions": "Investigate the purpose of ANONYMOUS LOGON events and assess C384's access patterns for unauthorized lateral movement. Review NTLM usage and consider enforcing Kerberos where possible."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are predominantly using machine accounts (e.g., C1459$, C1460$) to authenticate to themselves, which is typical for service accounts and automated processes.",
+    "targets": {
+      "frequent_targets": [
+        "C1459",
+        "C1460",
+        "C1461",
+        "C1462",
+        "C1467",
+        "C1480",
+        "C1490",
+        "C1492",
+        "C1496",
+        "C1497",
+        "C1499",
+        "C15",
+        "C150",
+        "C1501",
+        "C1508",
+        "C151",
+        "C1511",
+        "C1512",
+        "C1514",
+        "C1517",
+        "C1518",
+        "C1522",
+        "C153",
+        "C1531",
+        "C1537",
+        "C1538",
+        "C1539",
+        "C154",
+        "C1540",
+        "C1541",
+        "C1542",
+        "C1543",
+        "C1544",
+        "C1550",
+        "C1551",
+        "C1557",
+        "C156",
+        "C1560",
+        "C1562",
+        "C1568",
+        "C1570",
+        "C1571",
+        "C1572",
+        "C1575",
+        "C1577",
+        "C1578",
+        "C1583",
+        "C1587",
+        "C160"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are clustered around a single time period, suggesting routine system operations.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "No off-hours activity was detected; all events appear to be part of regular system operations."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "The repetitive pattern of machine accounts logging onto themselves is consistent with scheduled tasks or service operations.",
+      "lateral_movement": "No lateral movement patterns were detected as all authentications are self-contained within each system.",
+      "privilege_escalation": "No indication of privilege escalation was observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "An unknown authentication type '?' was detected in one event, which could indicate an anomaly or misconfiguration.",
+      "affected_entities": [
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "The use of machine accounts for self-authentication is typical for service operations.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "A single logoff event with an unknown authentication type was detected, which is unusual compared to the rest of the data.",
+      "affected_entities": [
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear normal for service accounts except for the unknown authentication type event.",
+      "deviation_details": "The unknown authentication type '?' on C586 could be a misconfiguration or an anomaly that warrants further investigation."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Verify the timing of the '?' authentication type event on C586 to determine if it aligns with any known system changes or updates.",
+    "behavioral_context": "Compare the '?' authentication type event on C586 with baseline data to determine if this pattern has occurred previously.",
+    "permission_analysis": "Check if the accounts involved in the '?' authentication type event have appropriate permissions and roles.",
+    "ioc_checks": "Investigate the '?' authentication type event for potential misconfigurations or signs of unauthorized access attempts."
+  },
+  "conclusion": {
+    "summary": "The authentication events are largely consistent with expected service account behavior, with the exception of a single event with an unknown authentication type that should be investigated further.",
+    "recommended_actions": "Investigate the unknown authentication type event on C586 to determine its cause and ensure it is not indicative of a misconfiguration or security issue."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

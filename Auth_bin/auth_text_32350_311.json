@@ -1,0 +1,101 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C2521, C457, C2704, C529, C612, C2901, C2106, C3173, C3730, C3758, C3853, C1065, C3906, C467, C3921, C3924, C4038, C466, C4831, C101, C539, C585, C1619, C743, C866, C976, C978. Notably, C457 and C586 are frequently involved in multiple authentications.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C2106",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are timestamped with <311>, indicating a single time period for all events.",
+      "bursts": "No specific bursts detected due to uniform timestamps.",
+      "off_hours_activity": "Unable to determine off-hours activity due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are observed, particularly with machine accounts like C2521$@DOM1 and C612$@DOM1.",
+      "lateral_movement": "Potential lateral movement suggested by multiple authentications to C457 and C586 from different sources.",
+      "privilege_escalation": "No clear evidence of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unspecified authentication types ('?') is noted, which could indicate misconfigured or suspicious activity.",
+      "affected_entities": [
+        "C2521",
+        "C457",
+        "C529",
+        "C612",
+        "C2106",
+        "C3173",
+        "C1065",
+        "C467",
+        "C101",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently used, and some accounts are accessing multiple destinations rapidly.",
+      "affected_accounts": [
+        "C2614$@DOM1",
+        "C3850$@DOM1",
+        "C3863$@DOM1",
+        "C466$@DOM1",
+        "C2731$@DOM1",
+        "C2981$@DOM1",
+        "C3595$@DOM1",
+        "C3797$@DOM1",
+        "C567$@DOM1",
+        "C976$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are generally paired with LogOff events, but the presence of multiple LogOffs without corresponding LogOns in some cases could be unusual.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of unspecified authentication types and frequent machine account usage are notable.",
+      "deviation_details": "Unspecified authentication types and frequent machine account logons are deviations from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events for C457 and C586 to determine if there is a pattern of lateral movement or repeated access attempts.",
+    "behavioral_context": "Compare the current authentication patterns against historical data to establish if the observed behavior is typical for these systems.",
+    "permission_analysis": "Verify if the machine accounts and users should have access to the systems they are authenticating against, especially for C457 and C586.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals a benign environment with some anomalies such as unspecified authentication types and frequent machine account usage. There is no immediate evidence of malicious activity, but the patterns warrant further scrutiny to rule out potential misconfigurations or security gaps.",
+    "recommended_actions": "Investigate the unspecified authentication types to ensure they are not indicative of misconfigurations. Monitor the frequent access to C457 and C586 for any signs of lateral movement or unauthorized access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

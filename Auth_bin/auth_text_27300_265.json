@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C2245, C2384, C2392, C2404, C2814, C2943, C3088, C3219, C3310, C1798, C3514, C3526, C3584, C3609, C1065, C3691, C3707, and C3906. Notably, C3609 shows a high number of TGS requests, which could indicate ticket-granting service abuse.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C529",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are clustered around a single timestamp <265>, indicating a potential data aggregation issue rather than real-time analysis.",
+      "bursts": "No significant bursts detected due to lack of detailed timestamps.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed, particularly for machine accounts, which is typical in a domain environment.",
+      "lateral_movement": "Potential lateral movement is indicated by multiple LogOn events from C3514 to different systems including C457 and C467.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on available data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of NTLM authentication by C3584 in an environment where Kerberos is predominantly used is unusual.",
+      "affected_entities": [
+        "C3584"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating across multiple systems, which is expected in a domain environment but should be monitored for abnormal patterns.",
+      "affected_accounts": [
+        "C2383$@DOM1",
+        "C2391$@DOM1",
+        "C2403$@DOM1",
+        "C3690$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events for certain accounts, but this is typical for service accounts.",
+      "affected_entities": [
+        "C2383$@DOM1",
+        "C2391$@DOM1",
+        "C2403$@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the environment appears benign with expected authentication patterns for a domain environment.",
+      "deviation_details": "The use of NTLM by C3584 is the primary deviation from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps to identify potential attack chains or anomalies in sequence.",
+    "behavioral_context": "Compare observed authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify that machine accounts have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash in relation to NTLM usage."
+  },
+  "conclusion": {
+    "summary": "The authentication events generally align with expected domain operations, with the exception of NTLM use by C3584, which should be investigated further.",
+    "recommended_actions": "Investigate the NTLM authentication by C3584 for potential misconfiguration or compromise. Monitor machine account activity for any deviations from normal behavior."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

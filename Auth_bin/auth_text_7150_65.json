@@ -1,0 +1,122 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C612, C2180, C529, and C1065 are initiating multiple authentication requests. Notably, C2180 is involved in multiple TGS and TGT requests, which could indicate ticket-granting service activity.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C2180",
+        "C529",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C553",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp (65), indicating simultaneous authentication activities.",
+      "bursts": "No specific bursts identified beyond the clustered timing.",
+      "off_hours_activity": "All events occur at the same timestamp, suggesting potential automated or scripted activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed, particularly with machine accounts.",
+      "lateral_movement": "No clear lateral movement detected, but multiple TGS/TGT requests from C2180 could suggest preparation for such activity.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of TGS/TGT could be preparatory steps."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type, which is suspicious.",
+      "affected_entities": [
+        "C612",
+        "C2180",
+        "C457",
+        "C529",
+        "C528",
+        "C586",
+        "C1065",
+        "C2710",
+        "C1862",
+        "C2671",
+        "C5850",
+        "C2676",
+        "C1066"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating frequently, and there are multiple accounts from a single source in a short timeframe.",
+      "affected_accounts": [
+        "C2107$@DOM1",
+        "C2179$@DOM1",
+        "C2212$@DOM1",
+        "C2278$@DOM1",
+        "C2379$@DOM1",
+        "C2486$@DOM1",
+        "C2692$@DOM1",
+        "C2712$@DOM1",
+        "C3568$@DOM1",
+        "C3935$@DOM1",
+        "C567$@DOM1",
+        "U101@DOM1",
+        "U124@DOM1",
+        "U1733@DOM1",
+        "U175@DOM1",
+        "U1769@DOM1",
+        "U1829@?",
+        "U20@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, and there are excessive TGS/TGT requests.",
+      "affected_entities": [
+        "C2180",
+        "C457",
+        "C529",
+        "C1065",
+        "C2710",
+        "C1862",
+        "C2671",
+        "C5850",
+        "C2676",
+        "C1066"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and the pattern of TGS/TGT requests are notable anomalies.",
+      "deviation_details": "The consistent use of unknown authentication types and the clustering of events at the same timestamp are significant deviations from expected behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the clustered timing of events to determine if they are part of an orchestrated attack or automated process.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved in the TGS/TGT requests have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Ticket or Kerberoasting, given the TGS/TGT activity."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several anomalies, including the use of unknown authentication types, clustered authentication events, and excessive TGS/TGT requests. These patterns suggest potential automated activity or preparatory steps for lateral movement.",
+    "recommended_actions": "Investigate the source of the unknown authentication types and the clustered timing of events. Monitor the systems involved for further suspicious activity and consider implementing additional logging for detailed analysis."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C3022, C1878, C1217, and C298 are initiating authentication events. Notably, there are multiple ANONYMOUS LOGON events originating from different computers, which is unusual and potentially suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around the timestamp <321>.",
+      "bursts": "There is a notable burst of authentication events using ANONYMOUS LOGON at <321>.",
+      "off_hours_activity": "No specific off-hours activity detected, as all events are aggregated under the same timestamp."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGON events are observed from multiple sources to multiple destinations, which is unusual.",
+      "lateral_movement": "Potential lateral movement is suggested by multiple ANONYMOUS LOGONs and the use of multiple authentication types from the same source to different destinations.",
+      "privilege_escalation": "No clear evidence of privilege escalation patterns, but the presence of ANONYMOUS LOGONs is concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events are detected, which are generally considered high-risk.",
+      "affected_entities": [
+        "C457",
+        "C529",
+        "C586",
+        "C5919"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple ANONYMOUS LOGON events suggest potential misuse or probing of accounts.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C457",
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C5919"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events with ANONYMOUS LOGON without corresponding LogOff events are suspicious.",
+      "affected_entities": [
+        "C457",
+        "C529",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGONs and unknown authentication types is anomalous.",
+      "deviation_details": "ANONYMOUS LOGONs are not typical in a benign environment and suggest potential probing or reconnaissance."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of ANONYMOUS LOGON events to determine if they align with known attack patterns.",
+    "behavioral_context": "Compare the frequency and pattern of ANONYMOUS LOGONs with historical baselines to assess anomaly.",
+    "permission_analysis": "Verify if ANONYMOUS LOGONs are legitimate or if they represent unauthorized access attempts.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might exploit ANONYMOUS LOGONs."
+  },
+  "conclusion": {
+    "summary": "The presence of multiple ANONYMOUS LOGON events and unknown authentication types in a benign environment is concerning and suggests potential reconnaissance or probing activity. These patterns warrant further investigation.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGONs and assess whether they represent legitimate activity. Consider implementing stricter access controls and monitoring to prevent potential misuse."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

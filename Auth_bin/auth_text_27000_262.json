@@ -1,0 +1,105 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Computers such as C348, C3510, and C3604 are initiating multiple authentication requests. Notably, C348 is accessing multiple destinations like C612 and C625, which could indicate a service account or automated task.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are timestamped with <262>, suggesting a potential logging or data export artifact rather than actual clustering.",
+      "bursts": "No sudden spikes in authentication volume are evident due to uniform timestamps.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are seen, especially with machine accounts like C348$ and C3510$.",
+      "lateral_movement": "No clear sequential authentication patterns suggesting lateral movement are observed.",
+      "privilege_escalation": "No patterns indicating privilege escalation are detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events with unknown types (?).",
+      "affected_entities": [
+        "C586",
+        "C612",
+        "C467",
+        "C3604",
+        "C625",
+        "C1065",
+        "C457",
+        "C1085",
+        "C523",
+        "C528",
+        "C1710",
+        "C1691",
+        "C2010"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts such as C348$ and C3510$ are authenticating across multiple systems, which is typical for service accounts but should be monitored for anomalies.",
+      "affected_accounts": [
+        "C348$@DOM1",
+        "C3510$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events without corresponding LogOn events are observed, but they are not necessarily indicative of malicious activity without further context.",
+      "affected_entities": [
+        "C586",
+        "C612",
+        "C467",
+        "C625",
+        "C1065",
+        "C457",
+        "C1085",
+        "C523",
+        "C528",
+        "C1710",
+        "C1691"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and machine account activities across multiple systems.",
+      "deviation_details": "The use of '?' as an authentication type and frequent machine account activities."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate if the <262> timestamp is a placeholder or an error by checking system clock settings and log export configurations.",
+    "behavioral_context": "Compare current machine account behaviors with historical data to establish a baseline for normal activity.",
+    "permission_analysis": "Verify that machine accounts like C348$ and C3510$ have legitimate reasons to access multiple systems.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash or Kerberoasting, particularly where '?' authentication types are used."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several authentication events with unknown types and frequent machine account activities across multiple systems. However, these patterns are not definitively malicious without additional context.",
+    "recommended_actions": "Investigate the reason for '?' authentication types and ensure machine accounts are configured correctly. Validate the timestamp anomaly and monitor for any changes in authentication patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

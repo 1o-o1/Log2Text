@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C506 and C1403 are initiating multiple authentication events, some with unspecified authentication types, which could be indicative of unusual activity.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "U22"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around timestamp 108, with some activity at 109.",
+      "bursts": "There is a noticeable burst of activity involving C506 and U22, with multiple LogOn and TGS requests.",
+      "off_hours_activity": "No specific off-hours activity detected based on provided timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences from C506 and C1403 indicate potential automated processes or scripts.",
+      "lateral_movement": "C1403 accessing multiple destinations (C529, C586, C625) suggests potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation; however, the frequent access by U22 to multiple systems could be indicative of such attempts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types detected, which could indicate attempts to obscure authentication methods.",
+      "affected_entities": [
+        "C586",
+        "C625",
+        "C467",
+        "C1065",
+        "C101",
+        "C523",
+        "C506",
+        "C1581",
+        "C1115",
+        "C553",
+        "C528",
+        "C1085",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Accounts such as U22 and U222 are accessing multiple systems rapidly, which could indicate credential misuse or compromise.",
+      "affected_accounts": [
+        "U22@DOM1",
+        "U222@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Several LogOn events without corresponding LogOff events, particularly involving U22, suggest incomplete session handling or potential misuse.",
+      "affected_entities": [
+        "C506",
+        "U22"
+      ]
+    },
+    "anomalies": {
+      "description": "Multiple anomalies detected, including unspecified authentication types and rapid account access across systems.",
+      "deviation_details": "The use of unknown authentication types and rapid sequential access by specific accounts deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events involving U22 and C506 to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare the observed patterns of U22 and C1403 with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if U22 and U222 have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known techniques such as Pass-the-Hash or Kerberoasting, particularly involving accounts like U22 and U222."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several anomalies, including unspecified authentication types, potential lateral movement by C1403, and rapid access by accounts U22 and U222. These patterns suggest a moderate risk of suspicious activity.",
+    "recommended_actions": "Investigate the authentication events involving U22 and C1403 for potential lateral movement or credential misuse. Review the use of unspecified authentication types and ensure proper session management to prevent incomplete logon/logoff sequences."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

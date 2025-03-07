@@ -1,0 +1,108 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C1521, C2106, C523, C1798, C1824, C2224, C467, C2521, C2545, C2659, C2981, C3541, C3542, C1065, C3595, C3647, C3692, C3797, C3833, C3931, C3938, C4831, and C586. Notably, C2106 is involved in a high volume of authentication events, which could be expected if it is a domain controller or a critical server.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C1824",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C586",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated under a single timestamp <310>, suggesting a batch or summary report rather than real-time logging.",
+      "bursts": "No sudden spikes in authentication volume are evident from the provided data.",
+      "off_hours_activity": "The data does not specify exact times, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are multiple repetitive authentication actions involving C2106, suggesting it might be a central server or domain controller.",
+      "lateral_movement": "The movement from C1824 to multiple other computers (C528, C612, C625) could suggest lateral movement, but given the benign nature of the environment, this might be normal operational behavior.",
+      "privilege_escalation": "No clear patterns of privilege escalation are evident from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are multiple instances of authentication events with an unknown type (?) and some use of Kerberos.",
+      "affected_entities": [
+        "C2106",
+        "C523",
+        "C1824",
+        "C2224",
+        "C467",
+        "C625",
+        "C1065",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) are frequently authenticating, which is typical in a domain environment but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C1640$@DOM1",
+        "C1824$@DOM1",
+        "C2223$@DOM1",
+        "C2545$@DOM1",
+        "C2659$@DOM1",
+        "C2981$@DOM1",
+        "C3541$@DOM1",
+        "C3595$@DOM1",
+        "C3647$@DOM1",
+        "C3692$@DOM1",
+        "C3797$@DOM1",
+        "C3833$@DOM1",
+        "C3931$@DOM1",
+        "C3938$@DOM1",
+        "C4831$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are sequences of LogOn followed by LogOff, which are normal, but the presence of unknown authentication types should be reviewed.",
+      "affected_entities": [
+        "C2106",
+        "C1824",
+        "C2224",
+        "C529",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and the high volume of events involving certain computers (e.g., C2106) are notable.",
+      "deviation_details": "The use of unknown authentication types and the high frequency of machine account authentications could be deviations if not typical for the environment."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Verify the sequence and timing of events to ensure they align with expected operational patterns, particularly focusing on C2106 and C1824.",
+    "behavioral_context": "Compare the observed patterns with historical data to establish a baseline for normal activity, focusing on high-frequency actors like C2106.",
+    "permission_analysis": "Review the permissions associated with machine accounts and ensure they align with their authentication targets, especially for C1824 and C2106.",
+    "ioc_checks": "Consider checking for known attack techniques such as Pass-the-Hash or Kerberoasting, particularly in relation to the use of Kerberos and unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear mostly benign, with expected patterns for a domain environment. However, the presence of unknown authentication types and high-frequency activity on certain systems like C2106 should be monitored.",
+    "recommended_actions": "Conduct further monitoring of systems like C2106 and C1824 for unusual patterns. Review the use of unknown authentication types and ensure machine account activities align with expected operations."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

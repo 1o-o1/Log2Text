@@ -1,0 +1,105 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events are primarily self-authenticating, with machine accounts (e.g., C740$, C748$) logging onto themselves. However, there are instances of user accounts (e.g., U175@DOM1) initiating multiple TGS/TGT requests across different systems, which could indicate a pattern of lateral movement or service account usage.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1708",
+        "C1931",
+        "C2092"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters were identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "No specific off-hours activity was noted due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are repetitive authentication patterns involving machine accounts logging onto themselves, which is typical for service operations.",
+      "lateral_movement": "The account U175@DOM1 shows potential lateral movement by authenticating to multiple systems (C1708, C1931, C2092) with TGS requests.",
+      "privilege_escalation": "No clear patterns of privilege escalation were detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several instances of authentication events with unknown or missing authentication types, which could indicate misconfigurations or attempts to obscure authentication methods.",
+      "affected_entities": [
+        "C1065",
+        "C528",
+        "C586",
+        "C625",
+        "C229",
+        "C419",
+        "C2191",
+        "C553",
+        "C988",
+        "C1085",
+        "C1709",
+        "C1932",
+        "C2093",
+        "C2800",
+        "C467",
+        "C1484",
+        "C1750",
+        "C716",
+        "C1603"
+      ]
+    },
+    "account_patterns": {
+      "description": "The account U175@DOM1 is involved in multiple TGS/TGT requests across different systems, which may indicate service account activity or potential credential abuse.",
+      "affected_accounts": [
+        "U175@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are several instances of LogOn events without corresponding LogOff events, which might suggest incomplete session handling or potential session hijacking.",
+      "affected_entities": [
+        "C1065",
+        "C528",
+        "C586",
+        "C625",
+        "C229",
+        "C419"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication data shows several anomalies such as unknown authentication types and potential lateral movement by specific accounts.",
+      "deviation_details": "The presence of unknown authentication types and the pattern of TGS/TGT requests by U175@DOM1 deviate from typical authentication behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence and timing of authentication events for U175@DOM1 to identify potential attack chains or lateral movement paths.",
+    "behavioral_context": "Compare the observed authentication patterns of U175@DOM1 and other accounts with known baselines to identify deviations.",
+    "permission_analysis": "Verify whether the accounts, particularly U175@DOM1, should have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in relation to the TGS/TGT requests by U175@DOM1."
+  },
+  "conclusion": {
+    "summary": "The authentication events exhibit several anomalies, including unknown authentication types and potential lateral movement by the account U175@DOM1. These patterns could indicate misconfigurations or potential credential abuse.",
+    "recommended_actions": "Investigate the use of unknown authentication types and the TGS/TGT requests by U175@DOM1. Consider implementing stricter monitoring and logging to capture more detailed authentication data."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

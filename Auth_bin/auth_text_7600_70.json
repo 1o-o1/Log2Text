@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C527, C123, and C1620 are initiating multiple authentication events, which may indicate automated processes or potential lateral movement attempts.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C2516"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes detected; however, multiple rapid authentications from C527 to different destinations are noted.",
+      "off_hours_activity": "Events such as ANONYMOUS LOGON on C586 occur at timestamp <71>, which may be outside typical business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C123 shows repeated authentication attempts across multiple systems, suggesting potential automated or scripted behavior.",
+      "lateral_movement": "C527 authenticates to multiple systems (C457, C528, C553, C612, C625) in a short timeframe, indicating possible lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation detected, but the pattern of multiple authentications by single accounts could suggest attempts to gain broader access."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, NTLM usage in a Kerberos environment, and unspecified authentication types.",
+      "affected_entities": [
+        "C586",
+        "C368",
+        "C1710"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source (C527) and machine accounts authenticating unusually (e.g., C123$).",
+      "affected_accounts": [
+        "C123$",
+        "C527"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events, especially from C527.",
+      "affected_entities": [
+        "C527"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON, NTLM in Kerberos environments, and rapid authentication sequences.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and NTLM in environments where Kerberos is expected suggests potential misconfigurations or malicious activity."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps for C527 and C123 activities to confirm if they align with known attack patterns or business operations.",
+    "behavioral_context": "Compare the authentication patterns of C527 and C123 against historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts like C123$ and C527 should have access to the systems they are authenticating against.",
+    "ioc_checks": "Investigate for Pass-the-Hash or Kerberoasting attacks given the NTLM usage and rapid authentication sequences."
+  },
+  "conclusion": {
+    "summary": "The authentication patterns exhibit several anomalies, including ANONYMOUS LOGON, NTLM usage in Kerberos environments, and rapid authentication sequences suggesting potential lateral movement. These patterns warrant further investigation.",
+    "recommended_actions": "Conduct a detailed investigation into the activities of C527 and C123, particularly focusing on the ANONYMOUS LOGON event on C586. Review system configurations to ensure proper authentication protocols are enforced, and monitor for further suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

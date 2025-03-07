@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers such as C3758, C3765, and C586 are initiating authentication events. Notably, C586 is involved in multiple logoff events with different users, which might suggest a shared resource or service account usage.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "There are no specific time clusters provided, but the repeated use of the same timestamp <276> suggests these are aggregated or anonymized events.",
+      "bursts": "The data does not show specific bursts, but multiple logoff events from C586 and C625 suggest concentrated activity.",
+      "off_hours_activity": "The data does not specify actual timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are repetitive logon and logoff sequences involving C586 and C625, indicating potential service account activity.",
+      "lateral_movement": "The presence of multiple TGS requests from C3777 to various systems could suggest lateral movement attempts.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but the use of multiple accounts on C586 could indicate attempts to access different resources."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are instances of unknown authentication types (indicated by '?') and the use of Kerberos, which is expected in a domain environment.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C612",
+        "C528",
+        "C101"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts are used from a single source (e.g., C586 and C625), which could indicate a shared service or potential misuse.",
+      "affected_accounts": [
+        "C3765$@DOM1",
+        "C4831$@DOM1",
+        "C5333$@DOM1",
+        "C585$@DOM1",
+        "C743$@DOM1",
+        "U22@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are logon events without corresponding logoff events, particularly from C3777, which could indicate incomplete session handling or anomalies.",
+      "affected_entities": [
+        "C3777",
+        "C586",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of unknown authentication types and multiple accounts from single sources are notable.",
+      "deviation_details": "The use of '?' in authentication types and multiple accounts from C586 and C625 deviate from standard patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps for each event to identify any sequential patterns that may indicate attack chains.",
+    "behavioral_context": "Compare the observed authentication patterns against baseline data to identify deviations specific to this environment.",
+    "permission_analysis": "Verify the permissions associated with accounts like U22@DOM1 and machine accounts authenticating to multiple destinations.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash in environments where Kerberos is used, especially with unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis of authentication logs reveals some unusual patterns, such as multiple accounts from single sources and unknown authentication types. While these could be benign, they warrant further investigation due to potential risks of lateral movement and misuse of service accounts.",
+    "recommended_actions": "Conduct a detailed review of authentication events involving C586 and C625, verify the legitimacy of unknown authentication types, and ensure proper session handling to prevent potential misuse."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

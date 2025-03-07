@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1, C51, and C561 are initiating multiple authentication events, with C1 being particularly active across multiple destinations.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are provided, but multiple events are aggregated under '<2>' indicating potential clustering.",
+      "bursts": "The data suggests bursts of activity from computers like C1 and C561.",
+      "off_hours_activity": "No explicit timestamps are provided, making it difficult to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon actions from C1 to multiple destinations suggest a pattern of activity.",
+      "lateral_movement": "Sequential logons from C1 to various destinations such as C586, C1065, and C529 suggest potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "NTLM authentication detected in a Kerberos environment, which is unusual.",
+      "affected_entities": [
+        "C967"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source (e.g., U3@DOM1 from C1) accessing multiple destinations rapidly.",
+      "affected_accounts": [
+        "U3@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are present without corresponding LogOff events for some sequences, indicating incomplete session tracking.",
+      "affected_entities": [
+        "C1",
+        "C1191",
+        "C456"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of NTLM in a Kerberos environment and rapid authentication sequences suggest anomalies.",
+      "deviation_details": "NTLM usage on C967 and rapid sequential logons from C1 to multiple destinations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events from C1 to determine if they align with known attack patterns such as lateral movement.",
+    "behavioral_context": "Compare the observed authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts like U3@DOM1 should have access to systems like C586 and C1065.",
+    "ioc_checks": "Check for Pass-the-Hash attacks given the NTLM usage and potential Kerberoasting due to TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal potential lateral movement and unusual authentication types, particularly NTLM in a Kerberos environment, suggesting a medium risk of compromise.",
+    "recommended_actions": "Investigate the authentication patterns of U3@DOM1 and the NTLM usage on C967. Monitor for lateral movement from C1 and validate access permissions for involved accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

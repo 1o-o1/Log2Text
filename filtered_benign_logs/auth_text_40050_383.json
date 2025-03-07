@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "C1065 and C528 are notable for initiating multiple authentication events with unspecified authentication types, which could be unusual. C1507 also shows a mix of NTLM and Kerberos authentications, which is worth monitoring.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific clusters identified, but multiple events occur at the same timestamp <383>.",
+      "bursts": "No significant bursts detected beyond the consistent timestamp <383>.",
+      "off_hours_activity": "Activity appears consistent with a single timestamp, suggesting potential automated processes or batch jobs."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions from the same source to the same destination, such as C1065 and C528.",
+      "lateral_movement": "Potential lateral movement indicated by U22@DOM1 accessing multiple systems (C612, C457, C849, C965).",
+      "privilege_escalation": "No clear evidence of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unspecified authentication types ('?') in multiple events is suspicious.",
+      "affected_entities": [
+        "C1065",
+        "C528",
+        "C229",
+        "C457",
+        "C921"
+      ]
+    },
+    "account_patterns": {
+      "description": "Accounts such as U22@DOM1 are accessing multiple systems rapidly, which could indicate credential use across systems.",
+      "affected_accounts": [
+        "U22@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOffs are not prevalent, but multiple LogOffs with unspecified authentication types are noted.",
+      "affected_entities": [
+        "C1065",
+        "C528"
+      ]
+    },
+    "anomalies": {
+      "description": "The anomalies primarily revolve around unspecified authentication types and mixed authentication protocols.",
+      "deviation_details": "The use of NTLM by C1507 in a primarily Kerberos environment could be an anomaly."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the logs for events around the timestamp <383> to determine if these are batch processes or indicative of automated attacks.",
+    "behavioral_context": "Compare the current authentication patterns with historical data to determine if these patterns are typical for this environment.",
+    "permission_analysis": "Verify if accounts like U22@DOM1 have legitimate reasons to access multiple systems and whether the systems accessed are within their operational scope.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash or Kerberoasting, especially where NTLM is used in a Kerberos environment."
+  },
+  "conclusion": {
+    "summary": "The environment shows potential anomalies with unspecified authentication types and mixed authentication protocols, which could be benign but warrant further investigation.",
+    "recommended_actions": "Investigate the use of unspecified authentication types and NTLM in a Kerberos environment. Monitor accounts like U22@DOM1 for unusual access patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

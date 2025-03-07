@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1065, C457, and C586 are initiating multiple authentication events with unspecified authentication types, which is unusual. C1065 also shows ANONYMOUS LOGON activity, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C101",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around time <38>, with some activity extending to <39>.",
+      "bursts": "There are bursts of activity from C1065 and C457, indicating potential automated processes or scripts.",
+      "off_hours_activity": "Some events occur at time <39>, which may be outside normal business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication attempts from C1065 and C457 with multiple accounts suggest automated or scripted actions.",
+      "lateral_movement": "U22@DOM1 authenticating to multiple destinations (C1065, C457, C586) in a short timeframe suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but multiple TGS and TGT requests could indicate preparation for such actions."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types were detected, which are high-risk indicators.",
+      "affected_entities": [
+        "C1065",
+        "C1909"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and multiple user accounts from single sources show unusual authentication patterns.",
+      "affected_accounts": [
+        "C1766$@DOM1",
+        "C2196$@DOM1",
+        "C2217$@DOM1",
+        "C2345$@DOM1",
+        "C2422$@DOM1",
+        "U22@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events and excessive TGS/TGT requests were observed.",
+      "affected_entities": [
+        "C1065",
+        "C457",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, there are several anomalies including ANONYMOUS LOGON, unspecified auth types, and lateral movement indicators.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and unspecified authentication types deviates from normal secure authentication practices."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events around time <38> and <39> to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts like U22@DOM1 and machine accounts have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques given the observed patterns of TGS/TGT requests and lateral movement."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several high-risk indicators including ANONYMOUS LOGON, unspecified authentication types, and potential lateral movement. These anomalies suggest a possible security compromise or unauthorized access attempts.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, review access permissions for accounts showing lateral movement, and monitor systems for further suspicious activity. Implement stricter authentication controls and consider network segmentation to limit lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

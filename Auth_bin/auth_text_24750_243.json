@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C2841 and C2074 are initiating multiple authentication requests. C2841 is particularly active, accessing multiple systems rapidly, which could be indicative of a service account or automated process.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C467",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are aggregated under a single timestamp <243>, indicating a batch of events possibly collected from logs over a specific period.",
+      "bursts": "The data does not show clear temporal bursts due to lack of detailed timestamps, but C2841's activity across multiple systems suggests a burst pattern.",
+      "off_hours_activity": "Cannot be determined from the provided data as specific times are not available."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C2841 repeatedly accesses multiple systems, suggesting a pattern of automated or scripted activity.",
+      "lateral_movement": "C2841's pattern of accessing multiple systems (C1065, C457, C467, C528, C586, C612) in a short timeframe suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple instances of unknown authentication types are detected, particularly from C612 and C1065.",
+      "affected_entities": [
+        "C612",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "C2841 and C2073 are involved in multiple authentications across different systems, which is unusual for typical user accounts.",
+      "affected_accounts": [
+        "C2841",
+        "C2073"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are instances of LogOn events without corresponding LogOff events, particularly involving C2841.",
+      "affected_entities": [
+        "C2841"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and rapid access to multiple systems by certain accounts are notable anomalies.",
+      "deviation_details": "C2841's activity across multiple systems is unusual and deviates from typical user behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of events for C2841 to determine if the access pattern aligns with known attack vectors.",
+    "behavioral_context": "Compare C2841's access patterns with historical data to determine if this is a new behavior or part of regular operations.",
+    "permission_analysis": "Verify if C2841 and C2073 have legitimate reasons to access the systems they are authenticating against.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting attempts given the presence of NTLM and Kerberos authentications."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show unusual patterns, particularly with C2841 accessing multiple systems rapidly, which could indicate automated processes or potential lateral movement. The presence of unknown authentication types also raises concerns.",
+    "recommended_actions": "Investigate C2841's activities across systems for potential unauthorized access. Validate the legitimacy of unknown authentication types and ensure all systems are configured to prefer Kerberos over NTLM."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

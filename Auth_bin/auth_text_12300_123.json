@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C506, C586, C625, C2372, C1846, C921, C365, C868, C3055, C1727, C178, C1819, C573, C1065, C101, C1115, C467, C527, C1085, C1737, C2130, C2168, C2748, C3427, C395, C457, C516, C612, C5012, C5778. Notably, C573 initiated an ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C1015",
+        "C801"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around timestamps <123> and <124>.",
+      "bursts": "There are bursts of activity at timestamp <124> with multiple logon events.",
+      "off_hours_activity": "No specific off-hours activity was noted, but timestamps are abstracted."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are observed with systems like C586 and C625 being frequently targeted.",
+      "lateral_movement": "Potential lateral movement is suggested by sequential logons from C573 to C586 and C2168 to C586.",
+      "privilege_escalation": "No direct privilege escalation patterns are evident, but machine accounts are accessing multiple destinations."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types detected include ANONYMOUS LOGON and unspecified types.",
+      "affected_entities": [
+        "C573",
+        "C586",
+        "C625",
+        "C101",
+        "C457",
+        "C2168"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts accessing multiple destinations and ANONYMOUS LOGON.",
+      "affected_accounts": [
+        "C573$@DOM1",
+        "C2167$@DOM1",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular logon/logoff sequences include multiple logons without corresponding logoffs and excessive TGS/TGT requests.",
+      "affected_entities": [
+        "C586",
+        "C625",
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, there are anomalies in authentication types and sequences, particularly involving machine accounts and ANONYMOUS LOGON.",
+      "deviation_details": "Deviations include the use of ANONYMOUS LOGON and multiple machine accounts accessing critical systems like C586."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of logons and logoffs, especially around timestamps <123> and <124>, to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behavior to identify deviations, focusing on C586 and C625.",
+    "permission_analysis": "Verify if machine accounts like C573$@DOM1 and C2167$@DOM1 should have access to systems like C586.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the use of NTLM and ANONYMOUS LOGON."
+  },
+  "conclusion": {
+    "summary": "The authentication log reveals several anomalies, including the use of ANONYMOUS LOGON and unspecified authentication types, suggesting potential security risks. Systems like C586 and C625 are frequently targeted, indicating possible lateral movement.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, validate the legitimacy of machine account access to critical systems, and monitor for unusual authentication patterns indicative of lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

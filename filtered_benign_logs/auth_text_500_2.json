@@ -1,0 +1,79 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events are initiated by machine accounts (e.g., C331$, C3450$) on their respective systems, which is typical for service logons. However, C3450$ is initiating multiple authentication requests to different systems, which is unusual compared to other entries.",
+    "targets": {
+      "frequent_targets": [
+        "C1065",
+        "C586",
+        "C625"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "The data does not provide specific timestamps, but there is a consistent pattern of service logons across multiple systems.",
+      "bursts": "No sudden spikes in authentication volume are evident from the aggregated data.",
+      "off_hours_activity": "No specific off-hours activity can be determined from the given data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Most systems show repetitive service logon patterns, which are expected for system accounts.",
+      "lateral_movement": "C3450$ shows potential lateral movement by authenticating to multiple systems (C1065, C586, C625) using Kerberos and unspecified methods.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types are present, particularly with C3450$, which could indicate unusual or misconfigured authentication methods.",
+      "affected_entities": [
+        "C3450"
+      ]
+    },
+    "account_patterns": {
+      "description": "C3450$ is showing unusual behavior by authenticating to multiple systems, which could indicate lateral movement or a service account being used for broader access.",
+      "affected_accounts": [
+        "C3450$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "C3450$ has multiple TGS requests without corresponding LogOff events, which could indicate incomplete session handling or potential ticket reuse.",
+      "affected_entities": [
+        "C3450"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the behavior of C3450$, which is authenticating across multiple systems with unspecified authentication types.",
+      "deviation_details": "C3450$ is deviating from the typical pattern of single-system service logons seen in other entries."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the specific timestamps of C3450$'s authentication events to determine if they align with known attack patterns or legitimate scheduled tasks.",
+    "behavioral_context": "Compare C3450$'s activity against baseline behavior for service accounts to identify deviations.",
+    "permission_analysis": "Verify if C3450$ should legitimately access systems C1065, C586, and C625, and if it has the necessary permissions.",
+    "ioc_checks": "Investigate for signs of Pass-the-Ticket or other Kerberos-based attacks, given the TGS activity without clear logoff events."
+  },
+  "conclusion": {
+    "summary": "The authentication patterns primarily indicate normal service logon activity, except for C3450$, which shows signs of potential lateral movement or misconfiguration due to its cross-system authentication and unspecified methods.",
+    "recommended_actions": "Investigate the activity of C3450$ for potential misuse or compromise. Verify its permissions and intended use. Consider monitoring for unusual Kerberos ticket activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

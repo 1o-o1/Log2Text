@@ -1,0 +1,96 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C457, C1961, C1972, and C2071, are initiating authentication events. The use of machine accounts (e.g., C1777$@DOM1) is noted, which is typical in domain environments but should be monitored for unusual patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C625",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at a single timestamp (271), indicating a potential batch processing or a logging artifact.",
+      "bursts": "No significant bursts beyond the single timestamp cluster.",
+      "off_hours_activity": "No off-hours activity detected as all events are clustered at the same timestamp."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed, particularly involving machine accounts.",
+      "lateral_movement": "Sequential TGS and LogOn events from systems like C2071 and C2402 to C457 suggest potential lateral movement.",
+      "privilege_escalation": "No clear privilege escalation patterns detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include '?' indicating unknown or unspecified authentication protocols.",
+      "affected_entities": [
+        "C457",
+        "C528",
+        "C2071",
+        "C586",
+        "C612",
+        "C625",
+        "C529",
+        "C1065",
+        "C467"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating in a manner consistent with normal domain operations, though monitoring is advised.",
+      "affected_accounts": [
+        "C1777$@DOM1",
+        "C2070$@DOM1",
+        "C2401$@DOM1",
+        "C2411$@DOM1",
+        "C2425$@DOM1",
+        "C2523$@DOM1",
+        "C2841$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are seen, but they align with typical domain operations.",
+      "affected_entities": [
+        "C457",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of unknown authentication types and potential lateral movement indicators.",
+      "deviation_details": "The presence of '?' as an authentication type and sequential TGS requests followed by LogOn events to critical systems like C457."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Verify if the single timestamp (271) is a logging artifact or indicative of batch processing.",
+    "behavioral_context": "Compare these patterns against historical data to determine if this clustering is typical.",
+    "permission_analysis": "Ensure that machine accounts have appropriate permissions for the systems they are accessing.",
+    "ioc_checks": "Investigate potential Pass-the-Ticket or Kerberoasting activities due to the TGS requests."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals potential anomalies in authentication types and patterns suggestive of lateral movement, though these may be benign given the environment context.",
+    "recommended_actions": "Investigate the use of '?' authentication types and validate the legitimacy of lateral movement patterns. Ensure machine account permissions are appropriate."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

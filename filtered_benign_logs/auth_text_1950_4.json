@@ -1,0 +1,130 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most authentication events are initiated by machine accounts (e.g., C47$, C479$) authenticating to themselves, which is typical for service logons. However, there are a few instances where a machine account authenticates to a different machine (e.g., C539 to C1085 and C467), which could indicate lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C47",
+        "C479",
+        "C483",
+        "C485",
+        "C491",
+        "C494",
+        "C4984",
+        "C503",
+        "C508",
+        "C511",
+        "C515",
+        "C524",
+        "C526",
+        "C53",
+        "C533",
+        "C544",
+        "C548",
+        "C551",
+        "C552",
+        "C557",
+        "C558",
+        "C559",
+        "C560",
+        "C579",
+        "C5799",
+        "C5843",
+        "C588",
+        "C59",
+        "C591",
+        "C614",
+        "C619",
+        "C629",
+        "C630",
+        "C635",
+        "C637",
+        "C64",
+        "C641",
+        "C643",
+        "C646",
+        "C655",
+        "C669"
+      ],
+      "sporadic_targets": [
+        "C1085",
+        "C467",
+        "C523",
+        "C612",
+        "C529",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are provided, but the data suggests a consistent pattern of service logons.",
+      "bursts": "No sudden spikes in authentication volume are evident from the data provided.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive service logons by machine accounts to themselves are observed, which is normal.",
+      "lateral_movement": "Potential lateral movement is suggested by machine account C539 authenticating to different machines (C1085, C467).",
+      "privilege_escalation": "No clear indication of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unknown (?) and NTLM in a Kerberos-preferred environment.",
+      "affected_entities": [
+        "C1065",
+        "C612",
+        "C608"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account patterns include machine accounts authenticating to different machines, which may suggest lateral movement.",
+      "affected_accounts": [
+        "C539",
+        "C561",
+        "C5845"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not clearly indicated, but the presence of unknown authentication types is noted.",
+      "affected_entities": [
+        "C1065",
+        "C612",
+        "C608"
+      ]
+    },
+    "anomalies": {
+      "description": "Anomalies include the use of NTLM where Kerberos is expected, and unknown authentication types.",
+      "deviation_details": "C608 uses NTLM instead of Kerberos, and C1065 and C612 have unknown authentication types."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events for C539 and C561 to determine if lateral movement is occurring.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if accounts like C539$ and C561$ should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially for accounts using NTLM or unknown auth types."
+  },
+  "conclusion": {
+    "summary": "The authentication events show typical service logons by machine accounts, but there are potential indicators of lateral movement and suspicious authentication types that warrant further investigation.",
+    "recommended_actions": "Investigate the authentication events involving C539 and C561 for potential lateral movement. Review the use of NTLM and unknown authentication types for C608, C1065, and C612, and ensure these align with expected security policies."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

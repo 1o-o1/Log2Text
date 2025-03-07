@@ -1,0 +1,93 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers are initiating authentication events, including C3847, C387, C3900, C467, C586, C480, C528, C553, C585, C1619, C612, C98, C2855, C2022, C426, C431, C433, C419, C452, C1770, C101, C1001, C1823, and C2368. Notably, some computers like C528 and C612 are involved in multiple authentication types and events.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C612",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C599",
+        "C586",
+        "C2867"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated at a single timestamp <338>, indicating a lack of temporal granularity.",
+      "bursts": "No specific bursts can be identified due to lack of detailed timestamps.",
+      "off_hours_activity": "Cannot be determined from the provided data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff sequences are observed, particularly with machine accounts.",
+      "lateral_movement": "Potential lateral movement indicated by multiple authentications from a single source to different destinations, e.g., C553 accessing both C523 and C529.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use unknown or unspecified authentication types, which could be suspicious.",
+      "affected_entities": [
+        "C529",
+        "C467",
+        "C586",
+        "C612",
+        "C101",
+        "C1001",
+        "C1823"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts are authenticating from a single source, and some machine accounts are authenticating atypically.",
+      "affected_accounts": [
+        "C528$@DOM1",
+        "C612$@DOM1",
+        "C101$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events without corresponding logoff events are not explicitly visible, but multiple logoff events without prior logon are noted.",
+      "affected_entities": [
+        "C467",
+        "C586",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and multiple machine accounts authenticating in unusual patterns are notable anomalies.",
+      "deviation_details": "The use of unknown authentication types and rapid authentication sequences by machine accounts deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analysis with detailed timestamps is needed to correlate events and identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline authentication logs to identify deviations.",
+    "permission_analysis": "Verify if the accounts, especially machine accounts, have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially where NTLM is used or TGS/TGT requests are frequent."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several anomalies, including the use of unknown authentication types, potential lateral movement, and atypical machine account behavior. While no direct evidence of compromise is present, these patterns warrant further investigation.",
+    "recommended_actions": "Investigate the use of unknown authentication types and verify the legitimacy of machine account activities. Conduct a detailed review of authentication logs with timestamps for better correlation and context."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

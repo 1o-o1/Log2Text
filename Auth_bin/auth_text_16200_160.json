@@ -1,0 +1,103 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C523, C1521, C597, C749, C788, C988, C368, C585, C1443, C202, C3865, C1823, and others. Notably, C597 shows a high volume of authentication requests across multiple destinations, which could indicate automated processes or potential lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C585"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C528",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated under a single timestamp placeholder <160>, indicating a lack of precise temporal data for clustering.",
+      "bursts": "No specific bursts can be identified due to the placeholder timestamp <160>.",
+      "off_hours_activity": "Cannot be determined due to placeholder timestamp <160>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C597 repeatedly requests TGS tickets for multiple destinations, which could suggest automated or scripted behavior.",
+      "lateral_movement": "The pattern of C597 accessing multiple different computers (C1065, C2106, C467, C528, C529, C612) suggests possible lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation is observed from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types ('?') and NTLM in several entries is notable, especially in environments where Kerberos is preferred.",
+      "affected_entities": [
+        "C523",
+        "C586",
+        "C597",
+        "C1085",
+        "C457",
+        "C467",
+        "C788",
+        "C529",
+        "C2106",
+        "C1710",
+        "C589",
+        "C368",
+        "C743",
+        "C585",
+        "C1065",
+        "C612",
+        "C1581",
+        "C779",
+        "C1772"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) such as C586$, C597$, and others are seen authenticating across multiple systems, which could be normal for service accounts but warrants verification.",
+      "affected_accounts": [
+        "C586$@DOM1",
+        "C597$@DOM1",
+        "C749$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are instances of LogOn events without corresponding LogOff events and vice versa, particularly with C597 and C749.",
+      "affected_entities": [
+        "C597",
+        "C749"
+      ]
+    },
+    "anomalies": {
+      "description": "The use of NTLM and unknown authentication types in a potentially Kerberos-preferred environment is anomalous.",
+      "deviation_details": "Multiple TGS requests by C597 and the presence of NTLM where Kerberos is expected are deviations from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further investigate the sequence of events for C597 to determine if there is an attack chain or automated process.",
+    "behavioral_context": "Compare the observed authentication patterns of C597 and other frequent actors against historical baselines to identify anomalies.",
+    "permission_analysis": "Verify if the machine accounts and users involved have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM usage and TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication events show potential indicators of automated processes or lateral movement, particularly involving C597. The presence of NTLM and unknown authentication types in a Kerberos environment is concerning.",
+    "recommended_actions": "Investigate the authentication patterns of C597 and other frequently authenticating systems. Verify the legitimacy of machine account activities and consider monitoring for potential lateral movement or credential misuse."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

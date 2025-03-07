@@ -1,0 +1,107 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers are initiating authentication events, including C1619, C523, C1487, C270, C1710, C5850, C457, C612, C7, C921, C561, C1596, C1581, C1727, C1848, C61, C395, C1644, C223, C529, C105, C1115, C101, C1065, C1262, C1295, C1489, C1532, C1724, C1968, C625, C1085, C1899. Notably, C529 has an ANONYMOUS LOGON event which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C101",
+        "C523",
+        "C743",
+        "C754",
+        "C553"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around timestamps <14> and <15>.",
+      "bursts": "There is a noticeable spike in activity at timestamp <15>.",
+      "off_hours_activity": "No specific off-hours activity identified, but the clustering at <15> may suggest non-standard business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication events from C1619 to C101 and C523, indicating possible automated processes or scripts.",
+      "lateral_movement": "Potential lateral movement suggested by C1619 accessing multiple systems (C101, C523) and C529 showing ANONYMOUS LOGON.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the ANONYMOUS LOGON on C529 is concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include ANONYMOUS LOGON and unspecified types.",
+      "affected_entities": [
+        "C529",
+        "C523",
+        "C1487",
+        "C1710",
+        "C5850",
+        "C457",
+        "C7",
+        "C921",
+        "C561",
+        "C1644",
+        "C101",
+        "C1065",
+        "C625",
+        "C1085"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts authenticating atypically and ANONYMOUS LOGON events.",
+      "affected_accounts": [
+        "C599$@DOM1",
+        "C104$@DOM1",
+        "C1114$@DOM1",
+        "C123$@DOM1",
+        "C1782$@DOM1",
+        "C1794$@DOM1",
+        "ANONYMOUS LOGON@C529"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular sequences include logons without corresponding logoffs and vice versa.",
+      "affected_entities": [
+        "C529",
+        "C101",
+        "C1065",
+        "C625",
+        "C1085"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall anomalies include high frequency of unspecified authentication types and ANONYMOUS LOGON events.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and unspecified authentication types deviates from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events at timestamps <14> and <15> to identify potential attack chains.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts such as ANONYMOUS LOGON@C529 should have access to the systems they are targeting.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques, especially in systems showing NTLM and ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several anomalies, including ANONYMOUS LOGON events and unspecified authentication types, which may indicate potential security risks. The clustering of events at specific timestamps and the presence of unusual account patterns suggest further investigation is warranted.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON events on C529 and other systems with unspecified authentication types. Review access permissions for accounts showing unusual patterns. Conduct a thorough security audit to identify potential vulnerabilities exploited during these events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

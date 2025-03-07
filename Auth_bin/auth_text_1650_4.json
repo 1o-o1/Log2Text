@@ -1,0 +1,120 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily machine accounts (e.g., C1077$@DOM1) initiating authentication events, which is typical for service or batch operations.",
+    "targets": {
+      "frequent_targets": [
+        "C1077",
+        "C1081",
+        "C1083",
+        "C1086",
+        "C1087",
+        "C1091",
+        "C1093",
+        "C1099",
+        "C1101",
+        "C1102",
+        "C1106",
+        "C1107",
+        "C1110",
+        "C1115",
+        "C1117",
+        "C1119",
+        "C112",
+        "C1122",
+        "C1123",
+        "C1125",
+        "C1126",
+        "C1133",
+        "C1142",
+        "C1149",
+        "C1150",
+        "C1156",
+        "C1159",
+        "C1160",
+        "C1169",
+        "C1174",
+        "C1175",
+        "C1189",
+        "C1192",
+        "C1193",
+        "C1195",
+        "C120",
+        "C1206",
+        "C1213",
+        "C1214",
+        "C1216",
+        "C1219",
+        "C122",
+        "C1222",
+        "C1224",
+        "C1228",
+        "C1229",
+        "C1232",
+        "C1235",
+        "C1238",
+        "C124"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "There are no specific time clusters identified as the data is aggregated and lacks detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume are evident from the aggregated data.",
+      "off_hours_activity": "The data does not provide specific timestamps to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "The authentication events show repetitive patterns typical of service accounts logging on to their respective systems.",
+      "lateral_movement": "There is no clear evidence of lateral movement as most authentications are self-contained within the same source and destination.",
+      "privilege_escalation": "No patterns indicating privilege escalation are observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The authentication type used is predominantly 'Negotiate', which is common and not inherently suspicious.",
+      "affected_entities": []
+    },
+    "account_patterns": {
+      "description": "Most authentications are from machine accounts to themselves, which is typical for service operations.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "There are no unusual logon/logoff sequences detected in the provided data.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear typical for service operations with machine accounts.",
+      "deviation_details": "The only anomaly is a failed logon attempt from C1149 to U1325@DOM1, which may warrant further investigation."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps if available to identify any unusual sequences or timing of authentication events.",
+    "behavioral_context": "Compare these patterns against baseline behaviors for these systems to confirm normalcy.",
+    "permission_analysis": "Verify if the failed logon attempt from C1149 to U1325@DOM1 is legitimate or requires further investigation.",
+    "ioc_checks": "Check for any known indicators of compromise related to failed logon attempts or unusual service account activity."
+  },
+  "conclusion": {
+    "summary": "The authentication events analyzed appear to be typical service account operations with no immediate high-risk indicators. The failed logon attempt from C1149 to U1325@DOM1 is the only anomaly noted.",
+    "recommended_actions": "Investigate the failed logon attempt from C1149 to U1325@DOM1 to determine if it is a legitimate failure or indicative of a potential security issue."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": false,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

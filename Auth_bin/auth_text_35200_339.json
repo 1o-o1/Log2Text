@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "C1001 is initiating multiple authentication requests to various computers, suggesting a potential central role or automation script. C28 and C3832 are using ANONYMOUS LOGON, which is generally suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C529",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around a single timestamp <340>, indicating potential batch processing or scheduled tasks.",
+      "bursts": "There is a burst of activity at <340> with multiple computers authenticating rapidly.",
+      "off_hours_activity": "No specific off-hours activity detected as timestamps are anonymized."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1001 repeatedly accesses multiple systems with similar authentication patterns.",
+      "lateral_movement": "No clear evidence of lateral movement, but repeated access to multiple systems by C1001 could suggest exploration.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but ANONYMOUS LOGON could be indicative of attempts to bypass standard authentication."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected in multiple events, which is a high-risk authentication type.",
+      "affected_entities": [
+        "C586",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "ANONYMOUS LOGON and multiple machine accounts accessing various systems could indicate suspicious behavior.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C612",
+        "C104$@DOM1",
+        "C2223$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some sessions show multiple LogOff events without corresponding LogOn events, possibly indicating incomplete session handling.",
+      "affected_entities": [
+        "C467",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON and rapid successive authentications from a single source.",
+      "deviation_details": "ANONYMOUS LOGON events and rapid successive authentications from C1001 deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of events around <340> to identify potential batch operations or automated scripts.",
+    "behavioral_context": "Compare the observed patterns with historical data to determine if C1001's behavior is typical for its role.",
+    "permission_analysis": "Verify if the accounts, especially those using ANONYMOUS LOGON, have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, especially in systems accessed by ANONYMOUS LOGON."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some suspicious patterns, particularly with the use of ANONYMOUS LOGON and rapid successive authentications by C1001. These could indicate potential security risks or misconfigurations.",
+    "recommended_actions": "Investigate the use of ANONYMOUS LOGON, validate the role and permissions of C1001, and review system configurations for potential vulnerabilities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

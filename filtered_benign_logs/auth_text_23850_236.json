@@ -1,0 +1,99 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily authenticating to themselves, which is typical in network environments for local logons. However, there are instances of cross-system authentication, such as C2084 authenticating to C586, which could be normal depending on network roles.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C529",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C625",
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around a single timestamp (236), indicating a batch of authentication events likely due to a scheduled task or script.",
+      "bursts": "No significant bursts beyond the clustered timestamp, suggesting controlled or expected activity.",
+      "off_hours_activity": "All activities are logged at the same timestamp, making it difficult to determine if they occurred outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are seen on systems like C612 and C529, which could indicate routine operations or automated processes.",
+      "lateral_movement": "Some cross-system authentications, such as C2084 to C586, could suggest lateral movements, but without more context, they appear benign.",
+      "privilege_escalation": "No clear indicators of privilege escalation based on the available data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events use an unknown type (?), which is unusual and warrants further investigation.",
+      "affected_entities": [
+        "C612",
+        "C528",
+        "C586",
+        "C529",
+        "C625",
+        "C467",
+        "C2022",
+        "C421",
+        "C426",
+        "C431",
+        "C433"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently authenticating, which is normal in many environments, but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C1992$@DOM1",
+        "C3042$@DOM1",
+        "C3363$@DOM1",
+        "C523$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon and logoff sequences appear consistent with expected operations, though the presence of unknown auth types is concerning.",
+      "affected_entities": [
+        "C612",
+        "C528",
+        "C586",
+        "C529",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and consistent timestamps across events are notable anomalies.",
+      "deviation_details": "The use of '?' for auth_type and identical timestamps suggest either a logging issue or a scripted operation."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine system logs around the timestamp 236 to determine if these authentication events align with scheduled tasks or anomalies.",
+    "behavioral_context": "Compare these authentication patterns with historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify that the accounts involved have legitimate reasons to access the systems they are authenticating to, especially for cross-system authentications.",
+    "ioc_checks": "Investigate the use of unknown authentication types and cross-reference with known attack techniques such as Pass-the-Hash."
+  },
+  "conclusion": {
+    "summary": "The authentication events largely appear benign with some anomalies, such as unknown authentication types and consistent timestamps, which require further investigation. The risk is moderate due to these anomalies.",
+    "recommended_actions": "Investigate the use of unknown authentication types and consistent timestamps. Verify the legitimacy of cross-system authentications and ensure that machine accounts are behaving as expected."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

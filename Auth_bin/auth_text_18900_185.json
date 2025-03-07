@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C5107, C3720, and C117 are initiating authentication events using ANONYMOUS LOGON, which is generally considered suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C523",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around timestamps 185 and 186, indicating high activity periods.",
+      "bursts": "No sudden spikes in authentication volume detected beyond clustered periods.",
+      "off_hours_activity": "No specific off-hours activity detected as timestamps are not detailed with specific times."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns observed between C1677 and C528, and C2775 authenticating to itself multiple times.",
+      "lateral_movement": "Potential lateral movement suggested by C2955 authenticating to C1065 after authenticating to itself.",
+      "privilege_escalation": "No direct privilege escalation patterns observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, which is typically high-risk, especially when used with NTLM.",
+      "affected_entities": [
+        "C5107",
+        "C3720",
+        "C117",
+        "C312"
+      ]
+    },
+    "account_patterns": {
+      "description": "ANONYMOUS LOGON accounts are frequently used, which is unusual and potentially malicious.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C1065",
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not explicitly detailed, but repetitive LogOffs without preceding LogOns are present.",
+      "affected_entities": [
+        "C457",
+        "C528",
+        "C2775"
+      ]
+    },
+    "anomalies": {
+      "description": "Several anomalies detected including ANONYMOUS LOGON usage and repetitive machine account authentications.",
+      "deviation_details": "ANONYMOUS LOGON usage is a significant deviation from normal patterns, especially with NTLM in a Kerberos environment."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON events to determine if they align with known attack patterns.",
+    "behavioral_context": "Compare current ANONYMOUS LOGON and NTLM usage against historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts using ANONYMOUS LOGON have legitimate reasons for access, especially on critical systems like C586.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might exploit NTLM and ANONYMOUS LOGON."
+  },
+  "conclusion": {
+    "summary": "The authentication events show several high-risk indicators, particularly the use of ANONYMOUS LOGON and NTLM in a Kerberos-preferred environment. These patterns suggest potential malicious activity or misconfiguration.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, especially those using NTLM. Validate the necessity of NTLM in the environment and consider tightening authentication protocols. Review access permissions for accounts involved in suspicious activities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

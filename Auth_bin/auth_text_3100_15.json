@@ -1,0 +1,101 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, including C1954, C632, C229, and C1862. Notably, C1954 and C632 are involved in both TGT and TGS operations, which may indicate service ticket requests.",
+    "targets": {
+      "frequent_targets": [
+        "C1954",
+        "C632"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified due to lack of detailed timestamps.",
+      "bursts": "No significant bursts detected; however, C1065 shows multiple rapid authentications.",
+      "off_hours_activity": "Cannot determine due to lack of specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1954 and C632 are involved in repeated TGT and TGS requests, which is typical for service accounts but should be monitored for excessive requests.",
+      "lateral_movement": "No clear lateral movement detected, but multiple authentications from C1954 to different destinations could suggest initial stages.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the presence of TGT and TGS requests warrants monitoring."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Presence of unknown authentication types and NTLM in a Kerberos environment.",
+      "affected_entities": [
+        "C529",
+        "C1065",
+        "C2855",
+        "C467",
+        "C1015",
+        "C1085",
+        "C528",
+        "C553",
+        "C101",
+        "C625",
+        "C1681",
+        "C229",
+        "C801",
+        "C1755",
+        "C426"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from C1065 rapidly accessing different destinations, which could indicate automated processes or potential misuse.",
+      "affected_accounts": [
+        "C1905$@DOM1",
+        "C1979$@DOM1",
+        "C2577$@DOM1",
+        "C3543$@DOM1",
+        "C4410$@DOM1",
+        "C599$@DOM1",
+        "C688$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear consistent, but rapid sequences from C1065 should be reviewed.",
+      "affected_entities": [
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of unknown authentication types and rapid authentication sequences are notable.",
+      "deviation_details": "The use of '?' as an authentication type is unusual and should be investigated further."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps for C1065's rapid authentication events to determine if they align with known automated tasks or scripts.",
+    "behavioral_context": "Compare observed authentication patterns with baseline activities for service accounts like C1954 and C632.",
+    "permission_analysis": "Verify if accounts such as C1905$@DOM1 and others used by C1065 have legitimate access to their respective target systems.",
+    "ioc_checks": "Check for potential Pass-the-Hash or Kerberoasting activities, especially involving C1954 and C632 due to their TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some unusual patterns, particularly with the use of unknown authentication types and rapid sequences from C1065. While these could be benign, they warrant further investigation.",
+    "recommended_actions": "Investigate the unknown authentication types and rapid sequences from C1065. Ensure that service accounts like C1954 and C632 are not being misused for unauthorized access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

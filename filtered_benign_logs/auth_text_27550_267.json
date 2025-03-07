@@ -1,0 +1,110 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C612, C2413, C2444, C2560, C528, C2925, C457, C3025, C467, C3242, C3478, C3511, C3514, C3526, C3554, C3559, C3605, C586, C3728, C1521, C505, C5224, and C625. No suspicious naming patterns or unexpected systems were identified.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C529",
+        "C586",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occurred at the same timestamp <267>, indicating a single batch of authentication events.",
+      "bursts": "No sudden spikes in authentication volume were detected as all events occurred simultaneously.",
+      "off_hours_activity": "Given the uniform timestamp <267>, it is unclear if these events occurred outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Multiple logoff events from systems like C612, C528, C457, C467, and C586 suggest routine logoff operations.",
+      "lateral_movement": "No clear lateral movement patterns are evident from the data provided.",
+      "privilege_escalation": "No privilege escalation patterns are evident from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several events utilized unknown authentication types denoted by '?'.",
+      "affected_entities": [
+        "C612",
+        "C2444",
+        "C529",
+        "C2560",
+        "C457",
+        "C467",
+        "C3514",
+        "C586",
+        "C625"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., C2100$@DOM1) are authenticating, but no unusual patterns were identified.",
+      "affected_accounts": [
+        "C2100$@DOM1",
+        "C2321$@DOM1",
+        "C3511$@DOM1",
+        "C3682$@DOM1",
+        "C2413$@DOM1",
+        "C2443$@DOM1",
+        "C2560$@DOM1",
+        "C3025$@DOM1",
+        "C3124$@DOM1",
+        "C3526$@DOM1",
+        "C3554$@DOM1",
+        "C3605$@DOM1",
+        "C3684$@DOM1",
+        "C3692$@DOM1",
+        "C4618$@DOM1",
+        "C5268$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events are generally followed by corresponding logoff events, indicating complete sessions.",
+      "affected_entities": [
+        "C612",
+        "C528",
+        "C457",
+        "C467",
+        "C586",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and consistent timestamps for all events are notable.",
+      "deviation_details": "The use of '?' for authentication type and uniform timestamps across events deviate from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs for additional timestamps to determine if the <267> timestamp is an artifact or represents a real-time event.",
+    "behavioral_context": "Compare observed patterns with historical authentication logs to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if machine accounts and other accounts have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the use of Kerberos in many events."
+  },
+  "conclusion": {
+    "summary": "The authentication events show a consistent timestamp and several instances of unknown authentication types, which could indicate logging artifacts or misconfigurations. No malicious patterns were definitively identified, but the anomalies warrant further investigation.",
+    "recommended_actions": "Investigate the source of the '?' authentication type, confirm the legitimacy of the <267> timestamp, and ensure machine accounts have appropriate permissions. Consider monitoring for any future deviations from standard authentication behavior."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

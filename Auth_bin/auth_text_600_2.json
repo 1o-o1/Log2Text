@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most source computers are authenticating to themselves, which is typical for service logons. However, C608 shows unusual activity by authenticating to multiple different computers.",
+    "targets": {
+      "frequent_targets": [
+        "C608",
+        "C467",
+        "C529",
+        "C586",
+        "C612"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume are apparent from the data provided.",
+      "off_hours_activity": "Cannot be determined due to lack of specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C608 repeatedly authenticates to multiple systems, which is unusual compared to other systems that authenticate primarily to themselves.",
+      "lateral_movement": "C608's pattern of authenticating to multiple different systems suggests potential lateral movement.",
+      "privilege_escalation": "No clear indication of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unknown authentication types are present, indicated by '?' in the auth_type field.",
+      "affected_entities": [
+        "C529",
+        "C586",
+        "C608"
+      ]
+    },
+    "account_patterns": {
+      "description": "C608$@DOM1 is authenticating to multiple systems, which is atypical for a machine account.",
+      "affected_accounts": [
+        "C608$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, particularly for C608.",
+      "affected_entities": [
+        "C608"
+      ]
+    },
+    "anomalies": {
+      "description": "C608 shows a pattern of authenticating to multiple systems using both known and unknown authentication types.",
+      "deviation_details": "C608's activity deviates from the typical pattern of systems authenticating to themselves, suggesting possible lateral movement or reconnaissance."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps for C608's authentication events to identify precise timing and sequence.",
+    "behavioral_context": "Compare C608's authentication pattern against baseline behaviors for similar systems.",
+    "permission_analysis": "Verify if C608$@DOM1 should have legitimate access to the systems it is authenticating to.",
+    "ioc_checks": "Investigate for potential Pass-the-Hash or Kerberoasting attacks given the unusual authentication patterns of C608."
+  },
+  "conclusion": {
+    "summary": "The authentication patterns suggest potential lateral movement involving C608, with unknown authentication types and multiple system accesses being key indicators of suspicious activity.",
+    "recommended_actions": "Investigate C608's authentication events further, focusing on the unknown authentication types and cross-system accesses. Validate permissions and check for potential misuse of credentials."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

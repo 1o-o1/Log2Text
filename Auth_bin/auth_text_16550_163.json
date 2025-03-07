@@ -1,0 +1,93 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C1727, C1928, and C2252 are initiating numerous authentication events, with C1727 showing a high volume of TGS requests.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C467",
+        "C1065"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp <163>, indicating a potential synchronized activity.",
+      "bursts": "No specific bursts detected beyond the general clustering.",
+      "off_hours_activity": "Cannot be determined from the given data as specific time of day is not provided."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1727 repeatedly requests TGS tickets for various destination computers, suggesting potential reconnaissance or lateral movement.",
+      "lateral_movement": "C1727's pattern of accessing multiple systems sequentially suggests possible lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the pattern of TGS requests could be preparatory for such actions."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type '?', which is suspicious.",
+      "affected_entities": [
+        "C586",
+        "C1065",
+        "C612",
+        "C988",
+        "C457"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts such as C1727$@DOM1 are making numerous TGS requests, which is unusual.",
+      "affected_accounts": [
+        "C1727$@DOM1",
+        "C2251$@DOM1",
+        "C2273$@DOM1",
+        "C2275$@DOM1",
+        "C2279$@DOM1",
+        "C2477$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are LogOn events without corresponding LogOff events, particularly for TGS and TGT operations, which could indicate incomplete session tracking.",
+      "affected_entities": [
+        "C1727",
+        "C2252",
+        "C2274",
+        "C2276",
+        "C2280",
+        "C2478"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and the high volume of TGS requests are anomalies.",
+      "deviation_details": "The use of '?' as an authentication type is not typical and should be investigated further."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the synchronization of events around timestamp <163> to determine if this indicates a coordinated attack.",
+    "behavioral_context": "Compare the observed patterns of TGS requests and unknown authentication types against baseline behavior for these systems.",
+    "permission_analysis": "Verify if the accounts making TGS requests should have access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Kerberoasting or Pass-the-Hash that might explain the observed patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication events show suspicious patterns, particularly with the use of unknown authentication types and high volume of TGS requests, suggesting potential reconnaissance or lateral movement.",
+    "recommended_actions": "Investigate the systems and accounts involved in the suspicious TGS requests and unknown authentication types. Review logs for evidence of credential misuse or unauthorized access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

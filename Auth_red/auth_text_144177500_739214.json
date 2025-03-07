@@ -1,0 +1,93 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C529, C467, C586, and C612 are initiating authentication events with ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C467",
+        "C586",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C16469$@DOM1",
+        "C13974$@DOM1",
+        "C1409$@DOM1"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around the same timestamp <739215>.",
+      "bursts": "There is a sudden spike in authentication events at <739215>.",
+      "off_hours_activity": "All events occur at the same timestamp, suggesting potential automation or scripted attacks."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGON attempts from various source computers to different destinations.",
+      "lateral_movement": "Sequential authentication patterns from C529, C467, C586, and C612 suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but ANONYMOUS LOGON attempts are concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Numerous ANONYMOUS LOGON attempts detected, especially with unknown authentication types.",
+      "affected_entities": [
+        "C529",
+        "C467",
+        "C586",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage with ANONYMOUS LOGON and machine accounts authenticating atypically.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C467",
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C612"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events for some accounts, and excessive LogOffs with ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C529",
+        "C467",
+        "C586",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "High volume of ANONYMOUS LOGON and NTLM usage in a potentially Kerberos-preferred environment.",
+      "deviation_details": "The presence of unknown authentication types and ANONYMOUS LOGONs is a significant deviation from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around <739215> to identify any potential attack chains or automation scripts.",
+    "behavioral_context": "Compare the observed ANONYMOUS LOGON patterns with baseline authentication logs to determine anomalies.",
+    "permission_analysis": "Verify if the accounts involved in ANONYMOUS LOGON should have legitimate access to the systems they are attempting to authenticate to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM and Kerberos usage."
+  },
+  "conclusion": {
+    "summary": "The authentication events exhibit high-risk indicators, including ANONYMOUS LOGON attempts, unknown authentication types, and potential lateral movement. These patterns suggest a possible security compromise.",
+    "recommended_actions": "Immediate investigation is recommended to determine the source and intent of the ANONYMOUS LOGON attempts. Consider implementing stricter authentication policies and monitoring for unusual account activities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

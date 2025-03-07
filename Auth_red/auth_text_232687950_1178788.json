@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C18504 and C1115 are initiating numerous authentication events, with C18504 showing a pattern of accessing multiple systems rapidly.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C586",
+        "C612",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C1015"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Concentrated authentication activity observed around timestamp 1178788 and 1178789.",
+      "bursts": "Sudden spikes in authentication volume from C18504 accessing multiple destinations in a short timeframe.",
+      "off_hours_activity": "No specific off-hours activity identified from the provided timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Recurrent authentication patterns from C18504 to multiple systems, indicating possible automated or scripted actions.",
+      "lateral_movement": "C18504 accessing multiple systems sequentially (C467, C586, C612) suggests lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but frequent access to multiple systems by a single user (U8679@DOM1) could indicate attempts to gain higher access."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Presence of ANONYMOUS LOGON and NTLM in Kerberos-preferred settings detected.",
+      "affected_entities": [
+        "C17798",
+        "C7"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source (C18504) accessing various destinations rapidly.",
+      "affected_accounts": [
+        "U8679@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events, especially from C18504.",
+      "affected_entities": [
+        "C18504"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall anomalies include excessive TGS requests and use of NTLM where Kerberos is expected.",
+      "deviation_details": "C18504 shows excessive TGS requests and rapid access to multiple systems, deviating from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events from C18504 to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare C18504's activity with baseline authentication patterns for this environment.",
+    "permission_analysis": "Verify if U8679@DOM1 and other accounts have legitimate access to the systems targeted by C18504.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially given the NTLM and TGS activity."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal suspicious patterns indicative of potential lateral movement and misuse of authentication protocols, particularly from source C18504.",
+    "recommended_actions": "Investigate C18504's activity for potential compromise, review account permissions for U8679@DOM1, and monitor for further NTLM and TGS anomalies."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

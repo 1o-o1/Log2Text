@@ -1,0 +1,96 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C12864, C1418, C13515, C19105, C15475, C17693, and C2057 are initiating authentication events. Notably, C12864 is initiating multiple TGS requests to different destination computers, which could indicate a pattern of lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C1065",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C2553",
+        "C2753",
+        "C585",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur at the same timestamp <727060>, suggesting a potential data aggregation or logging issue.",
+      "bursts": "There are no clear bursts due to the uniform timestamp, but multiple requests from C12864 to different destinations could indicate a burst pattern.",
+      "off_hours_activity": "Cannot determine due to lack of specific time context; however, the uniform timestamp is suspicious."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C12864 repeatedly requests TGS tickets for different computers, which is unusual.",
+      "lateral_movement": "The pattern of C12864 accessing multiple computers suggests potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of NTLM by C15475 and C17693 in a Kerberos environment is suspicious."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are present, which are suspicious.",
+      "affected_entities": [
+        "C12864",
+        "C1262",
+        "C14145",
+        "C5552",
+        "C16314",
+        "C16543",
+        "C16856"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source and multiple destinations accessed by a single account are observed.",
+      "affected_accounts": [
+        "U5426@DOM1",
+        "U6546@DOM1",
+        "U8@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, especially with TGS requests.",
+      "affected_entities": [
+        "C12864",
+        "C14145",
+        "C5552",
+        "C16314",
+        "C16543",
+        "C16856"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, there is a pattern of potential lateral movement and suspicious authentication types.",
+      "deviation_details": "The uniform timestamp <727060> and multiple TGS requests from a single source are significant deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the uniform timestamp <727060> to determine if it reflects a logging issue or synchronized attack.",
+    "behavioral_context": "Compare the observed authentication patterns with baseline activity for these systems and accounts.",
+    "permission_analysis": "Verify if the accounts involved in TGS requests have legitimate access to the destination systems.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, especially given the NTLM usage."
+  },
+  "conclusion": {
+    "summary": "The authentication log reveals several anomalies, including potential lateral movement by C12864, suspicious use of NTLM, and uniform timestamps indicating possible logging issues. These patterns suggest a moderate to high risk of compromise.",
+    "recommended_actions": "Investigate the source and intent of the TGS requests by C12864, verify the legitimacy of NTLM usage, and review logging configurations to ensure accurate timestamps."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

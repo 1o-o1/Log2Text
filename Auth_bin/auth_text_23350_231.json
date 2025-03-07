@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication requests include C553, C574, C585, C586, C1619, C988, C612, C743, C889, C467, C528, C905, C1056, C1710, C1964, C1065, C144, C229, C2106, C477, C616, C1875, C529, C2892, C330, C1283, C1839, and C933. Notably, C586 and C905 are involved in multiple authentications, some involving ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C599",
+        "C528",
+        "C2742"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around time 231, with some activity at 232.",
+      "bursts": "No significant bursts detected, but consistent activity at time 231.",
+      "off_hours_activity": "Activity is clustered around specific times, but without context on business hours, it's unclear if this is off-hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated authentication attempts from C905 to multiple destinations suggest a pattern, but no immediate red flags without context.",
+      "lateral_movement": "Potential lateral movement indicated by C905 accessing multiple systems (C586, C612) using different authentication methods.",
+      "privilege_escalation": "No clear indication of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified (?) authentication types are detected, which are generally considered suspicious.",
+      "affected_entities": [
+        "C586",
+        "C1283",
+        "C1839",
+        "C933"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts such as C905$@DOM1 are authenticating to multiple systems, which may be unusual depending on their role.",
+      "affected_accounts": [
+        "C905$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are several LogOn events without corresponding LogOff events, but these are not excessive.",
+      "affected_entities": [
+        "C586",
+        "C905"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and unspecified authentication types are notable anomalies.",
+      "deviation_details": "ANONYMOUS LOGON detected at C586 with NTLM, which is unusual in a Kerberos environment."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events around times 231 and 232 to identify potential attack chains.",
+    "behavioral_context": "Compare observed authentication patterns against baseline behaviors for these systems and accounts.",
+    "permission_analysis": "Verify the legitimacy of C905$@DOM1's access to multiple systems, especially C586 and C612.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially involving C905 and ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some suspicious patterns, including ANONYMOUS LOGON and unspecified authentication types, which could indicate potential security issues. The activity of C905 and multiple ANONYMOUS LOGON events at C586 are particularly concerning.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON events at C586, especially those using NTLM. Review the access patterns of C905$@DOM1 across multiple systems. Validate the necessity of machine accounts authenticating in this manner."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

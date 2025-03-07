@@ -1,0 +1,125 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "All authentication events are initiated by machine accounts (e.g., C775$, C778$) on their respective systems, which is typical for system service logons.",
+    "targets": {
+      "frequent_targets": [
+        "C775",
+        "C778",
+        "C781",
+        "C788",
+        "C79",
+        "C791",
+        "C792",
+        "C797",
+        "C799",
+        "C8",
+        "C806",
+        "C810",
+        "C814",
+        "C817",
+        "C819",
+        "C822",
+        "C825",
+        "C827",
+        "C829",
+        "C830",
+        "C831",
+        "C837",
+        "C838",
+        "C840",
+        "C847",
+        "C855",
+        "C864",
+        "C866",
+        "C874",
+        "C876",
+        "C877",
+        "C885",
+        "C892",
+        "C897",
+        "C899",
+        "C902",
+        "C904",
+        "C905",
+        "C907",
+        "C913",
+        "C914",
+        "C918",
+        "C924",
+        "C925",
+        "C927",
+        "C928",
+        "C932",
+        "C945",
+        "C950"
+      ],
+      "sporadic_targets": [
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are identified as timestamps are aggregated.",
+      "bursts": "No sudden spikes in authentication volume are observed.",
+      "off_hours_activity": "No specific off-hours activity is identified due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive service logons are observed, typical for system operations.",
+      "lateral_movement": "No evidence of lateral movement as all logons are local to the source system.",
+      "privilege_escalation": "No indication of privilege escalation; all logons are service-related."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "An unknown authentication type (?) is detected in one event.",
+      "affected_entities": [
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are consistently used for service logons, which is expected.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "A LogOff event with an unknown authentication type is noted, which is unusual.",
+      "affected_entities": [
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication events appear normal except for the unknown authentication type on C612.",
+      "deviation_details": "The unknown authentication type on C612 is the only deviation from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analysis of the specific times and sequences of events on C612 to determine if the unknown authentication type correlates with any suspicious activity.",
+    "behavioral_context": "Compare C612's authentication patterns with baseline behavior to identify any anomalies.",
+    "permission_analysis": "Verify if the account on C612 should have legitimate access to the network and if the unknown authentication type is expected.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might exploit unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events generally show normal service logon patterns, except for an unknown authentication type on C612, which warrants further investigation.",
+    "recommended_actions": "Investigate the unknown authentication type on C612 to determine its cause and ensure it is not indicative of a security issue. Review system logs for any related anomalies."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

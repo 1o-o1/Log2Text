@@ -1,0 +1,96 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily initiating authentication requests to themselves or other computers within the same domain, with no unusual naming patterns or unexpected systems detected.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur at the same timestamp <191>, indicating a possible synchronization error or batch processing.",
+      "bursts": "No sudden spikes in authentication volume detected.",
+      "off_hours_activity": "All events occur at the same timestamp <191>, making it impossible to determine if they are outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are observed, particularly from C2274, C2276, and C2280 to C457, which may indicate normal service account behavior.",
+      "lateral_movement": "No sequential authentication patterns suggesting lateral movement detected.",
+      "privilege_escalation": "No patterns indicating escalation to higher privilege accounts detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type '?'.",
+      "affected_entities": [
+        "C612",
+        "C586",
+        "C553",
+        "C1065",
+        "C2274",
+        "C2276",
+        "C2280",
+        "C467",
+        "C529",
+        "C798"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) are authenticating, which is typical for service accounts.",
+      "affected_accounts": [
+        "C1427$@DOM1",
+        "C1767$@DOM1",
+        "C3324$@DOM1",
+        "C3550$@DOM1",
+        "C5502$@DOM1",
+        "C1562$@DOM1",
+        "C1720$@DOM1",
+        "C1766$@DOM1",
+        "C1965$@DOM1",
+        "C2067$@DOM1",
+        "C437$@DOM1",
+        "C585$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear consistent with expected behavior, with no irregular sequences detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of an unknown authentication type and synchronized timestamps.",
+      "deviation_details": "The use of '?' as an authentication type and the uniform timestamp <191> across all events."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the reason for the uniform timestamp <191> across all events to determine if it is a logging error or a batch process.",
+    "behavioral_context": "Compare the observed authentication patterns with historical data to confirm if this is typical behavior for these accounts and systems.",
+    "permission_analysis": "Verify that the machine accounts and service accounts have appropriate permissions for the systems they are accessing.",
+    "ioc_checks": "Check for any known vulnerabilities or attack patterns associated with the use of unknown authentication types and synchronized timestamps."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some anomalies, such as the use of an unknown authentication type and synchronized timestamps, which could indicate logging issues or batch processing rather than malicious activity.",
+    "recommended_actions": "Investigate the cause of the unknown authentication type and synchronized timestamps. Ensure that all systems are correctly logging authentication events and that there are no configuration errors."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

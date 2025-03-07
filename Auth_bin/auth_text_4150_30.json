@@ -1,0 +1,85 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with some using suspicious naming conventions such as ANONYMOUS LOGON, which is a high-risk indicator.",
+    "targets": {
+      "frequent_targets": [
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C1065",
+        "C457"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around time <30> and <31>.",
+      "bursts": "There are sudden spikes in authentication volume, particularly to C586, which may indicate targeted activity.",
+      "off_hours_activity": "Some authentication events occur outside typical business hours, particularly those involving ANONYMOUS LOGON."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication attempts are observed from C473 and C506 to multiple destinations, indicating possible credential testing or lateral movement.",
+      "lateral_movement": "Sequential authentication patterns from C473 to C457 and C612 suggest potential lateral movement.",
+      "privilege_escalation": "No clear patterns of privilege escalation were identified, but the use of ANONYMOUS LOGON is concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are detected, which are high-risk.",
+      "affected_entities": [
+        "C586",
+        "C1186",
+        "C174",
+        "C705"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts authenticating in unexpected ways and multiple accounts from a single source rapidly.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "C104$@DOM1",
+        "C1186$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some logon events do not have corresponding logoff events, particularly those involving ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, there are several authentication anomalies detected, including the use of ANONYMOUS LOGON and machine accounts authenticating unusually.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and multiple machine accounts authenticating to C586 is a significant deviation from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of authentication events, particularly those involving C586 and ANONYMOUS LOGON, to identify potential attack chains.",
+    "behavioral_context": "Compare observed authentication patterns with known baselines to identify deviations, focusing on C586 and related accounts.",
+    "permission_analysis": "Verify whether accounts such as ANONYMOUS LOGON and machine accounts should have legitimate access to target systems like C586.",
+    "ioc_checks": "Check for specific techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of NTLM and ANONYMOUS LOGON."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several high-risk anomalies, including the use of ANONYMOUS LOGON, NTLM in a potentially Kerberos-preferred environment, and unusual machine account activity. These patterns suggest possible lateral movement and credential misuse.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, monitor for lateral movement from C473 and C506, and review access permissions for machine accounts authenticating to C586. Consider implementing stricter authentication controls and monitoring for NTLM usage."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

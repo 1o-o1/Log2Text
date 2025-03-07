@@ -1,0 +1,122 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several source computers are initiating authentication events, including C1065, C1521, C457, C105, C1046, C1100, C1115, C612, C586, C1565, C1641, C1888, C1923, C2093, C2245, C2266, C2323, C2337, C2404, C2560, C2634, C3022, C3025, C352, C3554, C3584, C3601. No suspicious naming conventions observed.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around the timestamp <284>.",
+      "bursts": "No sudden spikes in authentication volume detected.",
+      "off_hours_activity": "No specific off-hours activity detected; all events are timestamped <284>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOff events from computers C1065, C457, C612, C586, C625, C528, C3022.",
+      "lateral_movement": "No clear lateral movement patterns detected.",
+      "privilege_escalation": "No privilege escalation patterns detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unknown authentication types detected in some events.",
+      "affected_entities": [
+        "C1065",
+        "C457",
+        "C105",
+        "C1115",
+        "C612",
+        "C1565",
+        "C1641",
+        "C2323",
+        "C2337",
+        "C2404",
+        "C2560",
+        "C3554"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts are authenticating from the same source computer, particularly in LogOff events.",
+      "affected_accounts": [
+        "C102$@DOM1",
+        "C2092$@DOM1",
+        "C2322$@DOM1",
+        "C1456$@DOM1",
+        "C1562$@DOM1",
+        "C2395$@DOM1",
+        "C1565$@DOM1",
+        "C1733$@DOM1",
+        "C2403$@DOM1",
+        "C2560$@DOM1",
+        "C3584$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some LogOn events do not have corresponding LogOff events in the dataset.",
+      "affected_entities": [
+        "C1521",
+        "C105",
+        "C1046",
+        "C1100",
+        "C1565",
+        "C1641",
+        "C1888",
+        "C1923",
+        "C2093",
+        "C2245",
+        "C2266",
+        "C2323",
+        "C2337",
+        "C2404",
+        "C2560",
+        "C2634",
+        "C3022",
+        "C3025",
+        "C352",
+        "C3584",
+        "C3601"
+      ]
+    },
+    "anomalies": {
+      "description": "Authentication anomalies detected due to unknown authentication types and multiple accounts from the same source.",
+      "deviation_details": "The presence of unknown authentication types and multiple accounts authenticating from the same source may indicate potential anomalies."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events around timestamp <284> to identify any potential attack chains.",
+    "behavioral_context": "Compare these authentication patterns with baseline activity to determine if these are normal for the environment.",
+    "permission_analysis": "Verify if the accounts involved in these authentication events have legitimate access to the targeted systems.",
+    "ioc_checks": "Conduct checks for potential Pass-the-Hash or Kerberoasting attacks, given the presence of unknown authentication types and multiple accounts from single sources."
+  },
+  "conclusion": {
+    "summary": "The analysis of authentication events reveals the presence of unknown authentication types and multiple accounts from the same source, which could indicate potential anomalies. However, in a benign environment, these may not necessarily represent malicious activity.",
+    "recommended_actions": "Investigate the use of unknown authentication types and verify account permissions. Monitor for any changes in authentication patterns that deviate from the norm."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

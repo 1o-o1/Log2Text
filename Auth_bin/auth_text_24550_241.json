@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most source computers are authenticating to themselves or a few other systems, which is typical in a benign environment. However, some computers like C1727 are accessing multiple destinations, which could be normal depending on the role of the machine.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C1727"
+      ],
+      "sporadic_targets": [
+        "C625",
+        "C2516"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a single timestamp, indicating a snapshot of activity rather than a continuous log.",
+      "bursts": "No significant bursts detected; activity is consistent across the dataset.",
+      "off_hours_activity": "All events occur at the same timestamp, making it impossible to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are observed, such as LogOn followed by LogOff, which is normal.",
+      "lateral_movement": "C1727 shows potential lateral movement as it accesses multiple systems, but this could be benign based on its role.",
+      "privilege_escalation": "No clear patterns of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several events have an unknown authentication type (?).",
+      "affected_entities": [
+        "C2106",
+        "C586",
+        "C467",
+        "C20",
+        "C1710",
+        "C229",
+        "C419",
+        "C1065",
+        "C1703",
+        "C529",
+        "C612",
+        "C1634",
+        "C1952",
+        "C2944",
+        "C1727",
+        "C1747"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and user accounts are authenticating in expected patterns, but some accounts like U78@DOM1 are accessing multiple systems, which could be normal depending on the role.",
+      "affected_accounts": [
+        "C905$@DOM1",
+        "U78@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal, with corresponding pairs.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns are consistent with a benign environment.",
+      "deviation_details": "The presence of unknown authentication types is the most notable anomaly."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analysis of logs over a longer period would help identify any unusual timing patterns.",
+    "behavioral_context": "Compare current patterns with historical data to confirm if multi-system access by C1727 is typical.",
+    "permission_analysis": "Verify if accounts like U78@DOM1 have legitimate reasons to access multiple systems.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash if any suspicious patterns arise in future logs."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear benign, with some unknown authentication types being the primary anomaly. No high-risk indicators of compromise are evident.",
+    "recommended_actions": "Monitor systems like C1727 for unusual access patterns in future logs. Investigate unknown authentication types to ensure they are not indicative of misconfigured systems."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

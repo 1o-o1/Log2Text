@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers, including C586, C1065, and C529, are initiating authentication events with suspicious patterns, such as ANONYMOUS LOGON and NTLM in a Kerberos environment.",
+    "targets": {
+      "frequent_targets": [
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Concentrated activity around timestamp <1093669>.",
+      "bursts": "Sudden spike in activity involving ANONYMOUS LOGON and NTLM authentications.",
+      "off_hours_activity": "Potential off-hours activity due to the high volume of events in a short timeframe."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated ANONYMOUS LOGON attempts from various sources to C586.",
+      "lateral_movement": "Sequential authentications from C105 to multiple destinations (C1065, C529, C553) suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but suspicious patterns warrant further investigation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentications detected, particularly concerning in Kerberos environments.",
+      "affected_entities": [
+        "C586",
+        "C529",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple ANONYMOUS LOGON events and machine accounts accessing various destinations.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C1065"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events with ANONYMOUS LOGON without corresponding logoffs, indicating potential session hijacking or persistence.",
+      "affected_entities": [
+        "C586",
+        "C529",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "High volume of ANONYMOUS LOGON and NTLM authentications in a Kerberos environment.",
+      "deviation_details": "The presence of NTLM in a Kerberos-preferred environment and excessive ANONYMOUS LOGON attempts are significant deviations from expected behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON and NTLM events to identify potential attack chains.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts involved in ANONYMOUS LOGON should have access to the targeted systems, particularly C586.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting based on the observed NTLM and ANONYMOUS LOGON patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal multiple suspicious patterns, including ANONYMOUS LOGON and NTLM authentications in a Kerberos environment, suggesting potential lateral movement and unauthorized access attempts. These patterns are indicative of a high risk of compromise.",
+    "recommended_actions": "Conduct a thorough investigation of systems C586, C529, and C1065 for unauthorized access. Implement stricter monitoring and logging for ANONYMOUS LOGON events and NTLM authentications. Consider network segmentation and enhanced authentication protocols to mitigate further risks."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

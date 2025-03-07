@@ -1,0 +1,89 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C2606, C9412, C2212, C11017, C1413, C16251, and C19189 initiated suspicious ANONYMOUS LOGON events, which are often indicative of malicious activity.",
+    "targets": {
+      "frequent_targets": [
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp <748398>, indicating a possible coordinated attack or automated script.",
+      "bursts": "There is a burst of ANONYMOUS LOGON events at <748398>, which is unusual and potentially malicious.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGON attempts on C586 and other systems suggest automated or scripted attacks.",
+      "lateral_movement": "Sequential logons from machine accounts like C1114$@DOM1 accessing multiple systems suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of ANONYMOUS LOGON could be a precursor to such attempts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events detected, which are high-risk for unauthorized access.",
+      "affected_entities": [
+        "C2606",
+        "C9412",
+        "C2212",
+        "C11017",
+        "C1413",
+        "C16251",
+        "C19189"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple ANONYMOUS LOGON and machine accounts accessing systems in a short timeframe.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "C1114$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events for some sequences, indicating potential session hijacking or persistence attempts.",
+      "affected_entities": [
+        "C586",
+        "C467",
+        "C528"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of ANONYMOUS LOGONs and the use of NTLM in a potentially Kerberos-preferred environment are concerning.",
+      "deviation_details": "The use of NTLM and ANONYMOUS LOGONs in a clustered timeframe deviates from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON events to determine if they align with known attack patterns such as Pass-the-Hash or Kerberoasting.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication logs to identify deviations specific to these events.",
+    "permission_analysis": "Verify if the accounts involved in the suspicious authentications have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for known indicators of compromise such as Pass-the-Hash attacks due to the presence of NTLM and ANONYMOUS LOGONs."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal significant anomalies, particularly the presence of ANONYMOUS LOGON events and NTLM usage, suggesting potential malicious activity and lateral movement.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, review access permissions for involved accounts, and consider implementing stricter authentication protocols to prevent unauthorized access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

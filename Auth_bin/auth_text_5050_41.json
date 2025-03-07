@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C1619, C553, C1065, C1798, C625, C85, C896, C3454, C4837, C1056, C229, C419, C2191, C529, C1750, C506, C586, C2089, C815, C423, C5471, C2127, C3454, C449, C1848, C61, C626, C1681, C182, C1021. Notably, C182 initiated an ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "U20",
+        "U6"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events occurred at time <41>, indicating a potential cluster of activity.",
+      "bursts": "No significant bursts were detected outside the main cluster at <41>.",
+      "off_hours_activity": "No specific off-hours activity was identified due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions were observed for several accounts, but no clear pattern of repetitive actions between different systems was noted.",
+      "lateral_movement": "Potential lateral movement is suggested by U22@DOM1 accessing multiple systems (C506, C586).",
+      "privilege_escalation": "No clear evidence of privilege escalation was detected from the available data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, NTLM used in a Kerberos-preferred environment.",
+      "affected_entities": [
+        "C182",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source (e.g., C419) and machine accounts showing unusual authentication patterns.",
+      "affected_accounts": [
+        "U129@DOM1",
+        "U3@DOM1",
+        "U48@DOM1",
+        "C599$@DOM1",
+        "C607$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events were detected, particularly for machine accounts.",
+      "affected_entities": [
+        "C1619",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "Several anomalies detected, including ANONYMOUS LOGON and NTLM usage.",
+      "deviation_details": "ANONYMOUS LOGON on C182, NTLM on C5471 in a Kerberos environment, and multiple machine accounts authenticating atypically."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps to analyze the sequence of events, particularly around <41> and <42>.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if accounts like U22@DOM1 and machine accounts have legitimate access to systems they authenticated to.",
+    "ioc_checks": "Check for Pass-the-Hash and other credential theft techniques, especially given the NTLM and ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several anomalies, including ANONYMOUS LOGON events, NTLM usage in a Kerberos environment, and potential lateral movement by user U22@DOM1. These patterns suggest a moderate risk of compromise.",
+    "recommended_actions": "Investigate the source and intent of the ANONYMOUS LOGON event on C182, review NTLM usage on C5471, and validate access permissions for accounts showing unusual activity. Consider implementing stricter monitoring and alerting for similar patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers C3130, C1641, and C2074 are initiating multiple authentication requests across different destination computers, which could indicate automated processes or scripts.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around the timestamps 274 and 275.",
+      "bursts": "There is a notable burst of authentication events at timestamp 275, particularly involving TGS and TGT operations.",
+      "off_hours_activity": "No specific off-hours activity was identified in the provided data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed, particularly with machine accounts and users like U66@DOM1 and U679@DOM1.",
+      "lateral_movement": "The pattern of authentication from C3130 to various destinations suggests potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation was detected, but the use of ANONYMOUS LOGON is concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types were detected, which are typically considered suspicious.",
+      "affected_entities": [
+        "C467",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and ANONYMOUS LOGON are used in ways that could be suspicious, such as C1641$@DOM1 accessing multiple systems rapidly.",
+      "affected_accounts": [
+        "C1641$@DOM1",
+        "C2073$@DOM1",
+        "C2177$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are sequences of LogOn and LogOff without corresponding pairs, which could indicate incomplete session handling or automation.",
+      "affected_entities": [
+        "C457",
+        "C586",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and unspecified authentication types, along with rapid TGS/TGT requests, are anomalies.",
+      "deviation_details": "The use of NTLM in some instances where Kerberos is available is also a deviation from expected behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of authentication events from C3130 and C1641 to determine if they align with known attack patterns like lateral movement.",
+    "behavioral_context": "Compare the observed authentication patterns against baseline data to identify deviations.",
+    "permission_analysis": "Verify if accounts like C1641$@DOM1 and U679@DOM1 have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques, especially given the presence of NTLM and TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication patterns show signs of potential automated behavior and lateral movement, with high-risk indicators such as ANONYMOUS LOGON and unspecified authentication types present.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events and verify the legitimacy of machine account activities. Consider monitoring for lateral movement from C3130 and C1641."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

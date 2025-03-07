@@ -1,0 +1,93 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple instances of ANONYMOUS LOGON from various computers (C1909, C2885, C10376, etc.) indicate potential malicious activity.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur at a similar timestamp <1075370> or <1075371>, suggesting a coordinated attack or scripted activity.",
+      "bursts": "High volume of authentication attempts within a very short timeframe.",
+      "off_hours_activity": "All events are timestamped similarly, indicating potential off-hours activity, but exact times are not specified."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated TGS requests from the same source (e.g., C19332) to different destinations.",
+      "lateral_movement": "Sequential access to multiple systems by the same accounts (e.g., C12367 accessing C1640, C457, C625).",
+      "privilege_escalation": "No direct evidence of privilege escalation, but patterns suggest potential credential harvesting."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types detected.",
+      "affected_entities": [
+        "C1909",
+        "C2885",
+        "C10376",
+        "C529",
+        "C586",
+        "C662",
+        "C13099"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts and ANONYMOUS LOGONs authenticating in unusual patterns.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON",
+        "C10093$@DOM1",
+        "C10216$@DOM1",
+        "C11101$@DOM1",
+        "C11138$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events, and multiple LogOffs for single LogOns.",
+      "affected_entities": [
+        "C457",
+        "C529",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "High volume of ANONYMOUS LOGONs and machine accounts accessing multiple systems.",
+      "deviation_details": "Unusual authentication patterns with high frequency and multiple systems accessed by the same accounts."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events to determine if they align with known attack patterns such as Pass-the-Hash or Kerberoasting.",
+    "behavioral_context": "Compare these patterns against historical authentication logs to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if the accounts involved should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known indicators of compromise such as Pass-the-Hash or Kerberoasting techniques."
+  },
+  "conclusion": {
+    "summary": "The authentication logs exhibit several high-risk indicators, including ANONYMOUS LOGONs, unspecified authentication types, and potential lateral movement patterns. The observed patterns suggest a coordinated attack or scripted activity, potentially involving credential harvesting or lateral movement.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGONs and unspecified authentication types. Review access permissions for involved accounts and systems. Monitor for further suspicious activity and consider implementing additional security measures such as multi-factor authentication."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

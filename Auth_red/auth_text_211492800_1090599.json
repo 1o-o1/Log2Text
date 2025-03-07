@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C229, C529, C801, and others are initiating authentication events. Notably, there are several instances of ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C10561",
+        "C457"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around a specific timestamp <1090599> and <1090600>.",
+      "bursts": "There is a noticeable spike in ANONYMOUS LOGON events at <1090600>.",
+      "off_hours_activity": "The specific timestamps are not detailed, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated ANONYMOUS LOGON attempts on C586 and C467.",
+      "lateral_movement": "Sequential logons from C487 to multiple destinations (C1830, C585, C92) suggest potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of ANONYMOUS LOGON could indicate attempts to bypass normal authentication."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM in Kerberos environments detected.",
+      "affected_entities": [
+        "C10561",
+        "C457",
+        "C467",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple ANONYMOUS LOGON attempts from different sources.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C10561",
+        "ANONYMOUS LOGON@C457",
+        "ANONYMOUS LOGON@C467",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events, particularly with ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C10561",
+        "C457",
+        "C467",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "High volume of ANONYMOUS LOGON and NTLM usage in a potentially Kerberos-preferred environment.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and NTLM where Kerberos is expected is a significant deviation from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON events to identify potential attack chains, especially around <1090600>.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if ANONYMOUS LOGON accounts should have access to the systems they are attempting to authenticate with.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several suspicious patterns, including repeated ANONYMOUS LOGON attempts and NTLM usage in a potentially Kerberos-preferred environment. These patterns suggest possible unauthorized access attempts and lateral movement.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON attempts, especially on C586 and C467. Review access permissions and consider implementing stricter authentication protocols. Monitor for further suspicious activity and consider isolating affected systems for further analysis."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

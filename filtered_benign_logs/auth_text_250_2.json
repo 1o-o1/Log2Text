@@ -1,0 +1,123 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are primarily self-authenticating, which is typical for service accounts and system processes. However, C105 authenticating to C523 using NTLM is unusual given the context of mostly Negotiate protocol usage.",
+    "targets": {
+      "frequent_targets": [
+        "C1009",
+        "C1012",
+        "C1016",
+        "C1024",
+        "C1039",
+        "C1047",
+        "C1048",
+        "C1050",
+        "C1053",
+        "C1055",
+        "C1059",
+        "C1060",
+        "C1064",
+        "C1070",
+        "C1071",
+        "C1073",
+        "C1074",
+        "C1076",
+        "C1077",
+        "C1078",
+        "C1081",
+        "C1082",
+        "C1085",
+        "C1086",
+        "C1091",
+        "C1093",
+        "C1097",
+        "C110",
+        "C1102",
+        "C1106",
+        "C1108",
+        "C1111",
+        "C1112",
+        "C1117",
+        "C1118",
+        "C1123",
+        "C1125",
+        "C1126",
+        "C1128",
+        "C1131",
+        "C1140",
+        "C1147",
+        "C1148",
+        "C1156",
+        "C1160",
+        "C1165",
+        "C1167",
+        "C1169",
+        "C1171"
+      ],
+      "sporadic_targets": [
+        "C523"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered with each source computer authenticating to itself, which is a common pattern for service accounts.",
+      "bursts": "No significant bursts in authentication volume detected.",
+      "off_hours_activity": "No specific off-hours activity detected from the data provided."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive self-authentication patterns are observed, which are typical for service accounts.",
+      "lateral_movement": "No clear lateral movement patterns detected, except for the NTLM authentication from C105 to C523.",
+      "privilege_escalation": "No privilege escalation patterns detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "NTLM authentication detected in a predominantly Negotiate environment, which may indicate a fallback or misconfiguration.",
+      "affected_entities": [
+        "C105 -> C523"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are predominantly self-authenticating, which is typical behavior for service accounts.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "No irregular logon/logoff sequences detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The NTLM authentication from C105 to C523 is an anomaly in the context of the other events.",
+      "deviation_details": "The use of NTLM instead of Negotiate for a single event is unusual and may warrant further investigation."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs for C105 and C523 to determine if the NTLM authentication is part of a larger sequence of events.",
+    "behavioral_context": "Compare the NTLM authentication event against baseline behaviors for C105 and C523 to determine if this is a known or expected pattern.",
+    "permission_analysis": "Verify if C105 has legitimate reasons to authenticate to C523 using NTLM, and check for any recent changes in configurations.",
+    "ioc_checks": "Check for known NTLM-related attack patterns, such as Pass-the-Hash, to ensure this is not an indicator of compromise."
+  },
+  "conclusion": {
+    "summary": "The authentication events largely appear benign with typical service account behavior. However, the NTLM authentication from C105 to C523 is an anomaly that should be investigated further to rule out any potential misconfiguration or compromise.",
+    "recommended_actions": "Investigate the NTLM authentication event from C105 to C523 to ensure it is legitimate. Review configurations and permissions for any discrepancies."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": false,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

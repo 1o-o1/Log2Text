@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C2106, C528, and C586 are initiating authentication events with multiple accounts, which is typical for machine accounts but should be monitored for unusual patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C528",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C625",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are timestamped with <378>, indicating a potential aggregation or logging artifact rather than real-time correlation.",
+      "bursts": "No specific bursts detected due to uniform timestamps.",
+      "off_hours_activity": "Cannot determine due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff patterns are seen, such as C2106 and C528 logging off multiple times.",
+      "lateral_movement": "No clear lateral movement detected, as most authentications are self-contained or involve expected machine account behavior.",
+      "privilege_escalation": "No clear indicators of privilege escalation; most authentications are successful and involve machine accounts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use unknown or missing types, which could indicate logging issues or misconfigurations.",
+      "affected_entities": [
+        "C529",
+        "C2106",
+        "C528",
+        "C625",
+        "C586",
+        "C457",
+        "C523",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating with multiple other machine accounts, which is typical but should be monitored for anomalies.",
+      "affected_accounts": [
+        "C3377$@DOM1",
+        "C3503$@DOM1",
+        "C3548$@DOM1",
+        "C4114$@DOM1",
+        "C4137$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Multiple logon events without corresponding logoff events, but these are typical for machine accounts.",
+      "affected_entities": [
+        "C2106",
+        "C528",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the environment shows typical machine account behavior with some logging anomalies.",
+      "deviation_details": "The use of unknown authentication types and uniform timestamps are notable but likely benign."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Verify the timestamp logging mechanism to ensure accurate time reporting.",
+    "behavioral_context": "Compare current machine account behavior with historical data to confirm typical patterns.",
+    "permission_analysis": "Ensure that all machine accounts have appropriate permissions for the systems they are accessing.",
+    "ioc_checks": "No immediate IOC checks necessary, but maintain vigilance for changes in authentication patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication events analyzed appear typical for a benign environment with machine accounts, though logging anomalies such as unknown authentication types and uniform timestamps should be addressed.",
+    "recommended_actions": "Investigate logging configuration to resolve unknown authentication types and verify timestamp accuracy. Continue monitoring for any shifts in authentication patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

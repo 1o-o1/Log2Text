@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several source computers are initiating authentication requests, including C490, C229, C1934, C612, C1691, C1443, C506, C1366, C419, C4210, C1697, C245, C2732, C3078, C528, C2754, C2148, C1085, C1115, C1327, C1618, C1646, C1065, C1968, C1795, C186, and C2346. Notably, C2148 shows an ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C529",
+        "C612",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1056",
+        "C457",
+        "C1065",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are clustered around timestamps 147 and 148, indicating potential synchronized activity or batch processing.",
+      "bursts": "No significant bursts detected beyond the clustered timestamps.",
+      "off_hours_activity": "No specific off-hours activity detected from the provided timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are observed, particularly with accounts like U66@DOM1 across multiple computers.",
+      "lateral_movement": "Potential lateral movement is suggested by the sequential authentication from C1646 to multiple destinations using TGS requests.",
+      "privilege_escalation": "No clear privilege escalation patterns detected, but ANONYMOUS LOGON is a potential risk."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected on C2148, and NTLM used by C1327 and C186, which could be suspicious in a Kerberos environment.",
+      "affected_entities": [
+        "C2148",
+        "C1327",
+        "C186"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating, such as C1617$@DOM1 and C1646$@DOM1, which may indicate automated processes or potential misuse.",
+      "affected_accounts": [
+        "C1617$@DOM1",
+        "C1646$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Repetitive LogOn and LogOff sequences detected, particularly with U66@DOM1 across multiple systems.",
+      "affected_entities": [
+        "U66@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "ANONYMOUS LOGON and NTLM usage are key anomalies.",
+      "deviation_details": "ANONYMOUS LOGON on C2148 and NTLM usage by C1327 and C186 deviate from expected Kerberos authentication."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps 147 and 148 to identify any coordinated attack patterns.",
+    "behavioral_context": "Compare the observed authentication patterns with baseline activity to identify deviations.",
+    "permission_analysis": "Verify if accounts like ANONYMOUS LOGON and machine accounts have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for Pass-the-Hash attacks due to NTLM usage and investigate ANONYMOUS LOGON for potential exploitation."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal potential risks, including ANONYMOUS LOGON and NTLM usage in a Kerberos environment, which could indicate malicious activity.",
+    "recommended_actions": "Investigate ANONYMOUS LOGON on C2148, review NTLM usage by C1327 and C186, and monitor for potential lateral movement involving C1646."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": false,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

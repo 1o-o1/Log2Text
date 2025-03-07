@@ -1,0 +1,109 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1641, C2130, and C2657 are initiating multiple authentication events, primarily using Kerberos. Some events show unknown authentication types, which could be a point of concern.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C457",
+        "C528",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur at the same timestamp <274>, indicating a batch or synchronized activity.",
+      "bursts": "No sudden spikes are observed as all events are clustered at the same time.",
+      "off_hours_activity": "Cannot determine off-hours activity as the timestamp is not specific to real-world time."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed, particularly with machine accounts, indicating potential automated processes.",
+      "lateral_movement": "No clear indication of lateral movement as most authentications are localized to the same source and destination.",
+      "privilege_escalation": "No clear patterns of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events with unknown types (?).",
+      "affected_entities": [
+        "C457",
+        "C625",
+        "C1703",
+        "C1727",
+        "C528",
+        "C612",
+        "C2233",
+        "C586",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) are frequently involved in authentication events, but this is expected in a benign environment for automated tasks.",
+      "affected_accounts": [
+        "C1573$@DOM1",
+        "C2129$@DOM1",
+        "C2841$@DOM1",
+        "C1694$@DOM1",
+        "C2657$@DOM1",
+        "C3510$@DOM1",
+        "C3601$@DOM1",
+        "C1993$@DOM1",
+        "C2027$@DOM1",
+        "C2816$@DOM1",
+        "C3584$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Several LogOn events without corresponding LogOff events, but they appear to be balanced by other LogOff events, suggesting normal automated processes.",
+      "affected_entities": [
+        "C457",
+        "C625",
+        "C1703",
+        "C1727",
+        "C528",
+        "C612",
+        "C2233",
+        "C586",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and failed TGT requests are the main anomalies.",
+      "deviation_details": "Failed TGT requests from C25240 and C457 with user C2096$@? indicate possible misconfigurations or unauthorized attempts."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analyze the synchronization of events at <274> to determine if this is a scheduled task or anomaly.",
+    "behavioral_context": "Compare current authentication patterns with historical logs to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved, especially those with unknown authentication types, have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack patterns such as Kerberoasting or Pass-the-Hash if suspicious authentication types persist."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear mostly benign with expected machine account activity. However, the presence of unknown authentication types and failed TGT requests warrant further investigation.",
+    "recommended_actions": "Investigate the unknown authentication types and failed TGT requests to ensure they are not indicative of misconfigurations or unauthorized access attempts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

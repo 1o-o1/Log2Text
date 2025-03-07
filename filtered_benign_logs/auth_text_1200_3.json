@@ -1,0 +1,129 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events are initiated by machine accounts (e.g., C2935$, C2957$) using the Negotiate protocol for service logons, which is typical for automated processes and services.",
+    "targets": {
+      "frequent_targets": [
+        "C2935",
+        "C2957",
+        "C296",
+        "C298",
+        "C299",
+        "C2991",
+        "C3",
+        "C301",
+        "C303",
+        "C3035",
+        "C309",
+        "C3096",
+        "C31",
+        "C3112",
+        "C3139",
+        "C314",
+        "C318",
+        "C3181",
+        "C319",
+        "C320",
+        "C321",
+        "C3210",
+        "C3236",
+        "C33",
+        "C330",
+        "C3327",
+        "C333",
+        "C336",
+        "C342",
+        "C3420",
+        "C3446",
+        "C3460",
+        "C3461",
+        "C347",
+        "C349",
+        "C3514",
+        "C3517",
+        "C3534",
+        "C3546",
+        "C355",
+        "C361",
+        "C3611"
+      ],
+      "sporadic_targets": [
+        "C3450",
+        "C625",
+        "C529",
+        "C1015"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are aggregated and do not show specific time clusters.",
+      "bursts": "No sudden spikes in authentication volume are observed.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive service logons using Negotiate protocol are observed, which is typical for machine accounts.",
+      "lateral_movement": "Potential lateral movement is suggested by the authentication from C3450 to C625 and C529, and from C3554 to C529.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include the use of NTLM and unknown authentication types.",
+      "affected_entities": [
+        "C365",
+        "C3450",
+        "C625",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account patterns include machine accounts authenticating to different systems, which could indicate lateral movement.",
+      "affected_accounts": [
+        "C3450$@DOM1",
+        "C3554$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular logon/logoff sequences are observed with unknown authentication types and TGS requests.",
+      "affected_entities": [
+        "C3450",
+        "C625",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "Anomalous patterns include NTLM usage in a Kerberos environment and unknown authentication types.",
+      "deviation_details": "NTLM authentication by C365 in a potentially Kerberos-preferred environment and unknown authentication types by C3450 and C529."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events for C3450 and C3554 to determine if they indicate lateral movement or unauthorized access.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior for these systems and accounts to identify deviations.",
+    "permission_analysis": "Verify if the accounts C3450$@DOM1 and C3554$@DOM1 should have access to systems C625 and C529.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting attacks due to the presence of NTLM and Kerberos authentication anomalies."
+  },
+  "conclusion": {
+    "summary": "The authentication events show typical machine account activity, but there are potential indicators of lateral movement and suspicious authentication types that warrant further investigation.",
+    "recommended_actions": "Investigate the authentication patterns of C3450 and C3554 for potential lateral movement. Review the use of NTLM and unknown authentication types for security risks. Ensure all accounts have appropriate permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

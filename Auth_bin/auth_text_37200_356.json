@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C612, C625, C457, and C419 are initiating multiple authentication events, often involving machine accounts and user accounts. The presence of machine accounts like C601$, C612$, C749$, and C976$ suggests automated processes or services.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C625",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a single timestamp <356>, indicating possible batch processing or synchronized activity.",
+      "bursts": "No significant bursts detected beyond the clustered timing.",
+      "off_hours_activity": "All events are recorded at the same timestamp, making it impossible to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed on systems like C612, C625, and C457, indicating regular usage patterns.",
+      "lateral_movement": "Potential lateral movement is suggested by U22@DOM1 accessing multiple systems such as C612, C625, C1065, and C457.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unspecified authentication types (?) and NTLM in some instances suggests potential misconfigurations or fallback mechanisms.",
+      "affected_entities": [
+        "C612",
+        "C625",
+        "C457",
+        "C1065",
+        "C2463"
+      ]
+    },
+    "account_patterns": {
+      "description": "U22@DOM1 and U235@DOM1 are accessing multiple systems rapidly, which could indicate credential sharing or automated scripts.",
+      "affected_accounts": [
+        "U22@DOM1",
+        "U235@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are frequently followed by LogOff events, which is typical, but the rapid succession and repetition could indicate automated processes.",
+      "affected_entities": [
+        "C612",
+        "C625",
+        "C457",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The use of NTLM in a Kerberos-preferred environment and unspecified authentication types are notable anomalies.",
+      "deviation_details": "Systems like C2463 using NTLM and unspecified (?) authentication types on C612, C625, and C457 deviate from expected Kerberos usage."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the synchronization of events at timestamp <356> to determine if they align with scheduled tasks or unexpected batch operations.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behaviors to identify deviations, focusing on frequent access patterns by U22@DOM1 and U235@DOM1.",
+    "permission_analysis": "Verify if accounts like U22@DOM1 and U235@DOM1 have legitimate access to all systems they are authenticating against, especially C625 and C457.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, particularly where NTLM is used in a Kerberos environment."
+  },
+  "conclusion": {
+    "summary": "The authentication events show patterns consistent with automated processes and potential lateral movement, particularly involving U22@DOM1 and U235@DOM1. The use of unspecified authentication types and NTLM where Kerberos is expected raises configuration concerns.",
+    "recommended_actions": "Investigate the use of NTLM and unspecified authentication types to ensure proper configuration. Monitor U22@DOM1 and U235@DOM1 for unusual access patterns and validate permissions. Consider reviewing scheduled tasks or automated scripts that may explain the synchronized events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

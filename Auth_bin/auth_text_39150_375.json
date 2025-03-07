@@ -1,0 +1,85 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most authentication events are initiated by machine accounts (e.g., C1916$@DOM1), which is typical in a domain environment. No suspicious naming conventions or unexpected system initiations were observed.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C2106"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a specific timestamp <375>, suggesting a batch operation or scheduled task.",
+      "bursts": "No sudden spikes in authentication volume were detected outside the clustered timestamps.",
+      "off_hours_activity": "All events occur around the same timestamp, making it difficult to determine if they are outside business hours without additional context."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are observed with machine accounts logging on and off the same systems, which is typical for service accounts.",
+      "lateral_movement": "No sequential authentication patterns suggesting lateral movement were detected.",
+      "privilege_escalation": "No patterns indicating escalation to higher privilege accounts were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several authentication events with unspecified types (?).",
+      "affected_entities": [
+        "C1917",
+        "C457",
+        "C2106",
+        "C2158",
+        "C2653",
+        "C4022"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are consistently used for authentication, which is normal in this context. However, multiple accounts from a single source were not observed.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal, with corresponding events for most sessions. However, some TGT requests failed, which may need further investigation.",
+      "affected_entities": [
+        "C2653",
+        "C4022"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear typical for a domain environment with machine accounts. The use of unspecified authentication types and failed TGT requests are minor anomalies.",
+      "deviation_details": "Unspecified authentication types and failed TGT requests are the main deviations from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the timestamps and sequence of events to ensure they align with expected operational tasks or scheduled jobs.",
+    "behavioral_context": "Compare observed patterns with baseline data to confirm if the use of unspecified authentication types is typical.",
+    "permission_analysis": "Verify that all machine accounts have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash if any anomalies are further substantiated."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear typical for a benign domain environment with machine accounts. Minor anomalies such as unspecified authentication types and failed TGT requests were noted but do not indicate a high risk of compromise.",
+    "recommended_actions": "Monitor the environment for any changes in authentication patterns, especially around the use of unspecified types and failed requests. Investigate the failed TGT requests to ensure they are not indicative of underlying issues."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

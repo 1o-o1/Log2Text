@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C608, C528, and C1618 are initiating multiple authentication events, some with unspecified authentication types, which could indicate a potential security concern.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C467",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a single timestamp <51>, indicating a potential scripted or automated process.",
+      "bursts": "There are no clear bursts identified beyond the clustering around <51>.",
+      "off_hours_activity": "No specific off-hours activity is noted due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication attempts from C608 to multiple destinations suggest potential lateral movement.",
+      "lateral_movement": "Sequential logons from C1618 to C528, C625, and C988 suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed, but the use of multiple accounts across systems could indicate attempts to gain higher access."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events with unknown types are detected, which could indicate an attempt to obfuscate activity.",
+      "affected_entities": [
+        "C1115",
+        "C608",
+        "C2653"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from single sources and machine accounts accessing multiple destinations rapidly.",
+      "affected_accounts": [
+        "C608$@DOM1",
+        "C1617$@DOM1",
+        "C528$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events and rapid LogOff sequences.",
+      "affected_entities": [
+        "C467",
+        "C528",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and rapid sequences of events suggest anomalies.",
+      "deviation_details": "The use of unknown authentication types and rapid authentication sequences deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around the <51> timestamp to determine if these are part of a coordinated attack.",
+    "behavioral_context": "Compare the observed patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, especially given the presence of TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication log reveals several anomalies, including the use of unknown authentication types, potential lateral movement, and rapid authentication sequences. These patterns suggest a moderate risk of security compromise.",
+    "recommended_actions": "Investigate the systems and accounts involved in the suspicious authentication events, particularly those with unknown authentication types and rapid sequences. Consider implementing stricter monitoring and alerting for unusual authentication patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

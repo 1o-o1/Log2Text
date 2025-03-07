@@ -1,0 +1,128 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events are initiated by machine accounts (e.g., C251$@DOM1) on their respective systems, which is typical for service logons. However, there are a few events where machine accounts authenticate to different systems, such as C2650 authenticating to C2855 and C2918 to C625, which could indicate lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C251",
+        "C252",
+        "C2526",
+        "C2530",
+        "C2535",
+        "C2537",
+        "C254",
+        "C255",
+        "C2556",
+        "C256",
+        "C2596",
+        "C262",
+        "C2622",
+        "C2623",
+        "C2633",
+        "C2643",
+        "C2654",
+        "C268",
+        "C2681",
+        "C2686",
+        "C2696",
+        "C2700",
+        "C2724",
+        "C273",
+        "C2734",
+        "C2757",
+        "C2758",
+        "C2767",
+        "C278",
+        "C2782",
+        "C279",
+        "C2792",
+        "C28",
+        "C281",
+        "C2815",
+        "C2819",
+        "C282",
+        "C2820",
+        "C2826",
+        "C283",
+        "C2831",
+        "C2850",
+        "C286",
+        "C2927",
+        "C293",
+        "C2934"
+      ],
+      "sporadic_targets": [
+        "C2855",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The data shows a consistent pattern of authentication events across different systems, suggesting regular service logons.",
+      "bursts": "No significant bursts in authentication volume are observed, indicating steady authentication activity.",
+      "off_hours_activity": "The dataset does not provide specific timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "The repetitive pattern of machine accounts logging onto their respective systems is observed, which is normal for service accounts.",
+      "lateral_movement": "Potential lateral movement is indicated by C2650 and C2918 authenticating to different systems (C2855 and C625, respectively).",
+      "privilege_escalation": "No clear patterns of privilege escalation are evident from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include the use of an unknown authentication type ('?') for certain logoff events.",
+      "affected_entities": [
+        "C457",
+        "C625"
+      ]
+    },
+    "account_patterns": {
+      "description": "The use of machine accounts to authenticate to different systems could indicate suspicious activity.",
+      "affected_accounts": [
+        "C2650$@DOM1",
+        "C2918$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are logoff events using an unknown authentication type ('?'), which is unusual.",
+      "affected_entities": [
+        "C457",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomalies involve machine accounts authenticating to different systems and the use of unknown authentication types.",
+      "deviation_details": "Machine accounts C2650$@DOM1 and C2918$@DOM1 authenticate to systems C2855 and C625, respectively, which is atypical. Additionally, unknown authentication types are used for logoff events."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of authentication events for C2650 and C2918 to determine if these indicate lateral movement or legitimate administrative actions.",
+    "behavioral_context": "Compare these authentication patterns with historical data to determine if such cross-system authentications are common or new.",
+    "permission_analysis": "Verify whether C2650$@DOM1 and C2918$@DOM1 have legitimate reasons to access C2855 and C625, respectively.",
+    "ioc_checks": "Check for indicators of compromise such as Pass-the-Hash or Kerberoasting, especially in relation to the unusual cross-system authentications."
+  },
+  "conclusion": {
+    "summary": "The authentication events primarily reflect normal service account activity, but there are potential indicators of lateral movement and unusual authentication types that warrant further investigation. The risk is moderate due to the potential for lateral movement.",
+    "recommended_actions": "Investigate the cross-system authentications by C2650 and C2918, and review the use of unknown authentication types for logoff events. Ensure that these activities align with legitimate administrative tasks or service operations."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

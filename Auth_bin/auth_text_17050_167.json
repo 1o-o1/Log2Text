@@ -1,0 +1,99 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C523, C529, C988, C5830, C586, C1521, C1619, C553, C743, C774, C1065, C807, C850, C897, C1691, C229, C18, C1705, C1649, C63, C2855, C1929, C415, C457, C1015, C1025, and C561. Notably, C807 has multiple authentication attempts to various destinations, indicating potential lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C528",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated under a single timestamp <167>, suggesting a batch of events possibly occurring in a short timeframe.",
+      "bursts": "No specific bursts identified beyond the general clustering at <167>.",
+      "off_hours_activity": "No specific off-hours activity identified due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon actions are noted for C807 across multiple destinations, suggesting potential lateral movement.",
+      "lateral_movement": "C807 shows signs of lateral movement with multiple TGS requests and logons across different systems.",
+      "privilege_escalation": "No clear evidence of privilege escalation detected from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unknown authentication types are present, indicated by '?', which could suggest incomplete or unusual authentication attempts.",
+      "affected_entities": [
+        "C529",
+        "C988",
+        "C586",
+        "C1619",
+        "C774",
+        "C1065",
+        "C807",
+        "C1691",
+        "C1929",
+        "C1015",
+        "C1025"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., C523$, C529$, etc.) are authenticating, but no clear anomalies in their behavior are detected beyond the expected.",
+      "affected_accounts": [
+        "C523$",
+        "C529$",
+        "C5830$",
+        "C586$",
+        "C743$",
+        "C850$",
+        "C897$",
+        "C807$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are generally followed by LogOff events, but some systems like C807 show multiple TGS requests without corresponding LogOffs.",
+      "affected_entities": [
+        "C807"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of unknown authentication types and the pattern of TGS requests from C807 are the primary anomalies.",
+      "deviation_details": "C807's activity deviates from normal patterns with multiple TGS requests and logons across various systems."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the specific sequence and timing of C807's authentication events to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare C807's authentication pattern with historical baselines to identify deviations indicative of compromise.",
+    "permission_analysis": "Verify if C807's account should have legitimate access to the systems it is authenticating against, especially C586 and C625.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might explain the observed TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication events show potential lateral movement by C807, characterized by multiple TGS requests and logons across different systems. Unknown authentication types further suggest potential anomalies.",
+    "recommended_actions": "Investigate C807's authentication patterns in detail, focusing on TGS requests and access permissions. Consider implementing stricter monitoring and logging for systems frequently targeted by C807."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

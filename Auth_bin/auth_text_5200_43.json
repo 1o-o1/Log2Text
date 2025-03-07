@@ -1,0 +1,97 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1673, C467, C586, and others are initiating authentication events. Some computers like C2478 and C832 are using unspecified authentication types, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C586",
+        "C529",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C612",
+        "C553"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are concentrated at a single timestamp <43>, indicating a batch of authentication events.",
+      "bursts": "There are no clear bursts of activity outside the cluster at <43>.",
+      "off_hours_activity": "All events are recorded at <43>, which could be outside normal business hours depending on the time zone."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are repetitive LogOn and LogOff sequences from the same source computers to themselves, which is typical for machine accounts.",
+      "lateral_movement": "Sequential LogOn events from C2650 to C1065 and C529 suggest potential lateral movement.",
+      "privilege_escalation": "No clear indication of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types (marked as '?') are detected, which could indicate misconfigurations or attempts to bypass standard authentication protocols.",
+      "affected_entities": [
+        "C467",
+        "C586",
+        "C988",
+        "C1847",
+        "C528",
+        "C625",
+        "C2478",
+        "C457",
+        "C540",
+        "C612",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to multiple destinations, and there are multiple accounts authenticating from a single source in a short timeframe.",
+      "affected_accounts": [
+        "C2072$@DOM1",
+        "C2477$@DOM1",
+        "U1734@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, particularly for machine accounts.",
+      "affected_entities": [
+        "C2478",
+        "C832"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and machine accounts authenticating atypically are notable anomalies.",
+      "deviation_details": "Unspecified authentication types and potential lateral movement from C2650 are deviations from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs around the <43> timestamp to determine if these events are part of a larger attack chain.",
+    "behavioral_context": "Compare these authentication patterns against historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if accounts like C2477$@DOM1 and U1734@DOM1 have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially given the unspecified authentication types and lateral movement indicators."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several anomalies, including unspecified authentication types, potential lateral movement, and unusual machine account activity. These patterns suggest a moderate risk of unauthorized access or lateral movement.",
+    "recommended_actions": "Investigate the unspecified authentication types and potential lateral movement from C2650. Verify the legitimacy of machine account activities and consider enhancing monitoring for these accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

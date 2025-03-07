@@ -1,0 +1,92 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events appear to be a mix of different systems, including what seem to be workstation and server identifiers. The presence of machine accounts (e.g., C3219$, C3377$) indicates typical automated processes or services.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C612",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C457"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp, <241>, indicating a single snapshot of activity.",
+      "bursts": "There are no significant bursts of activity beyond the single timestamp provided.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific time context."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon actions are seen from multiple source computers to the same destination computers, such as C2106 and C612.",
+      "lateral_movement": "No clear lateral movement patterns are evident from the data provided.",
+      "privilege_escalation": "No privilege escalation patterns are evident from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unknown or missing types (?).",
+      "affected_entities": [
+        "C2106",
+        "C1065",
+        "C612",
+        "C467",
+        "C4313",
+        "C1085",
+        "C553"
+      ]
+    },
+    "account_patterns": {
+      "description": "No unusual account patterns detected beyond typical machine account activity.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events are present without corresponding LogOn events for some systems, but this may be due to data snapshot limitations.",
+      "affected_entities": [
+        "C2106",
+        "C1065",
+        "C612",
+        "C467",
+        "C4313",
+        "C1085",
+        "C553"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the presence of unknown authentication types and missing logon events for some logoff sequences.",
+      "deviation_details": "The use of '?' for authentication types and lack of corresponding logon events for some logoff sequences are deviations from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine additional logs to establish a timeline of events and confirm whether these patterns persist over time.",
+    "behavioral_context": "Compare current patterns against historical baselines to determine if these are typical for the environment.",
+    "permission_analysis": "Verify if the machine accounts should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for indicators such as Pass-the-Hash or Kerberoasting, particularly in systems using NTLM or with unknown auth types."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals some anomalies, such as unknown authentication types and incomplete logon/logoff sequences, but no clear malicious patterns are evident in this snapshot. The environment appears mostly benign, with typical machine account activity.",
+    "recommended_actions": "Investigate the use of unknown authentication types and ensure that logon events are properly logged. Validate that machine accounts have appropriate permissions and access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, including C19518, C586, C143, C625, C20783, C17693, C457, C528, C11315, C10368, C12224, C14278, C453, C3151, C612, C10008, C1004, C101, C1013, C561, C10466, C1065, C10579, C21801, C2162, C10770, C10823, C529, C1115, C11208, C11242, and C11303. Notably, several events involve ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625",
+        "C457",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C2106",
+        "C17425",
+        "C612",
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around timestamps 748860 and 748861, indicating a high volume of activity during these periods.",
+      "bursts": "There is a sudden spike in authentication volume at timestamp 748861, with numerous events occurring simultaneously.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are repetitive authentication patterns involving ANONYMOUS LOGON across multiple systems, particularly targeting C586.",
+      "lateral_movement": "Sequential authentication patterns suggest potential lateral movement, especially with ANONYMOUS LOGON events targeting different systems.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but suspicious patterns could indicate attempts to gather credentials for escalation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unknown authentication types are prevalent, indicating potential malicious activity.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C528",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include multiple ANONYMOUS LOGON events and machine accounts accessing various systems.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C457",
+        "ANONYMOUS LOGON@C528",
+        "ANONYMOUS LOGON@C612"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are multiple LogOn events without corresponding LogOff events, particularly involving ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C528",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication anomalies indicate potential malicious activity, particularly with the use of ANONYMOUS LOGON and unknown authentication types.",
+      "deviation_details": "The use of ANONYMOUS LOGON and unknown authentication types deviates from normal authentication patterns, suggesting unauthorized access attempts."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of authentication events, particularly around timestamps 748860 and 748861, to identify potential attack chains.",
+    "behavioral_context": "Compare observed authentication patterns with known baselines to identify deviations indicative of malicious activity.",
+    "permission_analysis": "Verify whether accounts involved in suspicious authentication events, especially those using ANONYMOUS LOGON, should have legitimate access to target systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the suspicious use of ANONYMOUS LOGON and NTLM in a potentially Kerberos-preferred environment."
+  },
+  "conclusion": {
+    "summary": "The authentication anomalies detected, including the frequent use of ANONYMOUS LOGON and unknown authentication types, suggest a high risk of malicious activity. The patterns observed are indicative of potential lateral movement and unauthorized access attempts.",
+    "recommended_actions": "Investigate the suspicious authentication events, particularly those involving ANONYMOUS LOGON and unknown authentication types. Implement additional monitoring and consider isolating affected systems to prevent further unauthorized access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

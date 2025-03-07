@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C2825 and C19096, are initiating authentication events with suspicious patterns, including ANONYMOUS LOGON and NTLM in environments where Kerberos is expected.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C1065",
+        "C3173",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C2825",
+        "C19096"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are timestamped with <754601> or <754602>, indicating a potential batch of events or a logging error.",
+      "bursts": "There are no specific bursts identified due to the uniform timestamp, but the presence of multiple events from the same source within the same timestamp suggests potential automation.",
+      "off_hours_activity": "The data does not specify exact times, but the uniform timestamp suggests possible off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "User U66@DOM1 shows repetitive logon and logoff actions across multiple computers, indicating potential automated or scripted activity.",
+      "lateral_movement": "Sequential logons from user U66@DOM1 across different systems (C2084, C245, C3057, C3058, C3078, C3140) suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the repetitive and widespread access by U66@DOM1 could be indicative of credential misuse."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentications detected, which are suspicious in a Kerberos-preferred environment.",
+      "affected_entities": [
+        "C2825",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "User U66@DOM1 shows suspicious repetitive access across multiple systems, and ANONYMOUS LOGON is used inappropriately.",
+      "affected_accounts": [
+        "U66@DOM1",
+        "ANONYMOUS LOGON"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Multiple logon and logoff sequences by U66@DOM1 without clear purpose, suggesting automated or malicious activity.",
+      "affected_entities": [
+        "U66@DOM1",
+        "C2825",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Uniform timestamps and repeated access patterns suggest potential automation or scripted attacks.",
+      "deviation_details": "The use of ANONYMOUS LOGON and NTLM in a Kerberos environment deviates from expected security practices."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the uniform timestamp <754601> to determine if it represents a real-time event or a logging error.",
+    "behavioral_context": "Compare the activity of U66@DOM1 and ANONYMOUS LOGON patterns against historical baselines to identify deviations.",
+    "permission_analysis": "Verify if user U66@DOM1 and ANONYMOUS LOGON accounts should have access to the systems they authenticated against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM and ANONYMOUS LOGON usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal suspicious patterns, including ANONYMOUS LOGON usage, NTLM in a Kerberos environment, and repetitive access by user U66@DOM1, suggesting potential malicious activity or lateral movement.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON and NTLM authentications, scrutinize user U66@DOM1's activity for unauthorized access, and verify the integrity of systems frequently accessed by these accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

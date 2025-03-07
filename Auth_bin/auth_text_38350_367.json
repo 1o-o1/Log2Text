@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with C965 and C457 showing unusual patterns. C965 attempts a Kerberos LogOn and a TGS request, but the TGS fails. C457 shows multiple ANONYMOUS LOGON attempts.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C101"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around timestamps <367> and <368>.",
+      "bursts": "There are bursts of activity at timestamp <368> with multiple LogOn and LogOff events.",
+      "off_hours_activity": "No specific off-hours activity is noted, but the timestamps are not detailed enough to confirm business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated ANONYMOUS LOGON attempts on C457 and C586.",
+      "lateral_movement": "Potential lateral movement from C965 to U22, and C2402 to C457, indicated by TGS requests followed by LogOn.",
+      "privilege_escalation": "No clear signs of privilege escalation, but the failed TGS request from C965 to U22 could suggest attempted access to a service."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGONs and unspecified authentication types are detected, which are suspicious.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include ANONYMOUS LOGONs and multiple accounts from single sources.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C457",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Multiple LogOn events without corresponding LogOffs, especially around C457 and C586.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The environment shows multiple authentication anomalies, including failed TGS requests and ANONYMOUS LOGONs.",
+      "deviation_details": "The presence of ANONYMOUS LOGONs and failed TGS requests deviates from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps <367> and <368> to identify potential attack chains.",
+    "behavioral_context": "Compare the observed ANONYMOUS LOGON patterns with baseline authentication behavior to determine anomalies.",
+    "permission_analysis": "Verify if the accounts involved in failed TGS requests and ANONYMOUS LOGONs should have access to the targeted systems.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially where TGS requests fail."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal potential anomalies, including ANONYMOUS LOGONs and failed TGS requests, which could indicate reconnaissance or lateral movement attempts.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGONs and failed TGS requests. Monitor for any further suspicious activity and consider implementing stricter authentication policies."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

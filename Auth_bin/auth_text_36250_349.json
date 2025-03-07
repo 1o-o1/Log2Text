@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C586, C1619, C625, and C7 are initiating multiple authentication events. Notably, C625 shows ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C1085",
+        "C553",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur around timestamp 349, with some extending to 350.",
+      "bursts": "No significant bursts detected, but consistent activity around certain timestamps.",
+      "off_hours_activity": "No specific off-hours activity identified, but timestamps are not detailed enough to confirm."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are seen, especially with machine accounts.",
+      "lateral_movement": "Potential lateral movement from C1619 accessing multiple destinations (C101, C1085, C553).",
+      "privilege_escalation": "No clear evidence of privilege escalation, but multiple accesses by C1619 could indicate exploration."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, which is typically high-risk.",
+      "affected_entities": [
+        "C625"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts like C585$, C586$, and C1641$ are authenticating in ways that could be atypical.",
+      "affected_accounts": [
+        "C585$@DOM1",
+        "C586$@DOM1",
+        "C1641$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events generally have corresponding LogOffs, but some sequences are rapid and repetitive.",
+      "affected_entities": [
+        "C586",
+        "C612",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "ANONYMOUS LOGON and multiple machine account activities are the main anomalies.",
+      "deviation_details": "ANONYMOUS LOGON on C625 and rapid machine account activities on C586 and C612."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze sequences from C1619 and C625 for potential attack chains or lateral movement.",
+    "behavioral_context": "Compare current machine account activities with baseline behaviors to identify anomalies.",
+    "permission_analysis": "Verify if machine accounts like C585$, C586$, and C1641$ should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially involving C1619 and C625."
+  },
+  "conclusion": {
+    "summary": "The presence of ANONYMOUS LOGON on C625 and multiple machine account activities suggest potential security risks. Lateral movement is possible from C1619's access patterns.",
+    "recommended_actions": "Investigate ANONYMOUS LOGON on C625, validate machine account activities, and monitor C1619's access patterns for lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

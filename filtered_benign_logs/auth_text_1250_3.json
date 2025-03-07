@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events are initiated by machine accounts (e.g., C365$, C3680$) on their respective systems, which is typical for service operations. However, C395$ is seen authenticating to multiple destinations (C457, C586), which could be indicative of lateral movement or service account misconfiguration.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are aggregated and do not show specific clustering in the provided data.",
+      "bursts": "No sudden spikes in authentication volume are evident from the aggregated data.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive patterns are seen with machine accounts authenticating to themselves, which is normal for service operations.",
+      "lateral_movement": "Potential lateral movement is suggested by C395$ authenticating to C457 and C586.",
+      "privilege_escalation": "No clear indication of privilege escalation is observed from the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include '?' for logoff events from C457 and C586, which is unusual and requires further investigation.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "C395$ authenticating to multiple systems could indicate lateral movement or service account misuse.",
+      "affected_accounts": [
+        "C395$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "The '?' authentication type in logoff events is irregular and may indicate logging issues or misconfigured systems.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of '?' as an authentication type, which is not standard.",
+      "deviation_details": "The '?' type is not a recognized authentication protocol and suggests potential logging or configuration issues."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events for C395$ to determine if the access pattern aligns with legitimate service account usage or indicates lateral movement.",
+    "behavioral_context": "Compare the observed patterns of C395$ with known baseline behaviors for service accounts in the environment.",
+    "permission_analysis": "Verify if C395$ should have legitimate access to C457 and C586 based on its intended role and permissions.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting if C395$ has elevated privileges or access to sensitive systems."
+  },
+  "conclusion": {
+    "summary": "The authentication data shows typical service account activity with some anomalies. C395$ accessing multiple systems and the '?' authentication type are notable and warrant further investigation.",
+    "recommended_actions": "Investigate the role and permissions of C395$ to ensure it is not being misused. Review the configuration and logging settings for systems showing '?' authentication types."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C625, C529, C586, C467, and C457 are initiating authentication events, with some using unspecified authentication types, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C599"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp <130>, indicating synchronized or scripted activity.",
+      "bursts": "No specific bursts identified beyond the clustered timing.",
+      "off_hours_activity": "All events occur at the same time, suggesting potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication attempts from C625 and C586 with unspecified authentication types.",
+      "lateral_movement": "Possible lateral movement indicated by multiple computers accessing C625.",
+      "privilege_escalation": "No clear signs of privilege escalation, but multiple accounts accessing the same systems could indicate credential harvesting."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types detected, which could indicate misconfigured systems or attempts to obfuscate authentication methods.",
+      "affected_entities": [
+        "C625",
+        "C529",
+        "C586",
+        "C467",
+        "C457"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and user accounts are authenticating in patterns that could suggest automated processes or scripted attacks.",
+      "affected_accounts": [
+        "C2920$@DOM1",
+        "C2941$@DOM1",
+        "C480$@DOM1",
+        "C528$@DOM1",
+        "U222@DOM1",
+        "U22@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not prevalent, but the presence of multiple LogOffs with unspecified types is unusual.",
+      "affected_entities": [
+        "C625",
+        "C529",
+        "C586",
+        "C467",
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and synchronized timestamps suggests unusual activity.",
+      "deviation_details": "Authentication events are clustered around a single timestamp, and unspecified types are used frequently."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs for other activities around the same timestamp to identify potential attack chains.",
+    "behavioral_context": "Compare these patterns against baseline authentication logs to determine if this behavior is typical or anomalous.",
+    "permission_analysis": "Verify if the accounts involved should have access to the systems they are authenticating to, particularly C625.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash or Kerberoasting, especially given the use of NTLM and Kerberos."
+  },
+  "conclusion": {
+    "summary": "The authentication events show several anomalies, including unspecified authentication types and synchronized timestamps, which could indicate scripted attacks or misconfigurations. The risk is moderate to high, warranting further investigation.",
+    "recommended_actions": "Investigate the source of unspecified authentication types, review access permissions for involved accounts, and monitor for further unusual activity, especially around C625."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

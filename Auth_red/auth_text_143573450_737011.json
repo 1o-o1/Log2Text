@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1268, C3151, C6083, C6238, and C12870 initiated authentication events using ANONYMOUS LOGON, which is highly suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around the timestamp 737011, with a few at 737012.",
+      "bursts": "A sudden increase in ANONYMOUS LOGON events at timestamp 737012.",
+      "off_hours_activity": "The data does not specify exact business hours, but the clustering of events at specific timestamps suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Multiple logon and logoff events from the same source computers, such as C528 and C457, indicate repetitive actions.",
+      "lateral_movement": "Sequential logon events across different computers, such as from C18353 to C528 and C1065, suggest lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but the use of ANONYMOUS LOGON could indicate an attempt to bypass normal authentication controls."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, which is a high-risk authentication type.",
+      "affected_entities": [
+        "C1268",
+        "C3151",
+        "C6083",
+        "C6238",
+        "C12870"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source computer, such as C528, authenticating rapidly.",
+      "affected_accounts": [
+        "U5060@DOM1",
+        "U8604@DOM1",
+        "U9043@DOM1",
+        "U9213@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events, especially with ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C1268",
+        "C3151",
+        "C6083",
+        "C6238",
+        "C12870"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of NTLM in a Kerberos-preferred environment and ANONYMOUS LOGON events.",
+      "deviation_details": "Several computers are using NTLM where Kerberos is also used, and ANONYMOUS LOGON events are present, which is unusual."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON events at timestamp 737012 to identify potential attack chains.",
+    "behavioral_context": "Compare the current authentication patterns with historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if the accounts involved in suspicious logon events should have access to the target systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash and Kerberoasting, given the presence of NTLM and ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several high-risk patterns, including the use of ANONYMOUS LOGON and NTLM in a Kerberos environment, suggesting potential malicious activity.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON events and NTLM usage, especially focusing on systems C457 and C528. Consider implementing stricter authentication controls and monitoring for these systems."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

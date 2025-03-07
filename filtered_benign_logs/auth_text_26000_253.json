@@ -1,0 +1,89 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are varied, with no single computer showing an unusual amount of activity. However, C574 appears to initiate multiple successful logons to different destinations in rapid succession, which could indicate automated activity.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C529",
+        "C586",
+        "C612",
+        "C553",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C988",
+        "C996"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are clustered around the same timestamp <253>, indicating a possible batch processing or automated script execution.",
+      "bursts": "No sudden spikes in authentication volume were observed beyond the clustered timestamp.",
+      "off_hours_activity": "The data does not specify business hours, but the clustering around a single timestamp suggests potential off-hours processing."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are repetitive logon and logoff sequences, particularly on systems like C457, C529, and C586, which could indicate routine operations or automated tasks.",
+      "lateral_movement": "There is no clear evidence of lateral movement as the source and destination computers are often the same, except for C574 accessing multiple destinations.",
+      "privilege_escalation": "No patterns indicating privilege escalation were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "NTLM authentication was detected in a predominantly Kerberos environment, which could be considered unusual.",
+      "affected_entities": [
+        "C862",
+        "C905",
+        "C924"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to multiple systems, which is typical for service accounts but should be verified for legitimacy.",
+      "affected_accounts": [
+        "C2391$@DOM1",
+        "C3667$@DOM1",
+        "C567$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon and logoff sequences are generally complete, but the rapid succession of logons from C574 to multiple destinations could be investigated further.",
+      "affected_entities": [
+        "C574"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of NTLM in a Kerberos environment and the rapid succession of logons by C574.",
+      "deviation_details": "The use of NTLM is unexpected in a Kerberos-preferred setting, and C574's behavior deviates from typical single-destination logon patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around the <253> timestamp to determine if they are part of a legitimate batch process or an automated script.",
+    "behavioral_context": "Compare the observed patterns with historical data to determine if this is regular behavior for these systems and accounts.",
+    "permission_analysis": "Verify that the accounts involved, especially those using NTLM, have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash, especially in cases where NTLM is used, and review logs for any signs of Kerberoasting."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some unusual patterns, such as the use of NTLM in a Kerberos environment and rapid logon sequences by C574. These could indicate automated processes or potential misconfigurations rather than malicious activity.",
+    "recommended_actions": "Investigate the use of NTLM authentication, particularly by C862, C905, and C924. Review the behavior of C574 for potential automation or misconfiguration. Ensure that all machine accounts have appropriate permissions and access rights."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

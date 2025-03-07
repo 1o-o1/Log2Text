@@ -1,0 +1,109 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers are initiating authentication events, with C1727 and C1874 showing multiple TGS/TGT requests, which could indicate ticket-granting service activity. The presence of machine accounts (e.g., C567$, C599$, C739$) authenticating is noted, but no unusual naming conventions are detected.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C553",
+        "C988",
+        "C599"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated at a single timestamp <361>, indicating a potential batch export or system synchronization.",
+      "bursts": "No specific bursts are noted due to the singular timestamp.",
+      "off_hours_activity": "Cannot be determined due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff sequences are observed, particularly with user U22@DOM1 across multiple systems, which could indicate script-based activity.",
+      "lateral_movement": "Sequential logons by U22@DOM1 across different systems (C246, C612, C528, C965) may suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events have unspecified or missing authentication types, which may indicate logging issues or misconfigurations.",
+      "affected_entities": [
+        "C1619",
+        "C612",
+        "C586",
+        "C2162",
+        "C467",
+        "C1065",
+        "C457",
+        "C528",
+        "C625",
+        "C1732",
+        "C1952",
+        "C1681",
+        "C1710",
+        "C1727",
+        "C61",
+        "C1874"
+      ]
+    },
+    "account_patterns": {
+      "description": "User U22@DOM1 is authenticating across multiple systems in a short timeframe, which could be indicative of automated processes or lateral movement.",
+      "affected_accounts": [
+        "U22@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events without corresponding logoffs are not directly observed, but multiple logoff events are noted, which may indicate session management issues.",
+      "affected_entities": [
+        "C612",
+        "C586",
+        "C2162",
+        "C467",
+        "C1065",
+        "C457",
+        "C528",
+        "C625",
+        "C1732",
+        "C1952",
+        "C1681",
+        "C61"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of TGS/TGT requests and unspecified authentication types are the primary anomalies detected.",
+      "deviation_details": "Unspecified authentication types and multiple TGS/TGT requests by C1727 and C1874."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of events for U22@DOM1 to determine if the activity aligns with normal operational patterns or indicates lateral movement.",
+    "behavioral_context": "Compare the observed authentication patterns with historical data to identify deviations from typical behavior.",
+    "permission_analysis": "Review permissions for U22@DOM1 and other frequently authenticating accounts to ensure they align with expected access controls.",
+    "ioc_checks": "Conduct checks for potential Pass-the-Hash or Kerberoasting attacks given the presence of multiple TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential anomalies related to unspecified authentication types and repetitive authentication patterns by U22@DOM1, which could suggest lateral movement or automated processes. However, given the environment is benign, these may be normal operations.",
+    "recommended_actions": "Investigate the unspecified authentication types for potential logging issues. Review the activities of U22@DOM1 to ensure they align with expected operations and permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": false
+  }
+}

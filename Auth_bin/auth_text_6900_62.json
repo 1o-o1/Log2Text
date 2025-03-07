@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C3554, C3568, C574, C101, C1619, C1509, C832, C847, C946, C2306, C506, C849, C585, C936, C1998, C2127, C2890, C1633, C1596, C1848, C1785, C105 are initiating authentication events. Notably, C506 and C105 are involved in multiple authentications across different destinations, which could suggest lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612",
+        "C1691"
+      ],
+      "sporadic_targets": [
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Concentrated activity observed around timestamp 62.",
+      "bursts": "Sudden spikes in authentication volume at timestamp 62.",
+      "off_hours_activity": "No specific off-hours activity detected, but timestamp data is limited."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentications from C506 to C1065 and C586, and from C105 to C612 and C988.",
+      "lateral_movement": "Potential lateral movement indicated by C506 and C105 accessing multiple systems.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but multiple authentications from single sources warrant further investigation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types detected include NTLM in a Kerberos environment and unknown authentication types.",
+      "affected_entities": [
+        "C574",
+        "C105",
+        "C1619"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts authenticating atypically and multiple accounts from a single source.",
+      "affected_accounts": [
+        "C3554$@DOM1",
+        "C3568$@DOM1",
+        "C567$@DOM1",
+        "C599$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Suspicious logon/logoff sequences detected, including LogOn events without corresponding LogOff events and excessive TGS/TGT requests.",
+      "affected_entities": [
+        "C1848",
+        "C1785"
+      ]
+    },
+    "anomalies": {
+      "description": "Anomalies detected include unknown authentication types and excessive TGS/TGT activity.",
+      "deviation_details": "The presence of unknown authentication types and excessive TGS/TGT requests deviates from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of events around timestamp 62 to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if accounts like C506$@DOM1 and C104$@DOM1 should have access to systems like C586 and C988.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques due to NTLM and TGS/TGT activity."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals suspicious authentication patterns, including potential lateral movement and unusual account behavior, with a moderate risk classification.",
+    "recommended_actions": "Investigate the authentication chains involving C506 and C105 for lateral movement. Review NTLM usage in Kerberos environments and validate permissions for involved accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

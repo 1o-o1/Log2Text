@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events originate from computers with machine accounts (e.g., C204$@DOM1), which is typical for service logons. However, there are a few instances where machine accounts are authenticating to different destination computers, which could be indicative of lateral movement or service account misuse.",
+    "targets": {
+      "frequent_targets": [
+        "C204",
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters were identified due to lack of precise timestamps.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "Unable to determine due to lack of specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Most systems show repetitive LogOn actions using Negotiate authentication, which is typical for service accounts.",
+      "lateral_movement": "There are patterns suggesting potential lateral movement, such as machine accounts from C2074 and C2178 accessing C457.",
+      "privilege_escalation": "No clear evidence of privilege escalation was observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use unspecified authentication types (?).",
+      "affected_entities": [
+        "C2074",
+        "C457",
+        "C529",
+        "C2168",
+        "C586",
+        "C2178"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are accessing multiple destinations, which could indicate potential lateral movement.",
+      "affected_accounts": [
+        "C2073$@DOM1",
+        "C2167$@DOM1",
+        "C2177$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are instances of LogOn events without corresponding LogOff events, which could indicate incomplete session handling.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and machine accounts accessing multiple destinations are notable anomalies.",
+      "deviation_details": "The use of '?' as the authentication type and the cross-system authentication by machine accounts deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of authentication events for C2074, C2178, and C457 to identify potential attack chains.",
+    "behavioral_context": "Compare the observed patterns against baseline authentication behaviors for machine accounts in the environment.",
+    "permission_analysis": "Verify if the machine accounts (e.g., C2073$@DOM1, C2167$@DOM1) have legitimate reasons to access multiple systems like C457 and C586.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash or Kerberoasting, especially in the context of machine account activities."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show several anomalies, including unspecified authentication types and potential lateral movement by machine accounts. These patterns warrant further investigation to rule out malicious activity.",
+    "recommended_actions": "Investigate the machine accounts accessing multiple systems, especially C457 and C586. Validate the use of unspecified authentication types and ensure proper session handling for LogOn/LogOff events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

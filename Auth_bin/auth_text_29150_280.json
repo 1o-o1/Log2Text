@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, including C529, C467, C625, C457, and others. Some computers like C3681 and C542 are involved in multiple TGS requests, which could indicate service ticket requests.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1065",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a single timestamp (280), indicating synchronized or batch processing.",
+      "bursts": "No sudden spikes in authentication volume were detected beyond the clustered timestamps.",
+      "off_hours_activity": "No specific off-hours activity is noted due to lack of detailed timestamp information."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive patterns are seen with machine accounts (e.g., C3219$, C3524$) authenticating to their own systems.",
+      "lateral_movement": "Potential lateral movement is suggested by multiple authentications from C3681 to various systems (C1065, C467, C586).",
+      "privilege_escalation": "No clear indicators of privilege escalation are present in the data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types detected include unknown types marked as '?'.",
+      "affected_entities": [
+        "C529",
+        "C467",
+        "C625",
+        "C457",
+        "C528",
+        "C3681",
+        "C3642"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include multiple machine accounts authenticating to their own systems and others rapidly.",
+      "affected_accounts": [
+        "C3219$@DOM1",
+        "C3524$@DOM1",
+        "C3681$@DOM1",
+        "C542$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, especially for TGS requests.",
+      "affected_entities": [
+        "C3681",
+        "C542"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall anomalies include frequent use of unknown authentication types and repetitive TGS requests.",
+      "deviation_details": "The use of '?' as an authentication type and frequent TGS requests by C3681 and C542 deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence and timing of authentication events, particularly focusing on TGS requests by C3681 and C542.",
+    "behavioral_context": "Compare observed authentication patterns with known baselines to identify deviations, especially for machine accounts.",
+    "permission_analysis": "Verify whether machine accounts like C3681$ and C542$ should have access to multiple systems, especially those involved in TGS requests.",
+    "ioc_checks": "Check for techniques like Pass-the-Hash or Kerberoasting, given the TGS activity and unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events show several anomalies, including unknown authentication types and repetitive TGS requests, suggesting potential lateral movement or service ticket abuse.",
+    "recommended_actions": "Investigate the use of unknown authentication types and validate the necessity of TGS requests by C3681 and C542. Review access permissions for machine accounts involved in multiple authentications."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with some using machine accounts (e.g., C966$, C970$) and others using user accounts (e.g., U10, U12). The presence of machine accounts authenticating internally is typical, but should be monitored for anomalies.",
+    "targets": {
+      "frequent_targets": [
+        "C1691",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C2310",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are provided, but events are aggregated to show repeated patterns.",
+      "bursts": "No sudden spikes in authentication volume are indicated from the data provided.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are observed with machine accounts logging into themselves, which is typical for service accounts.",
+      "lateral_movement": "Potential lateral movement is indicated by U12 accessing multiple destinations (C467, C586) rapidly.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed, but rapid access to multiple systems by a single user could suggest attempts to escalate privileges."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unknown or missing types (e.g., '?').",
+      "affected_entities": [
+        "C990",
+        "C1862",
+        "C62",
+        "C366",
+        "C1691",
+        "C5850",
+        "C1085",
+        "C1484",
+        "C1",
+        "C1191",
+        "C456",
+        "C626",
+        "C1066",
+        "C1741",
+        "C457",
+        "C612",
+        "C1922",
+        "C1697",
+        "C1720"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include rapid authentication attempts by single accounts to multiple destinations.",
+      "affected_accounts": [
+        "U12@DOM1",
+        "U1@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon without corresponding logoff events are not directly visible, but multiple logoff events for U1@DOM1 suggest possible incomplete session handling.",
+      "affected_entities": [
+        "U1@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of unknown authentication types and rapid access patterns suggest anomalies.",
+      "deviation_details": "The use of '?' in authentication types and rapid access by U12@DOM1 to multiple systems are deviations from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events for U12@DOM1 and U1@DOM1 to determine if they indicate a coordinated attack or misconfiguration.",
+    "behavioral_context": "Compare the observed patterns with baseline behaviors for these accounts and systems to identify deviations.",
+    "permission_analysis": "Verify if U12@DOM1 and U1@DOM1 have legitimate access to the systems they are authenticating to, especially C467 and C586.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of NTLM and Kerberos authentications."
+  },
+  "conclusion": {
+    "summary": "The analysis identifies potential anomalies in authentication patterns, particularly with unknown authentication types and rapid access by certain accounts. These patterns warrant further investigation to rule out security incidents.",
+    "recommended_actions": "Investigate the use of unknown authentication types, especially where '?' is used. Monitor and audit the accounts U12@DOM1 and U1@DOM1 for unusual activity. Ensure proper session handling to avoid incomplete logon/logoff sequences."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

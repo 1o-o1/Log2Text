@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1115, C1747, C1965, and C2602 initiated multiple authentication events. Notably, C1965 and C895 initiated ANONYMOUS LOGON events, which are suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are concentrated around the same timestamp <203>, indicating possible batch processing or automated tasks.",
+      "bursts": "No significant bursts detected beyond the clustered timestamps.",
+      "off_hours_activity": "All events are timestamped similarly, making it difficult to determine if they occurred outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions observed from C2602 to multiple targets (C467, C612, C625) with TGS requests.",
+      "lateral_movement": "Potential lateral movement indicated by ANONYMOUS LOGON events and multiple TGS requests from C2602.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but multiple TGS requests could suggest ticket harvesting attempts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events and unspecified authentication types detected.",
+      "affected_entities": [
+        "C1965",
+        "C895",
+        "C586",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts authenticating in quick succession, potentially indicating automated processes or compromise.",
+      "affected_accounts": [
+        "C1065$@DOM1",
+        "C1114$@DOM1",
+        "C1333$@DOM1",
+        "C1708$@DOM1",
+        "C2358$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events in some cases, and excessive TGS requests from C2602.",
+      "affected_entities": [
+        "C2602",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON events and unspecified authentication types are primary anomalies.",
+      "deviation_details": "ANONYMOUS LOGON events from C1965 and C895 are highly unusual and potentially malicious."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the clustered timestamps to determine if they align with scheduled tasks or unauthorized batch processes.",
+    "behavioral_context": "Compare the observed patterns with historical baselines to identify deviations in authentication behavior.",
+    "permission_analysis": "Verify if accounts, especially those involved in ANONYMOUS LOGON events, have legitimate access to the systems they authenticated against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, particularly around the ANONYMOUS LOGON events and TGS requests."
+  },
+  "conclusion": {
+    "summary": "The presence of ANONYMOUS LOGON events and unspecified authentication types are concerning and suggest potential security risks. The clustered nature of events and repeated TGS requests could indicate automated or malicious activity.",
+    "recommended_actions": "Investigate ANONYMOUS LOGON events for potential unauthorized access. Review permission settings and authentication logs for accounts involved in suspicious activities. Consider implementing stricter authentication protocols and monitoring for unusual patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

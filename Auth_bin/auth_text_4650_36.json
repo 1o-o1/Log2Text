@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C523, C539, and C1015 are initiating multiple authentication events. Notably, C586 shows ANONYMOUS LOGON activity, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C101",
+        "C1085"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around a single time period <36> and <37>.",
+      "bursts": "No significant bursts detected beyond the clustered times.",
+      "off_hours_activity": "No specific off-hours activity detected due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon actions from C539 to multiple destinations suggest potential lateral movement.",
+      "lateral_movement": "C1015 shows potential lateral movement by accessing multiple systems in sequence.",
+      "privilege_escalation": "No clear privilege escalation patterns detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, and NTLM used in a Kerberos environment.",
+      "affected_entities": [
+        "C586",
+        "C1478"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts like C1015$ and C538$ are authenticating to multiple systems, which could indicate automated processes or potential misuse.",
+      "affected_accounts": [
+        "C1015$@DOM1",
+        "C538$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some systems show LogOn without corresponding LogOff, notably C467 and C586.",
+      "affected_entities": [
+        "C467",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of ANONYMOUS LOGON and NTLM usage in a Kerberos environment are significant anomalies.",
+      "deviation_details": "The use of ANONYMOUS LOGON and NTLM in environments where Kerberos is expected is a deviation from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events for C586 and C1015 to determine if they align with known attack patterns.",
+    "behavioral_context": "Compare the observed patterns of C1015 and C586 with baseline behaviors to identify deviations.",
+    "permission_analysis": "Verify if accounts like C1015$ and C538$ have legitimate reasons to access the systems they are targeting.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques, especially concerning C586 and C1015 activities."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential security concerns with ANONYMOUS LOGON and NTLM usage in a Kerberos environment, suggesting possible lateral movement and credential misuse.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON events on C586 and C1478, and review the access patterns of C1015$ and C538$ for unauthorized activities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

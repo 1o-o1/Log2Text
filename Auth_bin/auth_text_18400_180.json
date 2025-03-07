@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C574, C5902, C1619, C586, C743, C625, C528, C892, C3021, C5190, C1833, C1964, C1116, C1081, C368, C105, C539, C1581, C1669, C1747, C1881, C61, C1731, C1909, C2606, C1655, C553, C1085, C1065, C1115, C116. Notably, ANONYMOUS LOGONs are initiated from C586, C1909, and C2606, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C101",
+        "C523",
+        "C599",
+        "C1005",
+        "C1086",
+        "C123",
+        "C743",
+        "C104",
+        "C553",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at timestamps labeled <180> and <181>, indicating potential clustering.",
+      "bursts": "No significant bursts in authentication volume are observed, but multiple events are concentrated around <180> and <181>.",
+      "off_hours_activity": "The data does not specify exact times, but the presence of ANONYMOUS LOGONs suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed, particularly with machine accounts and ANONYMOUS LOGONs.",
+      "lateral_movement": "Potential lateral movement is suggested by the presence of ANONYMOUS LOGONs and machine accounts accessing multiple systems.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed, but the use of ANONYMOUS LOGONs could indicate attempts to bypass standard authentication."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGONs and unspecified authentication types are detected.",
+      "affected_entities": [
+        "C586",
+        "C1909",
+        "C2606"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and ANONYMOUS LOGONs are authenticating unusually.",
+      "affected_accounts": [
+        "C586$@DOM1",
+        "C1909$@DOM1",
+        "C2606$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not explicitly detailed, but repeated ANONYMOUS LOGONs are concerning.",
+      "affected_entities": [
+        "C586",
+        "C1909",
+        "C2606"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGONs and unspecified authentication types are the primary anomalies.",
+      "deviation_details": "ANONYMOUS LOGONs are not typical in secure environments and suggest potential reconnaissance or unauthorized access attempts."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON events to determine if they correlate with known attack patterns.",
+    "behavioral_context": "Compare the observed ANONYMOUS LOGON patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved in ANONYMOUS LOGONs should have access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might exploit ANONYMOUS LOGONs."
+  },
+  "conclusion": {
+    "summary": "The authentication events show suspicious patterns primarily due to the presence of ANONYMOUS LOGONs and unspecified authentication types, which are high-risk indicators.",
+    "recommended_actions": "Investigate the source and intent of ANONYMOUS LOGONs, ensure proper logging and monitoring are in place, and consider restricting or alerting on such logons."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

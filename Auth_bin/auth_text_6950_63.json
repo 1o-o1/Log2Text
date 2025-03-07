@@ -1,0 +1,106 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with some using unspecified authentication types, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C529",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C1015",
+        "C2855"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a specific timestamp <63>, suggesting a batch of activities or a scheduled task.",
+      "bursts": "There are bursts of authentication attempts from certain computers, such as C612, C457, and C529, indicating potential scripted activity.",
+      "off_hours_activity": "No specific off-hours activity identified due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff events are observed, particularly from C612 and C457, which may suggest automated processes.",
+      "lateral_movement": "Sequential logons from different computers like C1997 to C625 and C2074 to C457 suggest potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on available data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types are present, which could indicate attempts to obscure the authentication method.",
+      "affected_entities": [
+        "C612",
+        "C467",
+        "C529",
+        "C528",
+        "C1997",
+        "C2074",
+        "C2178",
+        "C2524",
+        "C2710"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating in a manner that could be suspicious, especially with rapid sequences from a single source.",
+      "affected_accounts": [
+        "C1151$@DOM1",
+        "C2060$@DOM1",
+        "C2523$@DOM1",
+        "C3605$@DOM1",
+        "C476$@DOM1",
+        "C1455$@DOM1",
+        "C1947$@DOM1",
+        "C1492$@DOM1",
+        "C2517$@DOM1",
+        "C3543$@DOM1",
+        "C1559$@DOM1",
+        "C2610$@DOM1",
+        "C2627$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon events without corresponding logoff events are observed, which may indicate incomplete session management.",
+      "affected_entities": [
+        "C612",
+        "C467",
+        "C529",
+        "C528",
+        "C457"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of unspecified authentication types and rapid authentication sequences from machine accounts are notable anomalies.",
+      "deviation_details": "The use of '?' as an authentication type and rapid logoff sequences without corresponding logon events are deviations from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamp <63> to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare these patterns against baseline behaviors to identify deviations that could indicate malicious activity.",
+    "permission_analysis": "Verify if the machine accounts and systems involved should legitimately be accessing the targeted systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of NTLM and Kerberos authentications."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several anomalies, including unspecified authentication types, rapid sequences of logon/logoff events, and potential lateral movement. These patterns suggest a moderate risk of malicious activity.",
+    "recommended_actions": "Investigate the systems and accounts involved in unspecified authentication types and rapid sequences. Consider implementing stricter monitoring and alerting for unusual authentication patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C2783 and C2398 are initiating multiple authentications to various destinations, which may be normal in a benign environment but could indicate lateral movement in a compromised one.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C529",
+        "C586",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered at a single timestamp <87>, suggesting a batch processing or logging anomaly rather than real-time events.",
+      "bursts": "No sudden spikes are observed due to the uniform timestamp.",
+      "off_hours_activity": "All activity appears to occur at a single timestamp, making it impossible to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Multiple logon events from single computers to various destinations, such as C2783 accessing multiple systems in a short timeframe.",
+      "lateral_movement": "C2783 shows potential lateral movement by accessing multiple computers (C457, C467, C528, C529, C586, C612) in a short period.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Presence of unknown authentication types indicated by '?', and NTLM usage in a predominantly Kerberos environment.",
+      "affected_entities": [
+        "C1065",
+        "C2233",
+        "C2398",
+        "C2428",
+        "C2444",
+        "C528",
+        "C612",
+        "C553",
+        "C574"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and user accounts are accessing multiple systems rapidly, which could indicate automated processes or potential misuse.",
+      "affected_accounts": [
+        "C2783$@DOM1",
+        "C2397$@DOM1",
+        "C2443$@DOM1",
+        "C567$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are not always paired with corresponding LogOff events, particularly for accounts accessing multiple systems.",
+      "affected_entities": [
+        "C2783$@DOM1",
+        "C2397$@DOM1",
+        "C2443$@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of '?' as an authentication type and uniform timestamps for all events are notable anomalies.",
+      "deviation_details": "The uniform timestamp <87> for all events suggests a logging issue or batch processing, while '?' as an authentication type is unusual."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the logging mechanism to understand why all events are timestamped as <87> and verify if this is a batch processing artifact.",
+    "behavioral_context": "Compare current authentication patterns with historical data to determine if the observed access patterns are typical for these accounts and systems.",
+    "permission_analysis": "Review access permissions for accounts like C2783$@DOM1 and C2397$@DOM1 to ensure they are authorized for the systems they accessed.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash or Kerberoasting, especially given the mixed use of NTLM and Kerberos."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential anomalies such as the use of unknown authentication types, uniform timestamps, and rapid multi-system access by certain accounts. These could be benign or indicative of misconfigurations or security issues.",
+    "recommended_actions": "Investigate the logging process to address the timestamp anomaly, verify the legitimacy of access patterns for accounts like C2783$@DOM1, and ensure proper configuration of authentication protocols."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

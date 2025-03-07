@@ -1,0 +1,109 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C612, C1065, C529, C457, C528, C586, C1521, C5333, C553, C574, C585, C1619, C467, C651, C654, C743, C768, C2551, C1934, C1228, C641, C552, C1691, C5850, and C229. There are no suspicious naming conventions or unexpected systems noted.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C586",
+        "C612",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C1056",
+        "C2327"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered at time 237, suggesting a single timeframe of activity.",
+      "bursts": "No sudden spikes in authentication volume beyond the cluster at time 237.",
+      "off_hours_activity": "All events occur at time 237; without specific context, it is unclear if this is outside normal business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication events are noted on systems like C612, C529, and C586, primarily involving machine accounts.",
+      "lateral_movement": "There is no clear evidence of lateral movement as most authentications are self-contained or involve expected Kerberos operations.",
+      "privilege_escalation": "No patterns indicating privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unspecified (?) types used frequently.",
+      "affected_entities": [
+        "C612",
+        "C1065",
+        "C529",
+        "C457",
+        "C528",
+        "C586",
+        "C553",
+        "C467",
+        "C1691",
+        "C5850",
+        "C229"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently authenticating, which is typical in a domain environment but should be monitored for anomalies.",
+      "affected_accounts": [
+        "C4392$@DOM1",
+        "C4649$@DOM1",
+        "C5190$@DOM1",
+        "C523$@DOM1",
+        "C585$@DOM1",
+        "C612$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal with no missing pairs, although some events use unspecified authentication types.",
+      "affected_entities": [
+        "C612",
+        "C1065",
+        "C529",
+        "C457",
+        "C528",
+        "C586",
+        "C553",
+        "C467",
+        "C1691",
+        "C5850",
+        "C229"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of unspecified authentication types, but no malicious patterns are evident.",
+      "deviation_details": "Unspecified authentication types are used in several events, which is unusual but not necessarily malicious in this context."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the context around time 237 to determine if this is a typical time for authentication events.",
+    "behavioral_context": "Compare these patterns against historical data to establish a baseline for normal activity.",
+    "permission_analysis": "Ensure that machine accounts and users have appropriate permissions for the systems they are accessing.",
+    "ioc_checks": "Monitor for any indicators of compromise such as Pass-the-Hash or Kerberoasting, especially in environments using unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis of authentication events shows a concentration of activity at time 237 with frequent use of unspecified authentication types. While no direct malicious patterns are evident, the use of unspecified types warrants further monitoring.",
+    "recommended_actions": "Investigate the use of unspecified authentication types and ensure that all systems and accounts are properly configured and monitored for unusual activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

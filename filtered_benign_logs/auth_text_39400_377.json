@@ -1,0 +1,109 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The authentication events are initiated by various computers, with C2106 being a notable source due to multiple interactions with different computers. The use of machine accounts (e.g., C1157$@DOM1) is prevalent, which is typical in domain environments.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C528"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at the same timestamp <377>, indicating a potential batch processing or scheduled task.",
+      "bursts": "No significant bursts observed beyond the clustered timestamp.",
+      "off_hours_activity": "All events appear to occur at a single timestamp, suggesting potential automation rather than human activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are seen with machine accounts logging off and on within the same system, which is typical in automated environments.",
+      "lateral_movement": "No clear indicators of lateral movement as most authentications are self-contained or directed towards known systems like C2106 and C528.",
+      "privilege_escalation": "No patterns indicating privilege escalation were detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several authentication events with unknown types (indicated by '?'), which could be benign but warrant verification.",
+      "affected_entities": [
+        "C2106",
+        "C529",
+        "C1171",
+        "C467",
+        "C988",
+        "C457",
+        "C586",
+        "C528"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are used frequently, which is normal in domain environments but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C1157$@DOM1",
+        "C1169$@DOM1",
+        "C123$@DOM1",
+        "C1385$@DOM1",
+        "C1516$@DOM1",
+        "C1640$@DOM1",
+        "C2284$@DOM1",
+        "C2382$@DOM1",
+        "C2975$@DOM1",
+        "C3026$@DOM1",
+        "C3033$@DOM1",
+        "C3072$@DOM1",
+        "C3147$@DOM1",
+        "C3587$@DOM1",
+        "C375$@DOM1",
+        "C4027$@DOM1",
+        "C4049$@DOM1",
+        "C4073$@DOM1",
+        "C4214$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal with no missing pairs, except for the presence of unknown authentication types.",
+      "affected_entities": [
+        "C2106",
+        "C529",
+        "C467",
+        "C988",
+        "C457",
+        "C586",
+        "C528"
+      ]
+    },
+    "anomalies": {
+      "description": "The use of unknown authentication types and the clustering of events at a single timestamp are the primary anomalies.",
+      "deviation_details": "The events are clustered at a timestamp <377>, and several authentications use an unknown type."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the reason for clustering of events at timestamp <377> to determine if this is a scheduled task or batch process.",
+    "behavioral_context": "Compare these patterns against baseline activity to confirm if the clustering and unknown auth types are normal.",
+    "permission_analysis": "Verify that machine accounts and their access to systems like C2106 and C528 are legitimate and expected.",
+    "ioc_checks": "Check for any signs of Pass-the-Hash or other techniques that may exploit NTLM or unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some anomalies such as clustering at a single timestamp and unknown authentication types. However, these may be benign in a controlled environment but should be verified against baseline activities.",
+    "recommended_actions": "Conduct a review of scheduled tasks or batch processes that may explain the clustering. Verify the legitimacy of unknown authentication types and ensure machine accounts have appropriate permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

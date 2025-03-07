@@ -1,0 +1,89 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C3163, C528, C586, C3484, C3493, C3554, C3600, C466, C457, C523, C1085, C539, C5902, C612, C743, C988, C3025, C1056, C574, C1681, C229, C419, C2089. No suspicious naming patterns or unexpected systems were observed.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C467",
+        "C457",
+        "C612"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "All events occurred at the same timestamp <221>, indicating a potential batch processing or log aggregation artifact rather than real-time activity.",
+      "bursts": "No sudden spikes in authentication volume were noted beyond the clustering at <221>.",
+      "off_hours_activity": "All events are timestamped <221>, making it impossible to determine if they occurred outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns were noted, such as multiple LogOn and LogOff sequences from the same source to the same destination.",
+      "lateral_movement": "No clear patterns of lateral movement were detected given the limited temporal data.",
+      "privilege_escalation": "No patterns suggesting privilege escalation were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events used an unknown or unspecified authentication type, marked as '?'.",
+      "affected_entities": [
+        "C528",
+        "C586",
+        "C467",
+        "C3600",
+        "C457",
+        "C612",
+        "C1085",
+        "C1056",
+        "C574",
+        "C1681",
+        "C229",
+        "C419",
+        "C539",
+        "C2089"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., ending with $) are authenticating in expected patterns, primarily within their domain.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are generally paired with LogOff events, suggesting normal session handling.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of unspecified authentication types and the clustering of events at a single timestamp.",
+      "deviation_details": "The use of '?' for authentication types is unusual and should be clarified. The clustering of events at <221> may indicate log aggregation rather than real-time activity."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the source of the <221> timestamp to determine if it reflects real-time activity or log aggregation.",
+    "behavioral_context": "Compare observed patterns against historical baselines to determine if the clustering and authentication types are typical.",
+    "permission_analysis": "Verify that the accounts involved have legitimate access to the systems they are authenticating to, especially for machine accounts.",
+    "ioc_checks": "Check for known attack patterns such as Pass-the-Hash or Kerberoasting, especially where NTLM is used in Kerberos-preferred environments."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show a clustering of events at a single timestamp and the use of unspecified authentication types, which are atypical and warrant further investigation.",
+    "recommended_actions": "Investigate the source of the <221> timestamp and clarify the use of '?' authentication types. Ensure that NTLM usage is appropriate in the observed environment and verify permissions for involved accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

@@ -1,0 +1,50 @@
+Aggregated Authentication Events:
+source_computer,destination_computer,auth_type,logon_type,times,source_users,destination_users,orientations,statuses
+C36,C36,?,?,<2>,U5@DOM1,U4@DOM1,AuthMap,Success
+C36,C36,?,Network,<2>,U5@DOM1,U5@DOM1,LogOff,Success
+C657,C586,Kerberos,Network,<2>,U5@DOM1,U5@DOM1,LogOn,Success
+C1581,C1581,Kerberos,Network,<2, 2>,U63@DOM1,U78@DOM1,U63@DOM1,U78@DOM1,LogOn,Success
+C1673,C1673,?,Network,<2>,U66@DOM1,U66@DOM1,LogOff,Success
+C1673,C1673,Kerberos,Network,<2>,U66@DOM1,U66@DOM1,LogOn,Success
+C2084,C2084,?,Network,<2>,U66@DOM1,U66@DOM1,LogOff,Success
+C779,C779,?,Network,<2>,U66@DOM1,U66@DOM1,LogOff,Success
+C1183,C529,?,?,<2>,U6@DOM1,U6@DOM1,TGS,Success
+C1183,C529,Kerberos,Network,<2>,U6@DOM1,U6@DOM1,LogOn,Success
+C1183,U6,?,?,<2>,U6@DOM1,U6@DOM1,TGS,Success
+C449,C467,Kerberos,Network,<2>,U6@DOM1,U6@DOM1,LogOn,Success
+C606,C1065,Kerberos,Network,<2>,U6@DOM1,U6@DOM1,LogOn,Success
+C61,C61,?,Network,<2>,U6@DOM1,U6@DOM1,LogOff,Success
+C61,C61,Kerberos,Network,<2>,U6@DOM1,U6@DOM1,LogOn,Success
+C92,C528,?,?,<2>,U6@DOM1,U6@DOM1,TGS,Success
+C92,U6,?,?,<2>,U6@DOM1,U6@DOM1,TGS,Success
+C1183,C1183,Kerberos,Network,<2>,U6@DOM1,U7@DOM1,LogOn,Success
+C606,C606,Kerberos,Network,<2>,U6@DOM1,U7@DOM1,LogOn,Success
+C92,C92,Kerberos,Network,<2>,U6@DOM1,U7@DOM1,LogOn,Success
+C1691,C1691,?,Network,<2>,U70@DOM1,U70@DOM1,LogOff,Success
+C1633,C1691,Kerberos,Network,<2>,U71@DOM1,U71@DOM1,LogOn,Success
+C1719,C1719,?,?,<2>,U76@DOM1,C1719$@DOM1,AuthMap,Success
+C1183,C1183,?,?,<2>,U7@DOM1,U6@DOM1,AuthMap,Success
+C606,C606,?,?,<2>,U7@DOM1,U6@DOM1,AuthMap,Success
+C92,C92,?,?,<2>,U7@DOM1,U6@DOM1,AuthMap,Success
+C1183,C1183,?,Network,<2>,U7@DOM1,U7@DOM1,LogOff,Success
+C606,C606,?,Network,<2>,U7@DOM1,U7@DOM1,LogOff,Success
+C92,C92,?,Network,<2>,U7@DOM1,U7@DOM1,LogOff,Success
+C457,C457,?,Network,<2>,U825@DOM1,U825@DOM1,LogOff,Success
+C561,C561,?,Network,<2>,U86@DOM1,U86@DOM1,LogOff,Success
+C1772,C1772,Kerberos,Network,<2>,U87@DOM1,U87@DOM1,LogOn,Success
+C1772,C1772,?,?,<2>,U88@DOM1,C1772$@DOM1,AuthMap,Success
+C1772,C1772,?,Network,<2>,U88@DOM1,U88@DOM1,LogOff,Success
+C1874,C529,Kerberos,Network,<2>,U88@DOM1,U88@DOM1,LogOn,Success
+C529,C529,?,Network,<2>,U88@DOM1,U88@DOM1,LogOff,Success
+C626,C626,?,?,<2>,U8@DOM1,C626$@DOM1,AuthMap,Success
+C102,C103,?,?,<2>,U8@DOM1,SYSTEM@C102,AuthMap,Success
+C1787,C1787,?,?,<2, 2>,U91@DOM1,U91@DOM1,TGS,TGT,Success
+C223,C223,?,Network,<2>,U9@DOM1,U9@DOM1,LogOff,Success
+C1065,C1065,?,Network,<3>,ANONYMOUS LOGON@C1065,ANONYMOUS LOGON@C1065,LogOff,Success
+C586,C586,?,Network,<3>,ANONYMOUS LOGON@C586,ANONYMOUS LOGON@C586,LogOff,Success
+C1000,C1000,Negotiate,Service,<3>,C1000$@DOM1,SYSTEM@C1000,LogOn,Success
+C1001,C1001,Negotiate,Service,<3>,C1001$@DOM1,SYSTEM@C1001,LogOn,Success
+C1002,C1002,Negotiate,Service,<3>,C1002$@DOM1,SYSTEM@C1002,LogOn,Success
+C1004,C1004,Negotiate,Service,<3>,C1004$@DOM1,SYSTEM@C1004,LogOn,Success
+C101,C988,Kerberos,Network,<3>,C101$@DOM1,C101$@DOM1,LogOn,Success
+C988,C988,?,Network,<3>,C101$@DOM1,C101$@DOM1,LogOff,Success

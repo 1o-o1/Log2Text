@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple source computers such as C2074, C2134, C2176, and C2178 are initiating authentication events, primarily using machine accounts (e.g., C2073$@DOM1, C2133$@DOM1). The presence of machine accounts is typical in automated processes, but their behavior should be monitored for anomalies.",
+    "targets": {
+      "frequent_targets": [
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C1065",
+        "C528",
+        "C586",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The data does not provide specific timestamps, but multiple events are aggregated, suggesting potential clustering of events.",
+      "bursts": "The presence of multiple logon events from different source computers to C457 indicates potential bursts of authentication activity.",
+      "off_hours_activity": "Without specific timestamps, off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are observed from multiple source computers to C457, which could indicate routine access or potential probing.",
+      "lateral_movement": "Sequential logons from different source computers to C457 suggest possible lateral movement, especially if these accounts do not typically access this system.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed, but the use of NTLM in some cases (e.g., C365, C426, C433) might indicate attempts to bypass Kerberos policies."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of NTLM authentication in a Kerberos-preferred environment is noted, particularly with accounts like U14@DOM1 and C365$@DOM1.",
+      "affected_entities": [
+        "C365$@DOM1",
+        "U14@DOM1"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently authenticating across systems, which is typical but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C2073$@DOM1",
+        "C2133$@DOM1",
+        "C2175$@DOM1",
+        "C2177$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some logon events do not have corresponding logoff events, and there are multiple logoff events without preceding logons, which could indicate incomplete session management.",
+      "affected_entities": [
+        "C467",
+        "C528",
+        "C612",
+        "C553",
+        "C529",
+        "C229",
+        "C421",
+        "C1065",
+        "C477"
+      ]
+    },
+    "anomalies": {
+      "description": "The use of NTLM where Kerberos is expected, and the presence of failed TGS requests, are notable anomalies.",
+      "deviation_details": "The failed TGS request for U22@DOM1 on C477 suggests potential credential issues or probing."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events around C457 to determine if there is a pattern of lateral movement or coordinated access.",
+    "behavioral_context": "Compare the observed authentication patterns against historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts accessing C457 have legitimate permissions and if their access patterns align with their roles.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially around NTLM usage and failed TGS requests."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several authentication anomalies, including the use of NTLM in a Kerberos environment, potential lateral movement patterns, and failed TGS requests. These suggest a moderate risk of unauthorized access or probing activities.",
+    "recommended_actions": "Investigate the NTLM usage further, especially for accounts U14@DOM1 and C365$@DOM1. Review access permissions for accounts frequently accessing C457. Monitor for any further failed TGS requests and consider increasing logging for detailed analysis."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

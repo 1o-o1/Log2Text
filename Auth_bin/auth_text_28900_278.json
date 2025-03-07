@@ -1,0 +1,89 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computer C3548 is initiating a high number of authentication events, predominantly using Kerberos, and targeting multiple destination computers, which is typical for a domain controller or a heavily used service account.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C529",
+        "C612",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C632"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are concentrated around a specific timestamp <278>, indicating a bulk operation or scheduled task.",
+      "bursts": "No sudden spikes in authentication volume were observed beyond the consistent pattern at <278>.",
+      "off_hours_activity": "All activities are recorded at <278>, which does not indicate off-hours activity without additional context on business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C3548 repeatedly authenticates to C528, C529, C612, and C625, suggesting a routine operation.",
+      "lateral_movement": "No clear indication of lateral movement as the source and destination accounts are consistently the same.",
+      "privilege_escalation": "No evidence of privilege escalation as the accounts used are consistent with machine accounts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are instances of unspecified authentication types (?), which could indicate incomplete logging or unusual activity.",
+      "affected_entities": [
+        "C529",
+        "C612",
+        "C625",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are predominantly used, which is typical in a benign environment for automated processes.",
+      "affected_accounts": [
+        "C3548$@DOM1",
+        "C612$@DOM1",
+        "C625$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events are present, but the sequence of LogOn without corresponding LogOff is not prevalent.",
+      "affected_entities": [
+        "C612",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the patterns are consistent with automated system operations.",
+      "deviation_details": "The presence of unspecified authentication types and NTLM in an otherwise Kerberos environment are the only deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Verify if the consistent timestamp <278> aligns with scheduled tasks or batch operations.",
+    "behavioral_context": "Compare the observed authentication patterns with baseline logs to confirm routine operations.",
+    "permission_analysis": "Ensure that machine accounts like C3548$@DOM1 have legitimate reasons to authenticate to the observed targets.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting attempts, especially around the unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear consistent with automated processes in a benign environment, with minor anomalies in authentication types that warrant further review.",
+    "recommended_actions": "Review the unspecified authentication types for potential logging issues or misconfigurations. Confirm that all machine accounts have appropriate permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

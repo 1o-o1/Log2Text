@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C114, C4563, and C1518 are initiating authentication events. Notably, C114 is involved in numerous TGS requests, which could be a point of interest.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C2106",
+        "C419"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around timestamps labeled <227> and <228>, suggesting a high volume of activity during these periods.",
+      "bursts": "There is a noticeable spike in activity at time <228>, especially involving machine accounts and ANONYMOUS LOGON.",
+      "off_hours_activity": "No specific off-hours activity is detailed, but the presence of ANONYMOUS LOGON and NTLM events could indicate unusual patterns."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C114 repeatedly accesses multiple systems, indicating a pattern of TGS requests.",
+      "lateral_movement": "Potential lateral movement is suggested by C114's access to multiple destination computers, including C2106, C457, C528, and C529.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the presence of ANONYMOUS LOGON and NTLM could suggest attempts to bypass standard authentication controls."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentication types are present, which are typically considered high-risk.",
+      "affected_entities": [
+        "C586",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and ANONYMOUS LOGON are used in unusual ways, such as C114 accessing multiple systems and ANONYMOUS LOGON on C586.",
+      "affected_accounts": [
+        "C114$@DOM1",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some logon events do not have corresponding logoff events, particularly involving machine accounts.",
+      "affected_entities": [
+        "C114$@DOM1",
+        "C1085$@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and NTLM in a potentially Kerberos-preferred environment, along with high-frequency TGS requests, are notable anomalies.",
+      "deviation_details": "The deviation from expected Kerberos-only authentication and the high volume of TGS requests by C114 are significant."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events around <227> and <228> to identify any suspicious chains of authentication.",
+    "behavioral_context": "Compare the observed patterns of C114 and ANONYMOUS LOGON with baseline authentication behaviors to identify anomalies.",
+    "permission_analysis": "Verify if the accounts involved, especially C114$@DOM1, have legitimate reasons for accessing multiple systems and performing TGS requests.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques, given the presence of NTLM and TGS activity."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential risks associated with ANONYMOUS LOGON and NTLM authentication, particularly involving C114 and C586. The patterns suggest possible lateral movement and credential misuse.",
+    "recommended_actions": "Investigate the activity of C114 and ANONYMOUS LOGON events further. Consider monitoring and restricting NTLM usage and reviewing access permissions for involved accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

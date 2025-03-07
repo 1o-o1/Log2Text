@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C2106, C17939, C586, and others are initiating ANONYMOUS LOGON events, which is suspicious. Additionally, machine accounts like C104$@DOM1 and C10741$@DOM1 are involved in TGS and TGT requests, which could indicate ticket-granting service abuse.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C3173",
+        "C3034"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Concentrated activity around timestamps 1758226 and 1758227.",
+      "bursts": "Sudden spikes in authentication events at timestamp 1758227, especially involving ANONYMOUS LOGON and NTLM.",
+      "off_hours_activity": "Potentially occurring outside normal business hours, but exact business hours are not specified."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGON events across multiple systems, indicating potential probing or lateral movement.",
+      "lateral_movement": "Sequential authentication events from different source computers targeting various destinations, suggesting lateral movement.",
+      "privilege_escalation": "Machine accounts requesting TGS and TGT tickets, which might indicate privilege escalation attempts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events and usage of NTLM in potentially Kerberos-preferred environments detected.",
+      "affected_entities": [
+        "C2106",
+        "C17939",
+        "C586",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns involving ANONYMOUS LOGON and machine accounts accessing multiple systems rapidly.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C2106",
+        "ANONYMOUS LOGON@C17939",
+        "C104$@DOM1",
+        "C10741$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events, and excessive TGS/TGT requests detected.",
+      "affected_entities": [
+        "C10741",
+        "C104"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall anomalies include unusual authentication types, excessive ticket requests, and lateral movement indicators.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and NTLM in a potentially Kerberos environment, along with machine accounts making TGS/TGT requests, deviates from normal authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of ANONYMOUS LOGON events and their timing to identify potential attack chains.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if the machine accounts and ANONYMOUS LOGON should have access to the systems they are targeting.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques, given the NTLM usage and TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show significant anomalies, including ANONYMOUS LOGON events, NTLM usage in a potentially Kerberos environment, and excessive TGS/TGT requests. These patterns suggest possible lateral movement and privilege escalation attempts, warranting further investigation.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, review the use of NTLM, especially in Kerberos environments, and analyze the machine account activities for potential ticket-granting service abuse. Implement monitoring and alerting for similar patterns in the future."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

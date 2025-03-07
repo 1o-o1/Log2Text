@@ -1,0 +1,76 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are primarily internal systems, such as C3303, C3365, C457, etc. No suspicious naming conventions or unexpected systems were noted.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C529",
+        "C553"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events occur at timestamp 175, with a few at 176, indicating a possible scheduled task or batch process.",
+      "bursts": "No significant spikes in authentication volume were detected.",
+      "off_hours_activity": "No authentication events were noted outside typical business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are seen with systems like C3365 and C529, which are frequently accessed.",
+      "lateral_movement": "No sequential authentication patterns suggesting lateral movement were detected.",
+      "privilege_escalation": "No patterns indicating escalation to higher privilege accounts were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of ANONYMOUS LOGON and NTLM in a Kerberos-preferred environment could be considered suspicious.",
+      "affected_entities": [
+        "C573",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "No suspicious account usage patterns were detected, as most accounts appear to follow expected naming conventions and usage.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal with no anomalies detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the authentication data does not show significant anomalies.",
+      "deviation_details": "The presence of NTLM and ANONYMOUS LOGON is noted, but without further context, it is not immediately indicative of compromise."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analysis of the sequence and timing of events around timestamps 175 and 176 could provide insights into potential automated processes.",
+    "behavioral_context": "Comparing observed patterns with baseline authentication behavior could help identify deviations.",
+    "permission_analysis": "Verification of account permissions for systems like C586 and C529 could ensure legitimate access.",
+    "ioc_checks": "Checking for known attack techniques like Pass-the-Hash could be beneficial given the presence of NTLM."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear largely benign, with the exception of NTLM and ANONYMOUS LOGON usage, which warrants further investigation.",
+    "recommended_actions": "Investigate the context of NTLM and ANONYMOUS LOGON events on C586. Validate account permissions and monitor for any deviations from normal behavior."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

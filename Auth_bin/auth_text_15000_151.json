@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers are initiating authentication requests, including C4056 and C4182, which are accessing multiple destination computers in a short timeframe, suggesting potential lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C528",
+        "C586",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around the same timestamp <151>, indicating a potential coordinated activity or automated process.",
+      "bursts": "There are bursts of authentication attempts from computers like C4056 and C4182 to multiple destinations.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon attempts from C4056 and C4182 to various computers suggest a pattern of access that could indicate automated scripts or lateral movement.",
+      "lateral_movement": "C4056 and C4182 show sequential logons to multiple systems, which could indicate lateral movement attempts.",
+      "privilege_escalation": "There is no direct evidence of privilege escalation, but the pattern of access could be a precursor to such activity."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown or missing authentication type, which is suspicious.",
+      "affected_entities": [
+        "C528",
+        "C586",
+        "C467",
+        "C612",
+        "C457",
+        "C553",
+        "C229"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts are accessing various systems rapidly, especially from C4056 and C4182.",
+      "affected_accounts": [
+        "C4055$@DOM1",
+        "C4181$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are multiple LogOn events without corresponding LogOff events, particularly from C4056 and C4182.",
+      "affected_entities": [
+        "C4056",
+        "C4182"
+      ]
+    },
+    "anomalies": {
+      "description": "The authentication patterns show deviations from typical behavior, such as multiple systems being accessed in quick succession.",
+      "deviation_details": "The clustering of events at <151> and the use of unknown authentication types are notable anomalies."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamp <151> to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare the observed patterns with baseline behaviors to identify deviations that suggest malicious activity.",
+    "permission_analysis": "Verify if the accounts used by C4056 and C4182 have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, given the use of Kerberos and potential lateral movement."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal patterns that suggest potential lateral movement and misuse of credentials, particularly involving computers C4056 and C4182. The use of unknown authentication types and clustered timestamps further indicate suspicious activity.",
+    "recommended_actions": "Investigate the activities of C4056 and C4182, focusing on their access patterns and the legitimacy of their actions. Review permission settings and consider implementing stricter monitoring and alerting for similar patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C553, C988, C1065, and C457, are initiating multiple authentication events with different accounts, which could indicate automated processes or potential misuse.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C988",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered at the same timestamp <193>, indicating a potential synchronized activity or logging issue.",
+      "bursts": "No specific bursts detected beyond the clustered timestamp.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific time context."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOff events from computers like C553, C988, and C1065 with multiple accounts suggest automated or batch processes.",
+      "lateral_movement": "Sequential LogOn events from different source computers to the same destination computers (e.g., C586, C988) suggest potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but multiple TGS requests could indicate preparation for such activities."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events with unknown authentication types (marked as '?') detected.",
+      "affected_entities": [
+        "C553",
+        "C988",
+        "C1115",
+        "C467",
+        "C1065",
+        "C1618",
+        "C1795",
+        "C3363"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from single sources and machine accounts authenticating in unusual patterns.",
+      "affected_accounts": [
+        "C104$@DOM1",
+        "C567$@DOM1",
+        "C599$@DOM1",
+        "C1484$@DOM1",
+        "C3074$@DOM1",
+        "C3153$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, especially with TGS requests.",
+      "affected_entities": [
+        "C1115",
+        "C1618",
+        "C1795",
+        "C3363"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of unknown authentication types and repetitive LogOff events are notable.",
+      "deviation_details": "The use of '?' as an authentication type and the synchronized timestamp <193> are significant deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further investigate the clustered timestamp <193> to determine if it's a logging anomaly or indicative of coordinated activity.",
+    "behavioral_context": "Compare current authentication patterns with historical data to identify deviations or new patterns.",
+    "permission_analysis": "Verify if the accounts involved in the TGS requests and unusual LogOn events have legitimate access to the target systems.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, especially given the TGS activity and unknown auth types."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several anomalies, including unknown authentication types, potential lateral movement, and repetitive LogOff events, indicating a medium risk of suspicious activity.",
+    "recommended_actions": "Investigate the unknown authentication types and clustered timestamp. Review access permissions for involved accounts and monitor for further suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

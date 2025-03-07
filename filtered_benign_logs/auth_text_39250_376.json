@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events are diverse, with no single source showing excessive activity. However, C3279 shows a mix of Kerberos and NTLM authentications, which is unusual in a Kerberos-preferred environment.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C625",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clustering is apparent from the data provided.",
+      "bursts": "No sudden spikes in authentication volume are evident.",
+      "off_hours_activity": "No information about time of day is provided, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are seen with machine accounts like C1157$ and C3279$, indicating automated processes or services.",
+      "lateral_movement": "Potential lateral movement is suggested by C3279 accessing multiple systems with different authentication types.",
+      "privilege_escalation": "No direct evidence of privilege escalation from the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unknown types and NTLM in a Kerberos environment.",
+      "affected_entities": [
+        "C3279"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts authenticating with unknown types and mixed authentication protocols.",
+      "affected_accounts": [
+        "C3279$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular sequences include multiple LogOff events with unknown authentication types.",
+      "affected_entities": [
+        "C1157",
+        "C586",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the anomalies detected include mixed authentication protocols and unknown authentication types.",
+      "deviation_details": "The presence of NTLM authentication in a Kerberos-preferred environment and unknown authentication types are deviations from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events for C3279 to determine if there is a pattern of lateral movement or privilege escalation.",
+    "behavioral_context": "Compare the observed authentication patterns of C3279 with baseline behavior to determine if the mixed authentication types are typical.",
+    "permission_analysis": "Verify if the accounts associated with C3279 should have access to the systems they are authenticating against, especially with NTLM.",
+    "ioc_checks": "Check for Pass-the-Hash attacks or other known techniques that could explain the NTLM usage in a Kerberos environment."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show potential anomalies with C3279 using mixed authentication protocols, which could indicate a misconfiguration or potential malicious activity. The presence of unknown authentication types also warrants further investigation.",
+    "recommended_actions": "Investigate the authentication behavior of C3279, focusing on the mixed use of Kerberos and NTLM. Verify system configurations to ensure proper protocol usage and review account permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

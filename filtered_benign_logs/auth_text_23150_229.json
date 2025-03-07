@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C2127, C1065, C667, C1429, etc., are initiating authentication events. Notably, machine accounts (ending with $) like C104$, C1085$, and C1197$ are also involved in authentication attempts, which is typical for service accounts but should be monitored for unusual activity.",
+    "targets": {
+      "frequent_targets": [
+        "C612",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C3398"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around the same time period, indicated by timestamps <229> and <230>.",
+      "bursts": "No significant bursts detected; events are evenly distributed.",
+      "off_hours_activity": "No specific off-hours activity detected; timestamps do not indicate time of day."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed, particularly with user U66@DOM1 across multiple computers.",
+      "lateral_movement": "No clear lateral movement patterns detected, as most authentications are self-contained within the same source and destination.",
+      "privilege_escalation": "No privilege escalation patterns detected from the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown (?) type, which could indicate misconfigured systems or potential obfuscation.",
+      "affected_entities": [
+        "C1065",
+        "C528",
+        "C1786",
+        "C2257",
+        "C2472",
+        "C2483",
+        "C3075",
+        "C3430",
+        "C3547",
+        "C7",
+        "C523",
+        "C612",
+        "C467",
+        "C101",
+        "C2106"
+      ]
+    },
+    "account_patterns": {
+      "description": "User U66@DOM1 shows a pattern of frequent authentication across multiple systems, which could be normal for an admin account but should be verified.",
+      "affected_accounts": [
+        "U66@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Frequent LogOn/LogOff sequences detected, especially with U66@DOM1, which could indicate automated processes or scripts.",
+      "affected_entities": [
+        "U66@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and repetitive patterns for specific users are notable.",
+      "deviation_details": "The use of unknown authentication types and repetitive LogOn/LogOff sequences by U66@DOM1 deviate from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of events for U66@DOM1 to determine if the pattern is indicative of automated tasks or potential misuse.",
+    "behavioral_context": "Compare the observed patterns of U66@DOM1 with baseline behaviors for administrative accounts to determine normalcy.",
+    "permission_analysis": "Verify if U66@DOM1 and machine accounts like C104$ have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash, particularly where NTLM is used alongside Kerberos."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals some unusual patterns, particularly the use of unknown authentication types and repetitive LogOn/LogOff sequences by U66@DOM1. While these may be benign, they warrant further investigation to rule out potential misconfigurations or security risks.",
+    "recommended_actions": "Investigate the use of unknown authentication types and verify the legitimacy of U66@DOM1's activity. Ensure that all machine accounts are operating within expected parameters and review authentication logs for any signs of lateral movement or privilege escalation."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

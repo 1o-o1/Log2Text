@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1727, C467, C528, and C529 are initiating multiple authentication events, with some using ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C612",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C2516",
+        "C2162"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most activity is concentrated around a single timestamp <764523>.",
+      "bursts": "There are sudden spikes in authentication requests from computers like C528 and C529.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Computers like C528 and C529 show repetitive ANONYMOUS LOGON patterns.",
+      "lateral_movement": "Sequential authentications from C1198 to multiple destinations suggest potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but ANONYMOUS LOGON usage is concerning."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are prevalent.",
+      "affected_entities": [
+        "C11475",
+        "C528",
+        "C529",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "ANONYMOUS LOGON accounts are used across multiple computers, which is unusual.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C11475",
+        "ANONYMOUS LOGON@C528",
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are multiple LogOn events without corresponding LogOffs, especially with ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C528",
+        "C529",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "High volume of ANONYMOUS LOGON and NTLM in a Kerberos environment.",
+      "deviation_details": "The use of NTLM and ANONYMOUS LOGON in a Kerberos-preferred environment is a significant deviation."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events around <764523> to identify potential attack chains.",
+    "behavioral_context": "Compare the observed ANONYMOUS LOGON patterns with historical baselines for these systems.",
+    "permission_analysis": "Verify if ANONYMOUS LOGON accounts should have access to the systems they are authenticating against.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques due to NTLM and Kerberos usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show significant anomalies, particularly with the use of ANONYMOUS LOGON and NTLM in a Kerberos environment, suggesting potential malicious activity.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON attempts, review NTLM usage, and assess potential lateral movement paths for compromise."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

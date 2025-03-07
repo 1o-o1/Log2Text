@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several machine accounts (e.g., C625$, C104$) are initiating authentication requests, which is typical in a domain environment. However, the presence of ANONYMOUS LOGON is unusual and warrants further investigation.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C553",
+        "C2516"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around timestamp 376, with a few at 377.",
+      "bursts": "No sudden spikes detected, but consistent activity at certain timestamps.",
+      "off_hours_activity": "No specific off-hours activity noted, but timestamps are not detailed enough to confirm."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication requests from C772 to multiple destinations (C457, C586, C612) suggest potential lateral movement or service account activity.",
+      "lateral_movement": "C772's activity pattern suggests possible lateral movement across the network.",
+      "privilege_escalation": "No clear indication of privilege escalation attempts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of ANONYMOUS LOGON and unspecified authentication types (e.g., '?') are suspicious.",
+      "affected_entities": [
+        "C586",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating in rapid succession, which could indicate automated processes or potential misuse.",
+      "affected_accounts": [
+        "C625$@DOM1",
+        "C104$@DOM1",
+        "C743$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some systems show LogOn events without corresponding LogOff events, which could indicate incomplete session handling or potential issues.",
+      "affected_entities": [
+        "C586",
+        "C612"
+      ]
+    },
+    "anomalies": {
+      "description": "Detected anomalies include the use of ANONYMOUS LOGON and unspecified authentication types.",
+      "deviation_details": "The use of '?' as an authentication type and the presence of ANONYMOUS LOGON deviate from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps 376 and 377 to identify potential attack chains.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if the accounts, especially those using ANONYMOUS LOGON, have legitimate access to the systems they target.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in cases where NTLM is used in a Kerberos environment."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several anomalies, including the use of ANONYMOUS LOGON and unspecified authentication types, which could indicate potential security issues. The activity of machine accounts and potential lateral movement by C772 should be further investigated.",
+    "recommended_actions": "Investigate the use of ANONYMOUS LOGON and unspecified authentication types. Review the activity of machine accounts for potential misuse. Monitor C772 for lateral movement and validate its access permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events are initiated by machine accounts (e.g., C1017$, C1018$) performing LogOn operations on themselves, which is typical for service accounts.",
+    "targets": {
+      "frequent_targets": [
+        "C1017",
+        "C1018",
+        "C1020",
+        "C1021",
+        "C1026",
+        "C1029",
+        "C1030",
+        "C1032",
+        "C1035",
+        "C1037",
+        "C1038",
+        "C1045",
+        "C1051",
+        "C1054",
+        "C1058",
+        "C1063",
+        "C1069",
+        "C107",
+        "C1072",
+        "C1079",
+        "C1084",
+        "C1088",
+        "C1092",
+        "C1096",
+        "C1098",
+        "C11",
+        "C1104",
+        "C1105",
+        "C1109",
+        "C111",
+        "C1113",
+        "C1116",
+        "C1120",
+        "C1127",
+        "C1129",
+        "C1130",
+        "C1132",
+        "C1138",
+        "C1145",
+        "C1151",
+        "C1154",
+        "C1155",
+        "C1158",
+        "C116",
+        "C1166",
+        "C117",
+        "C1170",
+        "C1172",
+        "C1179"
+      ],
+      "sporadic_targets": [
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume detected.",
+      "off_hours_activity": "No information on business hours provided to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn actions by machine accounts on themselves, which is normal for service operations.",
+      "lateral_movement": "No evidence of lateral movement detected in the provided data.",
+      "privilege_escalation": "No patterns indicating privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "An unknown authentication type '?' was detected in one event.",
+      "affected_entities": [
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are performing expected service LogOn operations on themselves.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "A LogOff event with an unknown authentication type was observed.",
+      "affected_entities": [
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Anomalous authentication type '?' detected.",
+      "deviation_details": "The presence of an unknown authentication type '?' in the logon and logoff sequence for C586 is unusual."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analyze the sequence of events for C586 to determine if the unknown authentication type is part of a larger pattern.",
+    "behavioral_context": "Compare the observed authentication patterns with historical data to identify deviations.",
+    "permission_analysis": "Verify if the account C1035$@DOM1 should have access to C586 and if the authentication type '?' is legitimate.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might exploit unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication logs primarily show normal service account activity with one anomaly involving an unknown authentication type. No significant indicators of compromise were found, but the unknown type should be investigated further.",
+    "recommended_actions": "Investigate the unknown authentication type '?' associated with C586 and verify the legitimacy of the account C1035$@DOM1 accessing it. Consider monitoring for any further occurrences of this anomaly."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

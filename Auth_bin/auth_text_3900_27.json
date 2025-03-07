@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, including C1657, C1734, C2444, C509, and others. Notably, C1734 is involved in numerous TGS requests, which could indicate ticket-granting service activity.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C529"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same time period (timestamp 27), suggesting a batch of authentication activities.",
+      "bursts": "There is a burst of TGS requests from C1734, indicating potential ticket-granting activity.",
+      "off_hours_activity": "All events appear to occur at the same timestamp, suggesting potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1734 repeatedly requests TGS tickets for multiple destinations, which is unusual.",
+      "lateral_movement": "C1734's sequential TGS requests to multiple destinations suggest potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the pattern of TGS requests could indicate preparation for such."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use unknown (?) types, which is suspicious.",
+      "affected_entities": [
+        "C612",
+        "C625",
+        "C101",
+        "C528",
+        "C229",
+        "C1691",
+        "C801"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and user accounts are authenticating in unusual patterns, such as multiple logons without corresponding logoffs.",
+      "affected_accounts": [
+        "C1734$@DOM1",
+        "C2443$@DOM1",
+        "C509$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are instances of logons without corresponding logoffs, particularly involving TGS requests.",
+      "affected_entities": [
+        "C1734",
+        "C2444"
+      ]
+    },
+    "anomalies": {
+      "description": "The authentication patterns show anomalies such as excessive TGS requests and use of unknown authentication types.",
+      "deviation_details": "C1734's activity deviates from normal patterns with multiple TGS requests in a short time frame."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of TGS requests from C1734 to determine if they form a pattern indicative of lateral movement.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts like C1734$@DOM1 should legitimately access the systems they are targeting.",
+    "ioc_checks": "Check for potential Pass-the-Ticket or Kerberoasting activities given the TGS request pattern."
+  },
+  "conclusion": {
+    "summary": "The authentication log reveals several anomalies, including excessive TGS requests from C1734, use of unknown authentication types, and potential lateral movement patterns. These indicate a medium to high risk of suspicious activity.",
+    "recommended_actions": "Investigate the source of TGS requests from C1734, validate the legitimacy of unknown authentication types, and monitor systems for potential lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

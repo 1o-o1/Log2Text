@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C180, C11182, C11508, C12913, and C5582 are initiating authentication events. Notably, C5582 and other computers are involved in ANONYMOUS LOGON events, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C1015",
+        "C529",
+        "C2162"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around the timestamp <1082081> and <1082082>.",
+      "bursts": "There is a burst of ANONYMOUS LOGON events at <1082082>.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive TGS requests from C11508 and C3130 suggest possible ticket harvesting.",
+      "lateral_movement": "Sequential authentications from C11508 to multiple destinations suggest lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but ANONYMOUS LOGONs could indicate attempts to bypass normal authentication."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGONs and NTLM in a Kerberos environment are present.",
+      "affected_entities": [
+        "C586",
+        "C625"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple ANONYMOUS LOGONs and machine accounts accessing unusual systems.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C625",
+        "C3276$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events and excessive TGS requests.",
+      "affected_entities": [
+        "C11508",
+        "C3130",
+        "C5582"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGONs and NTLM usage in a Kerberos environment are significant anomalies.",
+      "deviation_details": "The use of NTLM where Kerberos is expected and ANONYMOUS LOGONs are deviations from typical secure authentication practices."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of ANONYMOUS LOGON events and correlate with other suspicious activities.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behaviors to identify deviations.",
+    "permission_analysis": "Verify if accounts involved in suspicious activities have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for Pass-the-Hash and other credential theft techniques, especially related to ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals significant anomalies, including ANONYMOUS LOGONs and NTLM usage in a Kerberos environment, suggesting potential compromise and lateral movement.",
+    "recommended_actions": "Immediate investigation of ANONYMOUS LOGON events and NTLM authentications is recommended. Review access permissions and monitor for further suspicious activities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

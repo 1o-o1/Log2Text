@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C101, C4059, and C2614 are initiating multiple authentication events. Notably, C101 is involved in numerous TGS and LogOn requests, which is unusual for a single source.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C467",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C2553",
+        "C1691"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around timestamps <167> and <168>, indicating potential coordinated activity.",
+      "bursts": "There is a noticeable burst of activity at timestamp <168> with multiple systems and accounts involved.",
+      "off_hours_activity": "No specific off-hours activity detected as timestamps are not detailed enough to determine business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C101 repeatedly authenticates to multiple destinations, which could indicate automated processes or scripted activity.",
+      "lateral_movement": "The sequence of authentications from C101 to various systems suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but the use of machine accounts in multiple authentications is noteworthy."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events detected using NTLM, which is suspicious in a Kerberos-preferred environment.",
+      "affected_entities": [
+        "C529",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts such as C101$@DOM1 are authenticating to multiple systems rapidly, which is unusual.",
+      "affected_accounts": [
+        "C101$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not explicitly detected, but rapid successive LogOn events are noted.",
+      "affected_entities": [
+        "C101"
+      ]
+    },
+    "anomalies": {
+      "description": "Multiple anomalies detected including unusual use of ANONYMOUS LOGON and rapid succession of authentication events.",
+      "deviation_details": "The use of NTLM in a Kerberos environment and the rapid authentication requests from C101 are deviations from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps <167> and <168> to identify potential attack chains.",
+    "behavioral_context": "Compare the authentication patterns of C101 and other active systems against historical baselines to identify deviations.",
+    "permission_analysis": "Verify if machine accounts like C101$@DOM1 should have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash attacks due to NTLM usage and potential Kerberoasting due to excessive TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several anomalies, including the use of ANONYMOUS LOGON with NTLM, rapid authentication requests from C101, and potential lateral movement patterns. These warrant further investigation to rule out malicious activity.",
+    "recommended_actions": "Investigate the source and intent of ANONYMOUS LOGON events, particularly focusing on systems C529 and C586. Review the activity of C101 for potential automated or scripted actions. Validate the necessity and legitimacy of machine account access across multiple systems."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

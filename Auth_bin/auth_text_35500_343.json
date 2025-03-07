@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C1085, C1714, C1716, C1815, C1847, C2230, C2236, C2478, C2649, C2671, C2888, C3511, C3520, C3539, C3584, C3674, C3692, C3967, C4044, C405, C466, C4738, C5181, and C529. No suspicious naming patterns or unexpected systems were observed.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C528",
+        "C529",
+        "C612",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C1065",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All authentication events are clustered around the same timestamp <343>.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "No indication of off-hours activity as all events occur at the same timestamp."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed with certain accounts, such as C2477$@DOM1 and C467$@DOM1, but no suspicious behavior is detected.",
+      "lateral_movement": "No sequential authentication patterns suggesting lateral movement were detected.",
+      "privilege_escalation": "No patterns indicating privilege escalation were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several authentication events with an unknown authentication type '?'.",
+      "affected_entities": [
+        "C1085",
+        "C1847",
+        "C2236",
+        "C2478",
+        "C457",
+        "C467",
+        "C612",
+        "C529",
+        "C586",
+        "C528",
+        "C1065"
+      ]
+    },
+    "account_patterns": {
+      "description": "No suspicious account usage patterns were detected.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal with no missing logoff events for the logons observed.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the authentication events appear benign with no significant anomalies detected.",
+      "deviation_details": "The presence of unknown authentication types is the only notable deviation from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence of events around timestamp <343> to ensure no hidden patterns are overlooked.",
+    "behavioral_context": "Compare the observed authentication patterns with historical baselines to confirm normalcy.",
+    "permission_analysis": "Verify that accounts with unknown authentication types have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for potential Pass-the-Hash or other known attack techniques that might exploit unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events analyzed appear to be benign with no clear indicators of compromise or unusual patterns. The presence of unknown authentication types warrants further investigation to ensure they are not indicative of misconfigured systems or potential security gaps.",
+    "recommended_actions": "Investigate the unknown authentication types to determine their origin and legitimacy. Ensure all systems are properly configured to use known and secure authentication protocols."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

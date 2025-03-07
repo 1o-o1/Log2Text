@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers primarily initiating authentication events are C2560, C2562, C2579, C586, C2653, C2708, C2710, C2794, C2811, C2941, C2986, C3013, C3640, C231, C4920, C529, C5012, C540, C553, C101, C574, C623, C625, C641, C742, C743, C368, C1065, and C506. Notably, C586 and C2710 are involved in multiple events, indicating potential pivot points for further investigation.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated over a short period, suggesting a burst of activity.",
+      "bursts": "There is a noticeable spike in authentication activity, particularly involving C586 and C457.",
+      "off_hours_activity": "The data does not specify exact timestamps, but the aggregation suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated logon and logoff actions are seen, particularly with C586 and C457, which could indicate automated processes or scripted actions.",
+      "lateral_movement": "The sequence of logons and logoffs across different systems (e.g., C586, C457) suggests potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of NTLM in some instances may warrant further investigation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of NTLM authentication in a predominantly Kerberos environment is suspicious.",
+      "affected_entities": [
+        "C623",
+        "C368"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source and machine accounts authenticating to unusual systems are noted.",
+      "affected_accounts": [
+        "C586",
+        "C2710",
+        "C742"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events and vice versa are present, indicating incomplete session pairs.",
+      "affected_entities": [
+        "C586",
+        "C2710",
+        "C742"
+      ]
+    },
+    "anomalies": {
+      "description": "The data shows deviations from expected authentication patterns, particularly with unknown authentication types and excessive logon/logoff sequences.",
+      "deviation_details": "Unknown authentication types are noted, and there are excessive logon/logoff sequences involving C586 and C457."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of authentication events, focusing on C586 and C457, to identify potential attack chains.",
+    "behavioral_context": "Compare observed authentication patterns with known baselines to identify deviations, particularly for C586 and C2710.",
+    "permission_analysis": "Verify whether accounts such as C586$@DOM1 and C2710$@DOM1 should have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for techniques like Pass-the-Hash or Kerberoasting, especially given the presence of NTLM and unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication logs exhibit several anomalies, including the use of NTLM in a Kerberos environment, unknown authentication types, and potential lateral movement patterns. These warrant a medium to high risk classification.",
+    "recommended_actions": "Investigate the authentication patterns involving C586 and C2710, particularly focusing on NTLM usage and unknown authentication types. Implement stricter monitoring and potentially restrict access for suspicious accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

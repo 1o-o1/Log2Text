@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events include C247, C529, C625, C921, C3511, C2654, C967, C1691, C1633, C586, C1048, C1065, C1115, C467, C149, C457, C1727, C25240, C27137, C528, C2230, C2358, C2650, C3112, C3265, C3471, C3542, C365, C585, C591. Notably, C586 and C1065 have multiple logoffs with ANONYMOUS LOGON and unspecified auth types, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C467",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C612",
+        "C1015"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around the timestamps 212 and 213, suggesting high activity periods.",
+      "bursts": "There are no significant bursts of activity beyond the clustered timestamps.",
+      "off_hours_activity": "No specific off-hours activity detected as timestamps are not detailed enough to determine business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions observed on C586 and C1065 with unspecified auth types and ANONYMOUS LOGON.",
+      "lateral_movement": "Potential lateral movement indicated by multiple authentications to different destinations from C149 and C1065.",
+      "privilege_escalation": "No clear evidence of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are detected, which are considered suspicious.",
+      "affected_entities": [
+        "C586",
+        "C1065",
+        "C25240"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating in unusual patterns, particularly from C586 and C1065.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "C1965$@DOM1",
+        "C20$@DOM1",
+        "C2358$@DOM1",
+        "C585$@DOM1",
+        "C1065$@DOM1",
+        "C1470$@DOM1",
+        "C149$@DOM1",
+        "C3408$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logoff events with ANONYMOUS LOGON and unspecified auth types are unusual and warrant further investigation.",
+      "affected_entities": [
+        "C586",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the presence of ANONYMOUS LOGON and unspecified authentication types are the primary anomalies.",
+      "deviation_details": "The use of ANONYMOUS LOGON and missing authentication types deviate from expected authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of events on C586 and C1065 to determine if these align with known attack patterns.",
+    "behavioral_context": "Compare the observed ANONYMOUS LOGON and unspecified auth type patterns with historical data to establish a baseline.",
+    "permission_analysis": "Verify if the machine accounts and ANONYMOUS LOGON have legitimate reasons to access the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might exploit NTLM and Kerberos vulnerabilities."
+  },
+  "conclusion": {
+    "summary": "The authentication logs show anomalies primarily due to ANONYMOUS LOGON and unspecified authentication types, especially on systems C586 and C1065. These patterns could indicate potential security risks.",
+    "recommended_actions": "Investigate the source and purpose of ANONYMOUS LOGON and unspecified auth types. Review access permissions for machine accounts involved in these events. Consider implementing stricter access controls and monitoring for these accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

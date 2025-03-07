@@ -1,0 +1,152 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication requests include C1710, C449, C92, C61, C1065, C626, C457, C223, C528, C1000, C101, C1019, C1038, C105, C553, C1063, C1100, C1109, C1143, C1145, C1158, C1161, C1168, C1177, C1187, C1188, C1254, C1307, C1368, C1371, C1380, C1386, C1398, C1404, C1411, C1417, C1420, C1441, C1454, C147, C1507, C1512, C1514, C1522, C1529, C1536, C1544. Notably, C528 shows an ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C1065",
+        "C1000",
+        "C101",
+        "C1019",
+        "C1038",
+        "C105",
+        "C553",
+        "C1063",
+        "C1100",
+        "C1109",
+        "C1143",
+        "C1145",
+        "C1158",
+        "C1161",
+        "C1168",
+        "C1177",
+        "C1187",
+        "C1188",
+        "C1254",
+        "C1307",
+        "C1368",
+        "C1371",
+        "C1380",
+        "C1386",
+        "C1398",
+        "C1404",
+        "C1411",
+        "C1417",
+        "C1420",
+        "C1441",
+        "C1454",
+        "C147",
+        "C1507",
+        "C1512",
+        "C1514",
+        "C1522",
+        "C1536",
+        "C1544"
+      ],
+      "sporadic_targets": [
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated into two main clusters, labeled as <4> and <5>, indicating distinct periods of activity.",
+      "bursts": "There are no specific bursts of activity noted beyond the clustering.",
+      "off_hours_activity": "The data does not specify exact times, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are noted, particularly with machine accounts.",
+      "lateral_movement": "There is no clear evidence of lateral movement in the provided data.",
+      "privilege_escalation": "No direct indication of privilege escalation is observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected on C528, which is typically high-risk.",
+      "affected_entities": [
+        "C528"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., C1000$, C101$, etc.) show consistent LogOn activity, which is typical for service accounts but should be verified for legitimacy.",
+      "affected_accounts": [
+        "C1000$",
+        "C101$",
+        "C1019$",
+        "C1038$",
+        "C105$",
+        "C104$",
+        "C1063$",
+        "C1100$",
+        "C1109$",
+        "C1143$",
+        "C1145$",
+        "C1158$",
+        "C1161$",
+        "C1168$",
+        "C1177$",
+        "C1187$",
+        "C1188$",
+        "C1254$",
+        "C1307$",
+        "C1368$",
+        "C1371$",
+        "C1380$",
+        "C1386$",
+        "C1398$",
+        "C1404$",
+        "C1411$",
+        "C1417$",
+        "C1420$",
+        "C1441$",
+        "C1454$",
+        "C147$",
+        "C1507$",
+        "C1512$",
+        "C1514$",
+        "C1522$",
+        "C1536$",
+        "C1544$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear regular, but the presence of ANONYMOUS LOGON is concerning.",
+      "affected_entities": [
+        "C528"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and unspecified authentication types are notable.",
+      "deviation_details": "Unspecified authentication types and ANONYMOUS LOGON are deviations from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the specific timestamps within clusters <4> and <5> to identify any potential attack chains or anomalies.",
+    "behavioral_context": "Compare the observed machine account activity against baseline service account behavior to identify irregularities.",
+    "permission_analysis": "Verify that the machine accounts have legitimate reasons to access their respective systems, especially those with ANONYMOUS LOGON.",
+    "ioc_checks": "Check for indicators of compromise such as Pass-the-Hash or Kerberoasting, particularly focusing on systems with ANONYMOUS LOGON or unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events show a pattern of regular machine account activity, which is typical for service operations. However, the presence of ANONYMOUS LOGON on C528 and unspecified authentication types are concerning and warrant further investigation.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON event on C528 to determine its legitimacy. Review the use of unspecified authentication types and ensure all machine accounts are operating within expected parameters."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

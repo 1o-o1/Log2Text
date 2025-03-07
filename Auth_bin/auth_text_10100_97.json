@@ -1,0 +1,89 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1690, C2346, and C2442 are initiating multiple authentication events. Some use unspecified authentication types, which could be suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes detected due to aggregated data presentation.",
+      "off_hours_activity": "Cannot determine due to lack of specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logons and TGS requests from specific computers like C2346 and C2442 to C457.",
+      "lateral_movement": "Potential lateral movement suggested by multiple TGS requests from C2346 and C2442 to C457.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types detected, which could indicate suspicious activity.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C1065",
+        "C528"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating frequently, which is typical but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C2345$@DOM1",
+        "C2441$@DOM1",
+        "C2445$@DOM1",
+        "C2449$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events without corresponding LogOn events are noted, which could indicate incomplete session tracking.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of unspecified authentication types and frequent TGS requests indicate potential anomalies.",
+      "deviation_details": "Unspecified auth types and frequent TGS requests from certain computers deviate from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze specific timestamps for these events to identify potential attack chains or unusual sequences.",
+    "behavioral_context": "Compare these patterns against historical data to determine if they are typical for these accounts and systems.",
+    "permission_analysis": "Verify if the accounts involved have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the frequent TGS requests."
+  },
+  "conclusion": {
+    "summary": "The data shows some unusual patterns, such as unspecified authentication types and frequent TGS requests, which could indicate suspicious activity or misconfigurations. Further investigation is warranted.",
+    "recommended_actions": "Investigate the systems and accounts involved in unspecified authentication types and frequent TGS requests. Review access permissions and monitor for any further suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

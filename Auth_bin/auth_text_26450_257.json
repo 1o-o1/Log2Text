@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The majority of authentication events are initiated by machine accounts (e.g., C3532$, C3654$) which is typical in domain environments for service accounts. However, there are multiple instances of unknown authentication types initiated by machine accounts, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C529",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C988",
+        "C553"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated with timestamps labeled as <257>, indicating simultaneous or batch processing, which is typical for automated processes.",
+      "bursts": "No specific bursts detected as the data is aggregated.",
+      "off_hours_activity": "No specific off-hours activity detected due to lack of detailed timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are seen, particularly with machine accounts, which is normal for service accounts.",
+      "lateral_movement": "No clear indicators of lateral movement as the source and destination systems are often the same or expected pairs.",
+      "privilege_escalation": "No privilege escalation patterns detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type ('?'), which is unusual and should be investigated further.",
+      "affected_entities": [
+        "C528",
+        "C1065",
+        "C4313",
+        "C1619",
+        "C1641",
+        "C1045",
+        "C2625"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently used across multiple systems, which is expected in a domain environment, but the use of unknown authentication types is concerning.",
+      "affected_accounts": [
+        "C3532$@DOM1",
+        "C3654$@DOM1",
+        "C612$@DOM1",
+        "C585$@DOM1",
+        "C599$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are consistent LogOn and LogOff sequences, but the presence of unknown authentication types in these sequences is unusual.",
+      "affected_entities": [
+        "C528",
+        "C1065",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of unknown authentication types across several systems and accounts.",
+      "deviation_details": "The presence of '?' as an authentication type is not standard and should be examined further."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the specific timestamps associated with the '?' authentication types to understand if they correlate with any known issues or maintenance activities.",
+    "behavioral_context": "Compare the patterns of '?' authentication types with historical logs to determine if this is a new occurrence or part of a known pattern.",
+    "permission_analysis": "Review the permissions and roles of the accounts involved in '?' authentication events to ensure they align with expected access rights.",
+    "ioc_checks": "Check for known vulnerabilities or exploits that might result in '?' authentication types, such as misconfigured services or unauthorized access attempts."
+  },
+  "conclusion": {
+    "summary": "The authentication events largely appear benign, typical of a domain environment with service accounts. However, the presence of unknown authentication types ('?') across multiple systems and accounts is a potential concern and warrants further investigation.",
+    "recommended_actions": "Investigate the cause of the '?' authentication types, review system configurations, and ensure all accounts have appropriate permissions. Consider monitoring these systems for any further unusual activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

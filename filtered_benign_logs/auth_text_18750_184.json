@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers mostly authenticate to themselves, indicating local operations. However, C2130 and C2176 are initiating TGS requests to C457, which is a pattern worth noting for potential lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C101",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur at the same timestamp, suggesting a batch processing or a synchronized event generation.",
+      "bursts": "No sudden spikes detected as all events are uniformly timestamped.",
+      "off_hours_activity": "No specific off-hours activity can be determined from the given data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Multiple logon and logoff events from the same source to the same destination suggest routine operations.",
+      "lateral_movement": "The TGS requests from C2130 and C2176 to C457 suggest potential lateral movement attempts.",
+      "privilege_escalation": "No clear indication of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type (?).",
+      "affected_entities": [
+        "C528",
+        "C467",
+        "C2130",
+        "C457",
+        "C1065",
+        "C270",
+        "C101",
+        "C1862",
+        "C2022",
+        "C431",
+        "C506"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) are authenticating across various systems, which is typical in a domain environment but should be monitored for anomalies.",
+      "affected_accounts": [
+        "C1998$@DOM1",
+        "C2358$@DOM1",
+        "C3147$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not evident; however, LogOff events are frequent, indicating clean session closures.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The use of unknown authentication types and TGS requests to C457 are notable.",
+      "deviation_details": "The presence of unknown authentication types and the pattern of TGS requests to a specific target (C457) are deviations from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Verify the synchronization of events across systems to ensure they are not part of a coordinated attack.",
+    "behavioral_context": "Compare these patterns against historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Review the permissions of accounts making TGS requests to ensure they align with expected access levels.",
+    "ioc_checks": "Investigate the TGS requests for potential Kerberoasting attempts or other lateral movement techniques."
+  },
+  "conclusion": {
+    "summary": "The authentication data shows a consistent pattern of local logon and logoff events, with some TGS requests indicating potential lateral movement. The use of unknown authentication types is a concern that requires further investigation.",
+    "recommended_actions": "Investigate the systems using unknown authentication types and review the TGS requests to C457 for potential lateral movement. Ensure all accounts have appropriate permissions and monitor for any deviations from expected behavior."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

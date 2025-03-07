@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C186, C1065, and C529 are initiating multiple authentication events. Notably, C186 is involved in various TGS requests, which could indicate ticket-granting service activity related to Kerberos.",
+    "targets": {
+      "frequent_targets": [
+        "C1065",
+        "C186",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C528",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around timestamps 75 and 76, indicating potential synchronized activity.",
+      "bursts": "There is a noticeable spike in authentication events at timestamp 76, especially involving C186 and C529.",
+      "off_hours_activity": "No specific off-hours activity is noted, but the clustering suggests potential automated processes."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C186 shows repetitive TGS requests to multiple destinations, suggesting possible ticket-granting service exploitation.",
+      "lateral_movement": "The sequence of logons and TGS requests from C186 to multiple destinations suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but the repeated TGS requests could be an attempt to gather credentials."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are detected, which are suspicious.",
+      "affected_entities": [
+        "C586",
+        "C529",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and ANONYMOUS LOGON are used in unusual patterns, especially from C186 and C529.",
+      "affected_accounts": [
+        "C186$@DOM1",
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C612"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular sequences of LogOn without corresponding LogOff events, particularly involving TGS requests.",
+      "affected_entities": [
+        "C186",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "Multiple anomalies detected, including ANONYMOUS LOGON and excessive TGS requests.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and unspecified authentication types deviates from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps 75 and 76 to identify potential attack chains.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behaviors to identify anomalies.",
+    "permission_analysis": "Verify if the accounts involved in TGS requests should legitimately access the target systems.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques given the presence of NTLM and TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several anomalies, including the use of ANONYMOUS LOGON, unspecified authentication types, and excessive TGS requests, suggesting potential lateral movement and credential harvesting activities.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, review the legitimacy of TGS requests, and monitor for potential lateral movement from C186 and C529."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

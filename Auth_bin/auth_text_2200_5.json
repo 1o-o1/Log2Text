@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers primarily initiating authentication events are machine accounts (e.g., C1582$, C1589$, etc.) which is typical for service or scheduled tasks. However, C540$ shows a TGS request which is less common for a machine account.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C553",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are provided, but the data suggests consistent activity across various systems.",
+      "bursts": "No sudden spikes in authentication volume are apparent from the provided data.",
+      "off_hours_activity": "The data does not specify timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Many systems show repetitive LogOn and LogOff sequences, especially with machine accounts logging on to themselves.",
+      "lateral_movement": "Potential lateral movement is suggested by the sequence of logons from one system to another, such as C2109 to C529 and C1804 to C467.",
+      "privilege_escalation": "No clear patterns of privilege escalation are evident from the data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types ('?') is noted, which could indicate misconfigured systems or attempts to obscure authentication methods.",
+      "affected_entities": [
+        "C529",
+        "C467",
+        "C625",
+        "C528",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are primarily authenticating to themselves, which is normal, but the use of these accounts in network logons (e.g., C2109, C1804) could indicate automated tasks or potential misuse.",
+      "affected_accounts": [
+        "C540$",
+        "C2109$",
+        "C1804$"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are sequences where LogOn events are followed by LogOffs with unknown authentication types, which could suggest incomplete or unusual session handling.",
+      "affected_entities": [
+        "C529",
+        "C467",
+        "C625",
+        "C528"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the anomalies detected include unknown authentication types and potential lateral movement patterns.",
+      "deviation_details": "The use of '?' in authentication types and the sequence of network logons from one machine to another are deviations from typical service logon patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs for exact timestamps to determine if these events correlate with known scheduled tasks or user activity.",
+    "behavioral_context": "Compare these patterns against historical logs to identify deviations from normal behavior, particularly focusing on the use of unknown authentication types.",
+    "permission_analysis": "Verify if the machine accounts involved in network logons have legitimate reasons for accessing the target systems, possibly indicating automated processes or scripts.",
+    "ioc_checks": "Investigate the use of '?' in authentication types for potential misconfigurations or obfuscation attempts, and check for known attack signatures like Pass-the-Hash."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several authentication anomalies, including the use of unknown authentication types and patterns suggestive of lateral movement. These warrant further investigation to rule out potential security incidents.",
+    "recommended_actions": "Investigate the systems using unknown authentication types for misconfigurations or unauthorized access. Review the sequences of network logons for signs of lateral movement or automated tasks that may need adjustment."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

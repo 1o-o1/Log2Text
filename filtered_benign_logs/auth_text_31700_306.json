@@ -1,0 +1,110 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are primarily machine accounts, which is typical in a domain environment. However, C1795 using NTLM in a predominantly Kerberos environment could be an anomaly.",
+    "targets": {
+      "frequent_targets": [
+        "C523",
+        "C1065",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are aggregated under a single timestamp <306>, suggesting a batch or log aggregation rather than real-time analysis.",
+      "bursts": "No specific burst patterns identified due to the aggregated nature of the data.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Several systems like C467 and C523 are repeatedly targeted, which might be normal in a domain environment but should be cross-verified with baseline activity.",
+      "lateral_movement": "No clear lateral movement patterns detected due to lack of sequential timestamps.",
+      "privilege_escalation": "No evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "NTLM usage by C1795 is suspicious in a Kerberos-preferred environment. Additionally, several events have unspecified authentication types.",
+      "affected_entities": [
+        "C1795",
+        "C247",
+        "C528",
+        "C625",
+        "C467",
+        "C586",
+        "C1065",
+        "C3539",
+        "C3542",
+        "C3548",
+        "C612",
+        "C529",
+        "C523"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating normally, but the presence of unspecified authentication types raises questions.",
+      "affected_accounts": [
+        "C1794$@DOM1",
+        "C247$@DOM1",
+        "C2545$@DOM1",
+        "C3196$@DOM1",
+        "C3514$@DOM1",
+        "C3542$@DOM1",
+        "C3548$@DOM1",
+        "C3684$@DOM1",
+        "C387$@DOM1",
+        "C567$@DOM1",
+        "C599$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events without corresponding LogOn events and vice versa, especially with unspecified authentication types, are noted.",
+      "affected_entities": [
+        "C528",
+        "C625",
+        "C467",
+        "C586",
+        "C1065",
+        "C529",
+        "C523"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of unspecified authentication types and NTLM in a Kerberos environment are notable anomalies.",
+      "deviation_details": "The use of NTLM by C1795 and unspecified authentication types across several systems deviate from expected Kerberos usage."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate if the aggregated events under <306> represent a specific time range and correlate with known activities or scheduled tasks.",
+    "behavioral_context": "Compare the observed authentication patterns with historical baselines to determine if these are typical for the environment.",
+    "permission_analysis": "Verify if the accounts, especially those with unspecified authentication types, have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially in cases where NTLM is used or authentication types are unspecified."
+  },
+  "conclusion": {
+    "summary": "The authentication events show a mix of Kerberos and NTLM usage with several unspecified authentication types. While this might be benign, the NTLM usage and unspecified types warrant further investigation.",
+    "recommended_actions": "Investigate the NTLM usage by C1795 and the unspecified authentication types. Validate if these patterns align with legitimate activity or indicate potential misconfigurations or security gaps."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

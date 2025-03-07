@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1282 and C867 are initiating multiple authentication requests, with C1282 showing a high volume of activity across different destinations, which may indicate automated or scripted behavior.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C612",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around timestamps <25> and <26>, indicating concentrated activity periods.",
+      "bursts": "There is a noticeable spike in authentication events involving C1282 during timestamp <26>.",
+      "off_hours_activity": "Some authentication events, particularly those involving ANONYMOUS LOGON, occur at timestamp <26>, which may be outside typical business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1282 repeatedly accesses multiple systems in a short timeframe, suggesting automated processes.",
+      "lateral_movement": "C1282's pattern of accessing multiple systems could suggest lateral movement, especially given the variety of target systems.",
+      "privilege_escalation": "No clear evidence of privilege escalation, but the volume and spread of C1282's activity warrant further investigation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events and NTLM usage detected, which are suspicious in a Kerberos-preferred environment.",
+      "affected_entities": [
+        "C586",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts such as C1282$@DOM1 are showing unusual authentication behavior, accessing multiple systems rapidly.",
+      "affected_accounts": [
+        "C1282$@DOM1",
+        "C104$@DOM1",
+        "C123$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are instances of LogOn events without corresponding LogOff events, particularly involving ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C586",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns show deviations from typical behavior, particularly with the high volume and spread of C1282's activity.",
+      "deviation_details": "C1282's activity pattern is unusual due to its rapid access to multiple systems and high volume of TGS requests."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of C1282's authentication events to determine if they form a coherent attack chain or are indicative of scripted activity.",
+    "behavioral_context": "Compare C1282's current authentication patterns with historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if C1282$@DOM1 and other machine accounts have legitimate reasons to access the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM and TGS activity."
+  },
+  "conclusion": {
+    "summary": "The authentication logs indicate potential suspicious activity, particularly involving C1282 and ANONYMOUS LOGON events. The patterns suggest possible lateral movement and automated processes.",
+    "recommended_actions": "Investigate C1282's activity for signs of compromise or misuse, review permissions for involved accounts, and monitor for further ANONYMOUS LOGON events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

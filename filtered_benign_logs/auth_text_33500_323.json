@@ -1,0 +1,111 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers mostly follow expected naming conventions with machine accounts (e.g., C3575$@DOM1) initiating authentication events. No unexpected system initiations were noted.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are timestamped at <323>, indicating a single time period for the dataset.",
+      "bursts": "No sudden spikes in authentication volume were detected as all events are timestamped similarly.",
+      "off_hours_activity": "All events are timestamped at <323>, which does not provide specific insight into business hours or off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "There are repetitive authentication patterns from multiple source computers to destination computers such as C457 and C586.",
+      "lateral_movement": "The authentication from C4027 to multiple destinations (C457, C612) suggests potential lateral movement.",
+      "privilege_escalation": "No clear patterns indicating privilege escalation were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of '?' as an authentication type is suspicious and requires further investigation.",
+      "affected_entities": [
+        "C457",
+        "C529",
+        "C1065",
+        "C586",
+        "C4027",
+        "C612",
+        "C229"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating as expected, but the presence of '?' in authentication types is unusual.",
+      "affected_accounts": [
+        "C3575$@DOM1",
+        "C3596$@DOM1",
+        "C3605$@DOM1",
+        "C3720$@DOM1",
+        "C387$@DOM1",
+        "C3894$@DOM1",
+        "C4003$@DOM1",
+        "C4010$@DOM1",
+        "C4027$@DOM1",
+        "C453$@DOM1",
+        "C4738$@DOM1",
+        "C500$@DOM1",
+        "C5783$@DOM1",
+        "C585$@DOM1",
+        "C586$@DOM1",
+        "C612$@DOM1",
+        "C743$@DOM1",
+        "U1183@DOM1",
+        "U119@DOM1",
+        "U1702@?",
+        "U190@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are LogOff events with '?' as the authentication type, which is unusual.",
+      "affected_entities": [
+        "C457",
+        "C529",
+        "C1065",
+        "C586",
+        "C612",
+        "C229"
+      ]
+    },
+    "anomalies": {
+      "description": "The dataset shows unusual authentication types and potential lateral movement.",
+      "deviation_details": "The use of '?' in authentication types and the pattern of C4027 accessing multiple systems suggest deviations from normal authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around the <323> timestamp to identify any potential attack chains.",
+    "behavioral_context": "Compare observed authentication patterns against known baselines for the environment to identify anomalies.",
+    "permission_analysis": "Verify if the accounts with '?' authentication types should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of NTLM and '?' authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events show unusual patterns, particularly with the use of '?' as an authentication type and potential lateral movement by C4027. These anomalies should be further investigated to rule out malicious activity.",
+    "recommended_actions": "Investigate the use of '?' in authentication types and validate the legitimacy of C4027's access to multiple systems. Review the environment's authentication settings to ensure they align with security policies."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

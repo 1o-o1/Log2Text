@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers such as C529, C586, and C7 are initiating multiple authentication events. Notably, C529 and C586 have events with unknown authentication types, which could be worth further investigation.",
+    "targets": {
+      "frequent_targets": [
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C2106"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are clustered around times 84 and 85, indicating a potential scheduled task or batch process.",
+      "bursts": "No significant bursts detected beyond the clustering around times 84 and 85.",
+      "off_hours_activity": "No specific off-hours activity detected as all events occur within the same time period."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOff events from C529 and C586 with unknown authentication types.",
+      "lateral_movement": "Potential lateral movement indicated by multiple LogOn events to C529 from different source computers like C1116, C3814, and C2300.",
+      "privilege_escalation": "No clear privilege escalation patterns detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unknown types (marked as '?') and NTLM usage.",
+      "affected_entities": [
+        "C529",
+        "C586",
+        "C7"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage includes machine accounts authenticating in unexpected patterns and ANONYMOUS LOGON events.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C585",
+        "C123$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events were not detected, but multiple LogOff events with unknown auth types were noted.",
+      "affected_entities": [
+        "C529",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall, the anomalies include unknown authentication types and ANONYMOUS LOGON events.",
+      "deviation_details": "The presence of unknown authentication types and ANONYMOUS LOGON events deviates from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events around times 84 and 85 to determine if they correlate with known scheduled tasks or processes.",
+    "behavioral_context": "Compare the observed authentication patterns with historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if the accounts involved in suspicious authentication attempts have legitimate access to the target systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in systems with unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis identified several anomalies, including unknown authentication types, ANONYMOUS LOGON events, and potential lateral movement patterns. These warrant further investigation to rule out malicious activity.",
+    "recommended_actions": "Investigate the source of unknown authentication types and ANONYMOUS LOGON events. Review access permissions for accounts involved in suspicious patterns and monitor for potential lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

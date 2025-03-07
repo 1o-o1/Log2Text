@@ -1,0 +1,96 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are primarily machine accounts, which is typical in a domain environment. However, there are some instances of user accounts initiating authentication, such as U102@DOM1 and U109@DOM1.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C1065",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C1056"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp <223>, indicating a batch of authentication events occurring simultaneously.",
+      "bursts": "No sudden spikes in authentication volume as all events occur at the same timestamp.",
+      "off_hours_activity": "No indication of off-hours activity as specific business hours are not defined in the data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Several computers, such as C467 and C586, show repetitive LogOn and LogOff actions, which could indicate normal system operations.",
+      "lateral_movement": "The sequence of authentications from C3591 to multiple destinations (C1065, C528, C529) suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation as most authentications involve machine accounts or same-user authentications."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types ('?') is noted, which could indicate misconfigurations or unsupported logging formats.",
+      "affected_entities": [
+        "C528",
+        "C1065",
+        "C467",
+        "C457",
+        "C2106",
+        "C586",
+        "C988",
+        "C553",
+        "C612",
+        "C1929",
+        "C1710",
+        "C229",
+        "C3040",
+        "C921"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently involved in authentication events, which is typical in domain environments. However, the rapid sequence of authentications from C3591 using U365@DOM1 to multiple destinations could be suspicious.",
+      "affected_accounts": [
+        "U365@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are consistent LogOn and LogOff sequences, but the presence of TGS/TGT requests without corresponding LogOffs could indicate ticket-based operations.",
+      "affected_entities": [
+        "C523",
+        "C1710"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of unknown authentication types and the sequence of authentications suggesting lateral movement.",
+      "deviation_details": "The use of '?' as an authentication type and the pattern of authentications from C3591 to multiple destinations are deviations from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analyze the sequence of events from C3591 to determine if they form a coherent attack chain.",
+    "behavioral_context": "Compare the observed authentication patterns with historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if U365@DOM1 should have legitimate access to C1065, C528, and C529.",
+    "ioc_checks": "Perform checks for known lateral movement techniques such as Pass-the-Hash or Kerberoasting based on the observed authentication patterns."
+  },
+  "conclusion": {
+    "summary": "The analysis identifies several anomalies, including unknown authentication types and potential lateral movement from C3591 using U365@DOM1. These patterns warrant further investigation to rule out malicious activity.",
+    "recommended_actions": "Investigate the unknown authentication types and validate the access permissions of U365@DOM1. Consider implementing stricter monitoring on C3591 and its associated accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

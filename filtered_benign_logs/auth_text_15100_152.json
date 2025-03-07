@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C2404, C2456, C2478, and C4056 are initiating authentication events. Notably, C4056 is accessing multiple systems, which could indicate lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C457",
+        "C529",
+        "C612",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated around a specific timestamp <152>, indicating a batch of authentication activities.",
+      "bursts": "There are no significant bursts outside the clustered timestamp <152>.",
+      "off_hours_activity": "No specific off-hours activity is noted, as the timestamps are not detailed beyond <152>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are observed with machine accounts accessing the same systems multiple times.",
+      "lateral_movement": "Potential lateral movement is suggested by C4056 accessing multiple systems like C1065, C612, and C625.",
+      "privilege_escalation": "No clear evidence of privilege escalation is observed from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types (?) and NTLM in some cases raises concerns.",
+      "affected_entities": [
+        "C625",
+        "C457",
+        "C612",
+        "C1065",
+        "C467"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating across multiple systems, which is atypical for standard operations.",
+      "affected_accounts": [
+        "C2403$@DOM1",
+        "C2455$@DOM1",
+        "C2477$@DOM1",
+        "C4055$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events are recorded for multiple accounts in quick succession, which may indicate scripted or automated processes.",
+      "affected_entities": [
+        "C625",
+        "C457",
+        "C612",
+        "C529",
+        "C1065",
+        "C467"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and rapid logoff sequences are notable.",
+      "deviation_details": "The use of NTLM in a Kerberos environment and the presence of unknown auth types are deviations from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamp <152> to identify any potential attack chains.",
+    "behavioral_context": "Compare the observed authentication patterns with historical baselines to determine anomalies.",
+    "permission_analysis": "Verify if the machine accounts have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash and Kerberoasting, especially given the NTLM usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs exhibit several anomalies, including the use of unknown authentication types, NTLM in a Kerberos environment, and potential lateral movement by machine accounts. These patterns warrant further investigation.",
+    "recommended_actions": "Investigate the source of unknown authentication types and NTLM usage. Review access permissions for machine accounts and monitor for lateral movement indicators. Consider implementing stricter authentication protocols."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

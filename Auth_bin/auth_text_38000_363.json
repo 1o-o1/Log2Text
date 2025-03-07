@@ -1,0 +1,85 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C586 and C457, are initiating multiple authentication events. C586 shows ANONYMOUS LOGON activity, which is notable.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around time 364.",
+      "bursts": "C457 and C586 show bursts of authentication events within short timeframes.",
+      "off_hours_activity": "No specific off-hours activity is noted as timestamps are not specific to hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C457 and C586 show repetitive authentication actions, often with multiple accounts.",
+      "lateral_movement": "Potential lateral movement is suggested by the multiple accounts authenticating to C457 and C586.",
+      "privilege_escalation": "No clear evidence of privilege escalation is noted, though machine accounts are active."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are present, which are suspicious.",
+      "affected_entities": [
+        "C586",
+        "C5919"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source, such as C457 and C586, are authenticating rapidly.",
+      "affected_accounts": [
+        "C2073$@DOM1",
+        "C2177$@DOM1",
+        "C2619$@DOM1",
+        "C4069$@DOM1",
+        "C4075$@DOM1",
+        "C4738$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are noted, especially for C457 and C586.",
+      "affected_entities": [
+        "C457",
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and unspecified auth types are anomalies.",
+      "deviation_details": "The use of ANONYMOUS LOGON and rapid authentication sequences are deviations from typical patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events for C457 and C586 to determine if they form part of an attack chain.",
+    "behavioral_context": "Compare the observed patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved have legitimate access to the systems they are authenticating to, particularly C457 and C586.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques, given the presence of NTLM and Kerberos authentications."
+  },
+  "conclusion": {
+    "summary": "The authentication events show several anomalies, including ANONYMOUS LOGONs and rapid authentication sequences from single sources, indicating potential security risks.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON events and rapid authentication sequences for potential security breaches. Consider implementing stricter access controls and monitoring for C457 and C586."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

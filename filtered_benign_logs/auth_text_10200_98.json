@@ -1,0 +1,94 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with C1270 and C1065 being notable for initiating multiple events. C1270 is particularly active, initiating logons to multiple different destination computers.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C101"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occur within a single timestamp labeled as <98>, suggesting a batch of events processed together or a placeholder for actual timestamps.",
+      "bursts": "No specific bursts identified due to lack of detailed timestamps.",
+      "off_hours_activity": "Cannot be determined due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1270 repeatedly authenticates to various systems, which could indicate automated processes or potential lateral movement.",
+      "lateral_movement": "C1270's pattern of accessing multiple systems (C467, C586, C612, C625) in a short timeframe suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type (?).",
+      "affected_entities": [
+        "C1065",
+        "C101",
+        "C523",
+        "C1270",
+        "C467",
+        "C625",
+        "C586",
+        "C457",
+        "C2614",
+        "C529",
+        "C231",
+        "C706"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., C1270$@DOM1) are authenticating across multiple systems, which could be normal for service accounts but warrants verification.",
+      "affected_accounts": [
+        "C1270$@DOM1",
+        "C1065$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal, but the presence of unknown authentication types and repetitive patterns from certain accounts are notable.",
+      "affected_entities": [
+        "C1270",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The frequent use of unknown authentication types and the pattern of a single account accessing multiple destinations rapidly are anomalies.",
+      "deviation_details": "C1270's behavior deviates from typical patterns, potentially indicating automated or malicious activity."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analyze the sequence of events for C1270 to determine if the pattern aligns with known attack vectors like lateral movement.",
+    "behavioral_context": "Compare the observed patterns of C1270 and C1065 with historical data to determine if this is typical behavior for these accounts.",
+    "permission_analysis": "Verify if C1270$@DOM1 and C1065$@DOM1 have legitimate reasons to access the systems they authenticated to.",
+    "ioc_checks": "Check for indicators of compromise such as Pass-the-Hash or Kerberoasting, especially in the context of C1270's activity."
+  },
+  "conclusion": {
+    "summary": "The authentication events show potential anomalies, particularly with C1270's behavior suggesting possible lateral movement and the use of unknown authentication types.",
+    "recommended_actions": "Investigate C1270's authentication patterns further, verify permissions for involved accounts, and monitor for additional suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

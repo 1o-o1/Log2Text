@@ -1,0 +1,83 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C14930 and C586 are initiating multiple authentication requests, with C586 involved in suspicious ANONYMOUS LOGON activities.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C9945",
+        "C1640"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp <728138>, indicating a potential scripted or automated process.",
+      "bursts": "There is a sudden spike in authentication requests involving ANONYMOUS LOGON at timestamp <728139>.",
+      "off_hours_activity": "All events occur at the same timestamp, suggesting potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C14930 is repeatedly requesting TGS tickets for multiple destinations, suggesting potential lateral movement.",
+      "lateral_movement": "C14930 accesses multiple computers (C1065, C1640, C467, C586, C612) in quick succession, indicating possible lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but repeated TGS requests could indicate preparation for such an attempt."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events detected, which are high-risk and suspicious.",
+      "affected_entities": [
+        "C1065",
+        "C586"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from single sources and unusual account patterns detected.",
+      "affected_accounts": [
+        "U6656@DOM1",
+        "ANONYMOUS LOGON@C586"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events for ANONYMOUS LOGON detected.",
+      "affected_entities": [
+        "C586"
+      ]
+    },
+    "anomalies": {
+      "description": "Unusual authentication patterns detected, particularly involving ANONYMOUS LOGON and repeated TGS requests.",
+      "deviation_details": "The use of ANONYMOUS LOGON and rapid TGS requests deviate from normal authentication behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around <728138> and <728139> to identify potential attack chains.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if accounts like U6656@DOM1 and ANONYMOUS LOGON should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques, especially involving ANONYMOUS LOGON and repeated TGS requests."
+  },
+  "conclusion": {
+    "summary": "The authentication log reveals high-risk activities, including ANONYMOUS LOGON events and potential lateral movement by C14930, indicating a possible security compromise.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, monitor C14930's activities for lateral movement, and consider isolating affected systems for further analysis."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}

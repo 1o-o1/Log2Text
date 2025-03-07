@@ -1,0 +1,128 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Most source computers are authenticating to themselves, which is typical for service accounts. However, C3896 authenticates to C586, and C574 authenticates to C1085 and C523, which are deviations from the norm.",
+    "targets": {
+      "frequent_targets": [
+        "C402",
+        "C403",
+        "C410",
+        "C411",
+        "C414",
+        "C423",
+        "C44",
+        "C442",
+        "C443",
+        "C450",
+        "C451",
+        "C453",
+        "C454",
+        "C460",
+        "C463",
+        "C468",
+        "C471",
+        "C475",
+        "C479",
+        "C491",
+        "C496",
+        "C497",
+        "C5",
+        "C502",
+        "C505",
+        "C511",
+        "C515",
+        "C526",
+        "C53",
+        "C542",
+        "C543",
+        "C548",
+        "C559",
+        "C561",
+        "C57",
+        "C5764",
+        "C5783",
+        "C5799",
+        "C5843",
+        "C5847",
+        "C5850",
+        "C588",
+        "C591"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C1085",
+        "C523"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters identified from the data provided.",
+      "bursts": "No sudden spikes in authentication volume detected from the data provided.",
+      "off_hours_activity": "No specific off-hours activity identified from the data provided."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon actions are observed for service accounts, which is normal.",
+      "lateral_movement": "Potential lateral movement is suggested by C3896 authenticating to C586 and C574 authenticating to C1085 and C523.",
+      "privilege_escalation": "No clear indications of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unspecified (?) and NTLM in a Kerberos environment.",
+      "affected_entities": [
+        "C612",
+        "C523",
+        "C561"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account usage patterns include machine accounts authenticating to unusual systems and unspecified authentication types.",
+      "affected_accounts": [
+        "C518$@DOM1",
+        "C567$@DOM1",
+        "C561$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular sequences include logon events without corresponding logoff events and unspecified authentication types.",
+      "affected_entities": [
+        "C518$@DOM1",
+        "C567$@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "Overall anomalies include unspecified authentication types and potential lateral movement.",
+      "deviation_details": "C3896 and C574 authenticating to different systems, unspecified authentication types for C612 and C523."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of events for C3896 and C574 to determine if they are part of a larger attack chain.",
+    "behavioral_context": "Compare the observed patterns for C3896 and C574 against baseline authentication behaviors to identify deviations.",
+    "permission_analysis": "Verify whether C3896 and C574 have legitimate access to C586, C1085, and C523.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting that might explain the observed patterns."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals potential lateral movement involving C3896 and C574, as well as unspecified authentication types that could indicate misconfigurations or malicious activity. These anomalies warrant further investigation.",
+    "recommended_actions": "Investigate the authentication patterns of C3896 and C574 for potential lateral movement. Review configurations and permissions for systems showing unspecified authentication types. Monitor for further suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

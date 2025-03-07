@@ -1,0 +1,84 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C612, C1909, and C2626, are initiating ANONYMOUS LOGONs, which is suspicious. Additionally, C1619 is initiating multiple authentication requests using both NTLM and Kerberos, indicating potential credential misuse or testing.",
+    "targets": {
+      "frequent_targets": [
+        "C553",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C1085",
+        "C988"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "There is a cluster of activity around time <19>, indicating a potential coordinated effort or automated process.",
+      "bursts": "Sudden spikes in authentication volume are observed around time <19>, especially from C1619.",
+      "off_hours_activity": "Some authentication events occur at <19>, which may be outside typical business hours depending on the organization's timezone."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1619 repeatedly authenticates to different computers using different protocols, suggesting testing or credential misuse.",
+      "lateral_movement": "The pattern of C1619 accessing multiple systems (C1085, C553, C988) in quick succession suggests lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of NTLM in a Kerberos environment by C1619 could indicate attempts to escalate privileges."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events and NTLM usage in a Kerberos environment are detected.",
+      "affected_entities": [
+        "C612",
+        "C1909",
+        "C2626",
+        "C1619"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source (C1619) rapidly accessing different destinations.",
+      "affected_accounts": [
+        "C599$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not directly observed, but rapid successive sessions are noted.",
+      "affected_entities": [
+        "C1619"
+      ]
+    },
+    "anomalies": {
+      "description": "Numerous anomalies detected, including ANONYMOUS LOGONs and NTLM in a Kerberos environment.",
+      "deviation_details": "The presence of ANONYMOUS LOGONs and the use of NTLM where Kerberos is expected are significant deviations from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of events from C1619 to determine if they align with known attack patterns.",
+    "behavioral_context": "Compare the observed patterns of C1619 and other systems with the organization's baseline to identify deviations.",
+    "permission_analysis": "Verify if the accounts used by C1619 have legitimate access to the systems they authenticated against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, particularly given the NTLM usage in a Kerberos environment."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals suspicious authentication patterns, particularly involving ANONYMOUS LOGONs and the use of NTLM in a Kerberos environment, suggesting potential security risks.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGONs, particularly from C612, C1909, and C2626. Review the activities of C1619 for potential lateral movement or credential misuse. Consider implementing stricter authentication controls and monitoring for NTLM usage."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

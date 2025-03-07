@@ -1,0 +1,120 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers are all individual systems with naming conventions typical of machine accounts (e.g., C1180, C1184, etc.). Each source computer is authenticating to itself, which is typical for service logons.",
+    "targets": {
+      "frequent_targets": [
+        "C1180",
+        "C1184",
+        "C1185",
+        "C1186",
+        "C1187",
+        "C119",
+        "C1190",
+        "C1196",
+        "C1197",
+        "C1198",
+        "C1202",
+        "C1208",
+        "C121",
+        "C1210",
+        "C1217",
+        "C1218",
+        "C1220",
+        "C1223",
+        "C1227",
+        "C1231",
+        "C1233",
+        "C1236",
+        "C1239",
+        "C1241",
+        "C1242",
+        "C1248",
+        "C1251",
+        "C1253",
+        "C1255",
+        "C126",
+        "C1266",
+        "C127",
+        "C1271",
+        "C1274",
+        "C1275",
+        "C128",
+        "C1285",
+        "C1296",
+        "C1297",
+        "C1299",
+        "C1300",
+        "C1304",
+        "C1305",
+        "C1307",
+        "C1308",
+        "C1310",
+        "C1314",
+        "C1315",
+        "C132",
+        "C1321"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are evenly distributed with no specific clustering indicating bursts.",
+      "bursts": "No sudden spikes in authentication volume were observed.",
+      "off_hours_activity": "No evidence of off-hours activity; the data does not specify times, but all events are consistent with regular service logons."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Each computer is performing a repetitive pattern of authenticating to itself using service logons.",
+      "lateral_movement": "No evidence of lateral movement as each computer is only authenticating to itself.",
+      "privilege_escalation": "No indications of privilege escalation; all events are service logons with machine accounts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "No suspicious authentication types detected; all events use 'Negotiate', which is typical for service logons.",
+      "affected_entities": []
+    },
+    "account_patterns": {
+      "description": "All accounts are machine accounts authenticating to themselves, which is expected for service logons.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "All events are successful LogOn operations with no irregular sequences detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "No anomalies detected in the authentication patterns.",
+      "deviation_details": "All events are consistent with expected service logon behavior in a benign environment."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Given the uniformity of the data, no further temporal correlation is needed as no anomalies were detected.",
+    "behavioral_context": "The observed patterns are consistent with standard service logon behavior.",
+    "permission_analysis": "No permission analysis is necessary as all accounts are machine accounts authenticating to themselves.",
+    "ioc_checks": "No IOC checks are required as there are no indications of suspicious activity."
+  },
+  "conclusion": {
+    "summary": "The authentication events analyzed are consistent with normal service logon behavior in a benign environment. No suspicious patterns or potential compromises were detected.",
+    "recommended_actions": "No further investigation or remediation actions are necessary given the benign nature of the observed authentication events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": false,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

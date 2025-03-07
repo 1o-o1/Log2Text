@@ -1,0 +1,77 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1081, C506, and C527 are initiating multiple authentication events, but no unusual naming patterns or unexpected systems are noted in this benign environment.",
+    "targets": {
+      "frequent_targets": [
+        "C1065",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around time periods <80> and <81>, indicating potential shifts or scheduled tasks.",
+      "bursts": "No significant bursts detected outside expected operational windows.",
+      "off_hours_activity": "Events at <81> might suggest activity outside typical business hours, but context is needed to confirm."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff patterns are noted for accounts like U22@DOM1 and U63@DOM1, consistent with normal operations.",
+      "lateral_movement": "No clear indication of lateral movement based on the provided data.",
+      "privilege_escalation": "No evidence of privilege escalation attempts detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON events detected, which are typically high-risk.",
+      "affected_entities": [
+        "C1909",
+        "C2743"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts like C13$@DOM1 and C101$@DOM1 show typical authentication patterns, but no anomalies detected.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal with no missing pairs detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the environment shows expected benign patterns with some ANONYMOUS LOGON events.",
+      "deviation_details": "ANONYMOUS LOGON events are the primary deviations from normal patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the timing of ANONYMOUS LOGON events to determine if they align with known maintenance windows or unexpected activity.",
+    "behavioral_context": "Compare observed patterns with historical data to confirm benign nature.",
+    "permission_analysis": "Ensure accounts involved in ANONYMOUS LOGON have appropriate permissions and review any associated service accounts.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, especially related to ANONYMOUS LOGON events."
+  },
+  "conclusion": {
+    "summary": "The authentication events largely reflect a benign environment with expected patterns, except for the presence of ANONYMOUS LOGON events which warrant further investigation.",
+    "recommended_actions": "Investigate ANONYMOUS LOGON events to ensure they are legitimate and review associated account permissions. Monitor for any unusual changes in authentication patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers primarily initiating authentication events are C4271, C456, C468, C1927, C528, C551, C585, C586, C1798, C772, C2106, C835, C937, C977, C1691, C1315, C467, C18, C1705, C1649, C63, C1310, C229, C1065, C246, C457, C612, C849, C965, C574, C419, C1823, C1952, C2765, C1788. Notably, C528 and C2106 are involved in multiple events with different accounts, which could indicate central roles in authentication processes or potential targets for compromise.",
+    "targets": {
+      "frequent_targets": [
+        "C528",
+        "C2106",
+        "C1691"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C467",
+        "C2766"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated under a single timestamp <377>, suggesting a potential batch processing or log aggregation artifact.",
+      "bursts": "No sudden spikes in authentication volume are observed due to the uniform timestamp presentation.",
+      "off_hours_activity": "Without specific timestamps, off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are observed between C528 and C2106, indicating regular interactions or potential synchronization tasks.",
+      "lateral_movement": "The use of multiple accounts from a single source, such as C528 and C2106, suggests potential lateral movement or administrative operations.",
+      "privilege_escalation": "No clear patterns of privilege escalation are observed, as most authentications are successful and consistent with expected operations."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include '?' which are unspecified, and NTLM usage in a predominantly Kerberos environment.",
+      "affected_entities": [
+        "C528",
+        "C586",
+        "C772",
+        "C2106",
+        "C1691",
+        "C467",
+        "C1310",
+        "C229",
+        "C1065",
+        "C457",
+        "C612",
+        "C419",
+        "C1952",
+        "C2765"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious account patterns include multiple accounts from a single source (C528, C2106) and machine accounts authenticating atypically.",
+      "affected_accounts": [
+        "C528$@DOM1",
+        "C2106$@DOM1",
+        "U1151@DOM1",
+        "U143@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Irregular logon/logoff sequences are observed with multiple logoff events from a single source without corresponding logons.",
+      "affected_entities": [
+        "C528",
+        "C2106",
+        "C1691",
+        "C467",
+        "C1310",
+        "C229",
+        "C1065",
+        "C457",
+        "C612",
+        "C419",
+        "C1952",
+        "C2765"
+      ]
+    },
+    "anomalies": {
+      "description": "The primary anomaly is the use of unspecified authentication types and NTLM in a Kerberos-preferred environment.",
+      "deviation_details": "The presence of '?' in authentication types and NTLM usage suggests potential misconfigurations or attempts to bypass standard authentication protocols."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the actual timestamps of the events to identify potential attack chains or anomalies in timing.",
+    "behavioral_context": "Compare observed patterns with historical baselines to identify deviations that may indicate compromise.",
+    "permission_analysis": "Verify the permissions of accounts involved in suspicious patterns to ensure they align with expected access levels.",
+    "ioc_checks": "Conduct checks for Pass-the-Hash and Kerberoasting, given the presence of NTLM and unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential anomalies in authentication patterns, particularly with unspecified authentication types and NTLM usage in a Kerberos environment. The presence of multiple accounts from single sources and irregular logon/logoff sequences suggests further investigation is warranted.",
+    "recommended_actions": "Investigate the use of '?' authentication types and NTLM, especially on C528 and C2106. Review account permissions and access logs for signs of lateral movement or unauthorized access. Consider implementing stricter authentication protocols to mitigate potential risks."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

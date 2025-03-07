@@ -1,0 +1,82 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers C113, C1155, and C1825 are initiating multiple authentication requests, with C113 and C1155 also using NTLM, which could be unusual in a Kerberos-preferred environment.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C2106",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "No specific time clusters are identified due to lack of detailed timestamps.",
+      "bursts": "No sudden spikes in authentication volume are observed based on available data.",
+      "off_hours_activity": "No off-hours activity can be determined without specific timestamps."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are observed from machine accounts, which is typical in automated processes.",
+      "lateral_movement": "No clear evidence of lateral movement is observed, although multiple destinations are accessed by C1825.",
+      "privilege_escalation": "No direct evidence of privilege escalation is observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of NTLM authentication in a Kerberos environment is noted, which can be unusual.",
+      "affected_entities": [
+        "C1155",
+        "C30"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts like C113$ and C1155$ are showing repetitive authentication patterns, which could be normal for service accounts.",
+      "affected_accounts": [
+        "C113$@DOM1",
+        "C1155$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear normal for service accounts, with no missing LogOff events detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear consistent with expected behavior in a benign environment.",
+      "deviation_details": "The use of NTLM by C1155 and C30 is noted as a deviation from typical Kerberos usage."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review detailed timestamps to ensure no clustering of events that could indicate automated attacks.",
+    "behavioral_context": "Compare these patterns against typical baseline behaviors for these accounts and systems.",
+    "permission_analysis": "Verify that the accounts have legitimate access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash if NTLM is being used unexpectedly."
+  },
+  "conclusion": {
+    "summary": "The authentication patterns observed do not indicate any immediate malicious activity, but the use of NTLM in a Kerberos environment should be reviewed.",
+    "recommended_actions": "Investigate the necessity of NTLM usage by C1155 and C30, and ensure that all service accounts are operating within expected parameters."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

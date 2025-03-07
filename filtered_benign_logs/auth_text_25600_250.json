@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The computers initiating authentication events are primarily machine accounts, indicated by the $ sign. This is typical in domain environments where machines authenticate to each other.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C457",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are clustered around a similar time period, suggesting a routine or scheduled operation.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "No off-hours activity was noted; events are within expected operational hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are seen, such as multiple LogOff events from the same source to different destinations, which is typical in machine account operations.",
+      "lateral_movement": "No clear sequential patterns suggesting lateral movement were observed.",
+      "privilege_escalation": "No indications of privilege escalation were detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several authentication events with an unknown or missing authentication type, marked as '?'.",
+      "affected_entities": [
+        "C529",
+        "C612",
+        "C457",
+        "C586",
+        "C625",
+        "C467",
+        "C1065",
+        "C523",
+        "C528"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating to various systems, which is expected in a domain environment. No unusual patterns were detected.",
+      "affected_accounts": []
+    },
+    "logon_logoff_sequences": {
+      "description": "The presence of LogOn events followed by LogOff events is typical, and no anomalies were detected.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "Overall, the authentication patterns appear typical for a domain environment with machine accounts.",
+      "deviation_details": "The use of unknown authentication types is noted, but without additional context, it may not indicate a compromise."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the timing of authentication events to ensure they align with expected operational schedules.",
+    "behavioral_context": "Compare the observed authentication patterns with baseline behaviors to identify deviations.",
+    "permission_analysis": "Verify that the machine accounts have the appropriate permissions for the systems they are accessing.",
+    "ioc_checks": "Consider checking for known attack techniques such as Pass-the-Hash if unusual patterns are further detected."
+  },
+  "conclusion": {
+    "summary": "The authentication events analyzed do not show clear signs of malicious activity. The use of unknown authentication types could warrant further investigation, but the overall pattern is consistent with expected domain operations.",
+    "recommended_actions": "Monitor the use of unknown authentication types and ensure that all machine accounts have appropriate permissions. Consider setting alerts for any significant deviations from these patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

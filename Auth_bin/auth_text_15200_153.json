@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C586, C457, and C529 are initiating numerous authentication events, some with unspecified authentication types, which could indicate automated processes or potential misconfigurations.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C457",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around a single timestamp (153), indicating a potential batch operation or synchronized activity.",
+      "bursts": "There are sudden spikes in authentication attempts from certain computers like C457 and C529.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOff events from computers like C457 and C529 suggest automated processes or scripts.",
+      "lateral_movement": "Sequential TGT and TGS requests followed by LogOn events from computers like C1853 and C1990 suggest potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation detected, but the presence of TGT and TGS requests warrants further investigation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types detected, particularly in systems C586, C457, and C529, which could indicate misconfigurations or attempts to obscure authentication methods.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating in unusual patterns, such as multiple LogOff events without corresponding LogOn events.",
+      "affected_accounts": [
+        "C117$@DOM1",
+        "C1727$@DOM1",
+        "C1852$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are multiple LogOff events without corresponding LogOn events, particularly from systems like C457 and C529.",
+      "affected_entities": [
+        "C457",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and repetitive LogOff events are notable anomalies.",
+      "deviation_details": "The use of '?' for authentication types and repetitive LogOff sequences deviate from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine the sequence and timing of events to determine if they align with known attack patterns or legitimate batch processes.",
+    "behavioral_context": "Compare these patterns against baseline behaviors to determine if they are typical for the environment.",
+    "permission_analysis": "Verify if the machine accounts involved should have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of TGT and TGS requests."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals several anomalies, including unspecified authentication types and repetitive LogOff events, which could indicate misconfigurations or potential malicious activity. The risk is moderate to high, warranting further investigation.",
+    "recommended_actions": "Investigate the systems with unspecified authentication types and repetitive LogOff events. Validate the legitimacy of machine account activities and ensure proper authentication protocols are enforced."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

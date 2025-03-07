@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are primarily internal systems with machine accounts (e.g., C1747$, C1938$, etc.), which is typical in domain environments for service or scheduled tasks.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C457",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C612"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are timestamped with <353>, indicating a lack of specific temporal clustering in the data provided.",
+      "bursts": "No sudden spikes in authentication volume are evident from the data provided.",
+      "off_hours_activity": "The data does not specify times beyond <353>, so off-hours activity cannot be assessed."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are observed across several systems, which is typical in normal operations.",
+      "lateral_movement": "No clear sequential patterns suggestive of lateral movement are evident in the provided data.",
+      "privilege_escalation": "No patterns indicating privilege escalation are observed in the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of '?' as an authentication type is noted, which could indicate incomplete logging or non-standard authentication methods.",
+      "affected_entities": [
+        "C625",
+        "C1939",
+        "C612",
+        "C798",
+        "C528",
+        "C2320",
+        "C457",
+        "C586",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are used frequently, which is normal for service operations, but the presence of '?' in authentication types warrants further review.",
+      "affected_accounts": [
+        "C1747$@DOM1",
+        "C1938$@DOM1",
+        "C2319$@DOM1",
+        "C2491$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn and LogOff sequences appear consistent, though '?' authentication types could obscure full visibility.",
+      "affected_entities": [
+        "C625",
+        "C457",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "The use of '?' in authentication types and the presence of failed TGT requests are notable anomalies.",
+      "deviation_details": "C2649 shows a failed TGT request, which is unusual and could indicate a misconfiguration or an attempted unauthorized access."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review logs with complete timestamps to identify any clustering or off-hours activity.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify that all machine accounts and users have appropriate permissions for the systems they accessed.",
+    "ioc_checks": "Review for known attack patterns such as Pass-the-Hash or Kerberoasting, especially where '?' authentication types are involved."
+  },
+  "conclusion": {
+    "summary": "The authentication events appear largely benign with typical machine account activity. However, the presence of '?' as an authentication type and a failed TGT request on C2649 warrant further investigation.",
+    "recommended_actions": "Investigate the cause of '?' authentication types and the failed TGT request on C2649. Ensure logging is complete and accurate to avoid gaps in visibility."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

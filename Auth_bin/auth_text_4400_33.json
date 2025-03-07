@@ -1,0 +1,96 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers are initiating authentication events. Notably, C467 and C625 are initiating multiple logoff events with unspecified authentication types, which is unusual.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C1065",
+        "C2039"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The authentication events are clustered around a single time period, indicating potential batch processing or automated tasks.",
+      "bursts": "There are no significant bursts detected, but multiple logoff events from C467 and C625 suggest potential anomalies.",
+      "off_hours_activity": "The data does not specify exact timestamps, so off-hours activity cannot be determined."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logoff actions from C467 and C625 with multiple accounts suggest potential automated processes or misconfigurations.",
+      "lateral_movement": "The sequence of TGT and TGS requests from C2295 and C2980 suggests possible lateral movement attempts.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of NTLM by C365 in a Kerberos-preferred environment is suspicious."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple authentication events with unspecified types (?).",
+      "affected_entities": [
+        "C467",
+        "C625",
+        "C2039",
+        "C1065",
+        "C528",
+        "C586",
+        "C553",
+        "C101",
+        "C229"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts authenticating from single sources in short timeframes, particularly from C467 and C625.",
+      "affected_accounts": [
+        "C2025$@DOM1",
+        "C247$@DOM1",
+        "C5919$@DOM1",
+        "C608$@DOM1",
+        "C2240$@DOM1",
+        "C4589$@DOM1",
+        "C480$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logoff events without corresponding logon events, particularly from C467 and C625.",
+      "affected_entities": [
+        "C467",
+        "C625"
+      ]
+    },
+    "anomalies": {
+      "description": "Unspecified authentication types and multiple accounts from single sources suggest anomalies.",
+      "deviation_details": "The presence of NTLM in a Kerberos-preferred environment and unspecified authentication types are deviations from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence of events from C467 and C625 to determine if they form part of a larger attack chain.",
+    "behavioral_context": "Compare the observed patterns against historical data to determine if these are new behaviors.",
+    "permission_analysis": "Verify if the accounts used in the unspecified authentication events have legitimate access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the NTLM usage and TGS/TGT requests."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several suspicious patterns, including the use of unspecified authentication types, potential lateral movement, and the use of NTLM in a Kerberos environment. These anomalies suggest a moderate risk of compromise or misconfiguration.",
+    "recommended_actions": "Investigate the source and purpose of the unspecified authentication types, especially from C467 and C625. Review the NTLM usage by C365 and assess the legitimacy of TGS/TGT requests from C2295 and C2980. Consider implementing stricter monitoring and alerts for similar patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

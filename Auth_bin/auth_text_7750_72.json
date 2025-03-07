@@ -1,0 +1,93 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1065, C523, C612, C101, C529, and C2796 are initiating multiple authentication events, some with unspecified authentication types, which could be suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C1640",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around a specific time (72), indicating a potential batch operation or automated process.",
+      "bursts": "There are no significant bursts outside the clustered time.",
+      "off_hours_activity": "All events are recorded at the same time, suggesting potential off-hours activity, but more context is needed to confirm."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are noted from C1065 and C523, suggesting automated processes.",
+      "lateral_movement": "Potential lateral movement is indicated by multiple TGS requests and logons from C2796 to various destinations.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types are used in several events, which is unusual and potentially suspicious.",
+      "affected_entities": [
+        "C1065",
+        "C523",
+        "C612",
+        "C101",
+        "C529",
+        "C2796"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating in quick succession, which may indicate automated scripts or potential misuse.",
+      "affected_accounts": [
+        "C104$@DOM1",
+        "C1114$@DOM1",
+        "C123$@DOM1",
+        "C1509$@DOM1",
+        "C2319$@DOM1",
+        "C2796$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are generally followed by LogOff events, but some sequences involve multiple TGS requests, suggesting potential ticket harvesting.",
+      "affected_entities": [
+        "C1509",
+        "C2319",
+        "C2796"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and repetitive patterns suggest anomalies.",
+      "deviation_details": "The use of '?' for authentication types and repeated TGS requests deviate from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around the clustered time to identify potential attack chains or automated processes.",
+    "behavioral_context": "Compare these patterns with baseline authentication logs to determine if these are typical for the environment.",
+    "permission_analysis": "Verify if the accounts involved should have access to the systems they are authenticating against, especially for TGS requests.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the TGS activity."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several anomalies, including unspecified authentication types and potential lateral movement, which warrant further investigation.",
+    "recommended_actions": "Investigate the source of unspecified authentication types, verify account permissions, and monitor for potential lateral movement or ticket harvesting."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": false
+  }
+}

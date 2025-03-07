@@ -1,0 +1,109 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C2803, C586, C1065, C2106, C457, C528, C3022, C3050, C612, C3147, C3179, C3183, C3194, C3211, C3218, C3269, C4056, C529, C625, C4182, C463, C467, C480, C523, C5764, C597, C676. Notably, C2106 and C612 are involved in multiple authentication events, suggesting they may be key systems or targets of interest.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C457",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The timestamps <162> indicate a potential clustering of events, but without specific time data, detailed clustering analysis is limited.",
+      "bursts": "The presence of multiple authentication events from the same source within the same timestamp <162> suggests bursts of activity.",
+      "off_hours_activity": "Without specific time data, it's unclear if events occurred outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are observed from C2106 and C612, indicating potential routine operations or automated processes.",
+      "lateral_movement": "Sequential authentication events from different sources to the same destination (e.g., C2106) suggest possible lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of '?' as an authentication type is suspicious and warrants further investigation.",
+      "affected_entities": [
+        "C586",
+        "C1065",
+        "C2106",
+        "C457",
+        "C528",
+        "C612",
+        "C467",
+        "C529",
+        "C625",
+        "C523"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts from a single source, such as C2106, indicate potential automated or scripted activity.",
+      "affected_accounts": [
+        "C2980$@DOM1",
+        "C3114$@DOM1",
+        "C3117$@DOM1",
+        "C3137$@DOM1",
+        "C3256$@DOM1",
+        "C3260$@DOM1",
+        "C4146$@DOM1",
+        "C4181$@DOM1",
+        "C552$@DOM1",
+        "C597$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events without corresponding LogOn events are noted, but this may be due to data truncation.",
+      "affected_entities": [
+        "C586",
+        "C1065",
+        "C2106",
+        "C457",
+        "C528",
+        "C612",
+        "C467",
+        "C529",
+        "C625",
+        "C523"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and repeated use of certain systems suggests anomalies.",
+      "deviation_details": "The use of '?' as an authentication type and repeated access to C2106 and C612 deviates from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events for C2106 and C612 to determine if there is a pattern of lateral movement or automated activity.",
+    "behavioral_context": "Compare current authentication patterns against historical data to identify deviations in behavior.",
+    "permission_analysis": "Verify if the accounts accessing C2106 and C612 have legitimate access rights to these systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially given the presence of '?' authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential anomalies in authentication patterns, particularly with the use of unknown authentication types and repeated access to specific systems like C2106 and C612. These patterns may suggest automated processes or potential lateral movement.",
+    "recommended_actions": "Investigate the use of '?' authentication types, verify access permissions for accounts accessing C2106 and C612, and conduct a deeper analysis of potential lateral movement patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

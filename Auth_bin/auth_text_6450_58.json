@@ -1,0 +1,86 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C1621, C2101, and C2472 are initiating multiple authentication requests. Notably, C1621 is involved in both TGT and TGS operations, which is typical for a domain controller or a system handling service tickets.",
+    "targets": {
+      "frequent_targets": [
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C586",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are aggregated at timestamp <58>, indicating a lack of temporal diversity in the data provided.",
+      "bursts": "There is a high concentration of events occurring at the same time, suggesting potential automation or scripted activity.",
+      "off_hours_activity": "Cannot be determined due to lack of specific time context."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1621 and C2101 are repeatedly accessing C612, which could indicate normal service operations if C612 is a critical server.",
+      "lateral_movement": "The sequence of logons from C506 to C1065 and then to C586 by U22@DOM1 suggests potential lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are several instances of unknown authentication types (?).",
+      "affected_entities": [
+        "C1621",
+        "C2101",
+        "C2472",
+        "C1929",
+        "C366"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts such as C1620$@DOM1 and C2100$@DOM1 are authenticating in a manner that could be typical for service accounts, but their activity should be verified against expected behavior.",
+      "affected_accounts": [
+        "C1620$@DOM1",
+        "C2100$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "There are instances of LogOn events without corresponding LogOff events, particularly involving C1621 and C2101.",
+      "affected_entities": [
+        "C1621",
+        "C2101"
+      ]
+    },
+    "anomalies": {
+      "description": "The data shows a high number of successful authentications with unknown types and some failed attempts followed by successes.",
+      "deviation_details": "The presence of NTLM in a Kerberos environment (C2653) and the use of MICROSOFT_AUTHENTICATION_PACKAGE_V1_0 are deviations from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analyze the sequence of events for C1621 and C2101 to determine if they align with known attack patterns like Pass-the-Ticket.",
+    "behavioral_context": "Compare the authentication patterns of C1621 and C2101 with historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if accounts such as C1620$@DOM1 and C2100$@DOM1 should have access to C612 and if their activity aligns with expected service operations.",
+    "ioc_checks": "Check for known attack techniques like Pass-the-Hash or Kerberoasting, especially given the presence of NTLM and unusual service account activity."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal potential anomalies, including the use of unknown authentication types, possible lateral movement, and the presence of NTLM in a Kerberos environment. These patterns warrant further investigation.",
+    "recommended_actions": "Investigate the authentication activities of C1621 and C2101, particularly their interactions with C612. Review the use of NTLM by C2653 and verify the legitimacy of machine account activities. Consider implementing stricter monitoring for unknown authentication types."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

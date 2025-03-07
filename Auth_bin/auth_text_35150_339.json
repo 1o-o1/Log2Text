@@ -1,0 +1,99 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication requests include C1065, C3919, C457, C586, C528, C574, C988, C585, C1619, C553, C612, C743, C3847, C467, C452, C965, C1922, C624, C2093, C527, C7, C921. Notably, C3847 is seen accessing multiple destinations, which could be indicative of lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C612",
+        "C467"
+      ],
+      "sporadic_targets": [
+        "C988",
+        "C553",
+        "C528"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events occurred at the same timestamp (339), suggesting a batch processing or synchronized event.",
+      "bursts": "No distinct bursts were identified beyond the cluster at timestamp 339.",
+      "off_hours_activity": "No specific off-hours activity can be determined from the provided data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff sequences are observed, particularly within single systems (e.g., C457, C528).",
+      "lateral_movement": "C3847 shows potential lateral movement by accessing multiple systems (C1065, C467, C612) within the same timeframe.",
+      "privilege_escalation": "No clear indication of privilege escalation was observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Multiple instances of authentication with unknown types (?).",
+      "affected_entities": [
+        "C1065",
+        "C457",
+        "C586",
+        "C1619",
+        "C553",
+        "C612",
+        "C3847",
+        "C467",
+        "C965",
+        "C1922",
+        "C2093",
+        "C527",
+        "C7"
+      ]
+    },
+    "account_patterns": {
+      "description": "Accounts like U1375@DOM1 and U292@DOM1 are seen accessing multiple systems rapidly, which could indicate potential credential misuse.",
+      "affected_accounts": [
+        "U1375@DOM1",
+        "U292@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events are followed by LogOff events within the same systems, which is typical but should be monitored for excessive frequency.",
+      "affected_entities": [
+        "C457",
+        "C528",
+        "C612",
+        "C921"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and rapid access patterns by certain accounts suggest potential anomalies.",
+      "deviation_details": "The use of unknown authentication types (?) and rapid access by accounts like U1375@DOM1 and U292@DOM1 deviate from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the synchronization of events at timestamp 339 to determine if it aligns with scheduled tasks or batch processes.",
+    "behavioral_context": "Compare the observed patterns with historical authentication logs to establish a baseline and identify deviations.",
+    "permission_analysis": "Verify the permissions of accounts like U1375@DOM1 and U292@DOM1 to ensure they are authorized for the systems they accessed.",
+    "ioc_checks": "Investigate the potential for Pass-the-Hash or Kerberoasting attacks, especially given the presence of NTLM in a Kerberos environment."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals potential anomalies in authentication patterns, notably the use of unknown authentication types and rapid multi-system access by certain accounts. These patterns warrant further investigation to rule out credential misuse or lateral movement.",
+    "recommended_actions": "Conduct a detailed review of accounts U1375@DOM1 and U292@DOM1 for unauthorized access. Investigate the use of unknown authentication types and ensure that NTLM usage is justified in the environment. Consider implementing stricter monitoring on systems frequently accessed by multiple accounts."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

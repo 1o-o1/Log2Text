@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C1619, C866, C467, C980, and others are initiating authentication events. Notably, machine accounts (e.g., C599$@DOM1, C866$@DOM1) are frequently involved, which is typical in a domain environment but requires monitoring for unusual patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C529",
+        "C625",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C523",
+        "C586",
+        "C5919"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Events are concentrated around a specific time period, denoted by <348> and <349>, suggesting batch processing or automated tasks.",
+      "bursts": "No sudden spikes in authentication volume detected beyond the general clustering.",
+      "off_hours_activity": "No specific indication of off-hours activity, but the timestamps are abstracted as <348> and <349>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff events are observed for certain accounts, such as U22@DOM1 and U431@DOM1, which could indicate normal usage patterns.",
+      "lateral_movement": "Sequential authentications involving U1123@DOM1 accessing multiple systems (C467, C528, C529, C612) suggest potential lateral movement.",
+      "privilege_escalation": "No clear patterns indicating privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and unspecified authentication types are present, which can be suspicious.",
+      "affected_entities": [
+        "C529",
+        "C586",
+        "C5919"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and ANONYMOUS LOGON accounts are authenticating, which can be normal but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C599$@DOM1",
+        "C866$@DOM1",
+        "ANONYMOUS LOGON@C529",
+        "ANONYMOUS LOGON@C586",
+        "ANONYMOUS LOGON@C5919"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some logon events do not have corresponding logoff events, and there are multiple TGS requests followed by failures and successes.",
+      "affected_entities": [
+        "U22@DOM1",
+        "U431@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON and unspecified authentication types are notable anomalies.",
+      "deviation_details": "Unspecified authentication types and ANONYMOUS LOGONs deviate from typical Kerberos or NTLM usage."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further analyze the sequence of events around <348> and <349> to identify potential attack chains.",
+    "behavioral_context": "Compare observed patterns with baseline authentication behavior to identify deviations.",
+    "permission_analysis": "Verify if accounts like U1123@DOM1 and U22@DOM1 should have access to systems like C529 and C612.",
+    "ioc_checks": "Check for Pass-the-Hash and Kerberoasting techniques given the presence of NTLM and TGS requests."
+  },
+  "conclusion": {
+    "summary": "The analysis indicates potential anomalies such as ANONYMOUS LOGON events and unspecified authentication types, which require further investigation. However, no definitive malicious activity is confirmed.",
+    "recommended_actions": "Investigate the usage of ANONYMOUS LOGON and unspecified authentication types. Monitor accounts like U1123@DOM1 for lateral movement. Validate if machine accounts are operating within expected parameters."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

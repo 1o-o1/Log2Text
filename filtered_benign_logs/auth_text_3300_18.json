@@ -1,0 +1,119 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events appear to be primarily machine accounts, which is typical in a domain environment. However, there are several instances of accounts using unknown or missing authentication types, which could be worth further investigation.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C586",
+        "C612"
+      ],
+      "sporadic_targets": [
+        "C585",
+        "C567"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around a single timestamp, indicating a possible batch processing or scheduled task.",
+      "bursts": "No significant bursts of activity were detected, suggesting a stable authentication pattern.",
+      "off_hours_activity": "There is no specific information on business hours provided, but the uniform timestamp suggests automated processes rather than user-driven activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication events are seen with machine accounts logging onto themselves, which is typical for service accounts.",
+      "lateral_movement": "There are no clear indicators of lateral movement based on the data provided.",
+      "privilege_escalation": "No evidence of privilege escalation detected in the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown or missing authentication type, which could indicate misconfigured systems or potential obfuscation attempts.",
+      "affected_entities": [
+        "C467",
+        "C529",
+        "C586",
+        "C1065",
+        "C612",
+        "C2101",
+        "C2143",
+        "C457",
+        "C101",
+        "C561",
+        "C419",
+        "C832"
+      ]
+    },
+    "account_patterns": {
+      "description": "Some accounts are seen logging off without a preceding logon event, which might indicate incomplete session tracking or misconfigured logging.",
+      "affected_accounts": [
+        "C1770$@DOM1",
+        "C561$@DOM1",
+        "C878$@DOM1",
+        "C1903$@DOM1",
+        "C2212$@DOM1",
+        "C380$@DOM1",
+        "U1269@DOM1",
+        "C1920$@DOM1",
+        "C1987$@DOM1",
+        "C493$@DOM1",
+        "U5@DOM1",
+        "C2091$@DOM1",
+        "C2100$@DOM1",
+        "C3543$@DOM1",
+        "C538$@DOM1",
+        "SYSTEM@C561",
+        "U17@DOM3",
+        "U33@C832"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events are recorded without corresponding LogOn events for some accounts, which could indicate logging issues or unusual session handling.",
+      "affected_entities": [
+        "C467",
+        "C529",
+        "C586",
+        "C1065",
+        "C612",
+        "C457",
+        "C101",
+        "C561",
+        "C419",
+        "C832"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and missing logon events are the primary anomalies detected.",
+      "deviation_details": "The use of '?' as an authentication type and the lack of corresponding LogOn events for some LogOffs are deviations from expected patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the scheduling and batch processing configurations on systems like C467, C586, and C612 to verify if the clustered timestamps align with expected operations.",
+    "behavioral_context": "Compare the observed authentication patterns with known baseline behaviors for the environment to identify any deviations.",
+    "permission_analysis": "Ensure that all machine accounts and user accounts have appropriate permissions for the systems they are accessing, particularly those using unknown authentication types.",
+    "ioc_checks": "Investigate the use of NTLM in a potentially Kerberos-preferred environment and check for signs of Pass-the-Hash or other credential misuse techniques."
+  },
+  "conclusion": {
+    "summary": "The analysis of authentication events reveals a generally benign pattern with some anomalies related to unknown authentication types and missing logon events. These could be indicative of misconfigurations rather than malicious activity.",
+    "recommended_actions": "Review and correct any misconfigurations leading to unknown authentication types. Ensure logging is complete and accurate to prevent missing logon events. Monitor for any changes in these patterns that might indicate emerging threats."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

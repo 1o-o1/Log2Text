@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple ANONYMOUS LOGON events from various computers (e.g., C457, C467, C529) indicate potential unauthorized access attempts. Machine accounts like C10047$@DOM1 are also initiating logons, which is unusual if not part of regular operations.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C528",
+        "C625",
+        "C743"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Concentrated activity around timestamp <1071249> with multiple ANONYMOUS LOGON events.",
+      "bursts": "Sudden spike in ANONYMOUS LOGON events at <1071249>.",
+      "off_hours_activity": "Potential off-hours activity detected with ANONYMOUS LOGON events."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated ANONYMOUS LOGON attempts across different systems suggest a pattern of probing or unauthorized access attempts.",
+      "lateral_movement": "Sequential logons from C18846 to multiple destinations (C457, C528, C743) suggest possible lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the use of ANONYMOUS LOGON could indicate attempts to bypass standard authentication controls."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Presence of ANONYMOUS LOGON events and NTLM usage in potentially Kerberos-preferred environments.",
+      "affected_entities": [
+        "C457",
+        "C467",
+        "C529",
+        "C586",
+        "C612"
+      ]
+    },
+    "account_patterns": {
+      "description": "Suspicious use of machine accounts and ANONYMOUS LOGONs.",
+      "affected_accounts": [
+        "C10047$@DOM1",
+        "ANONYMOUS LOGON@C457",
+        "ANONYMOUS LOGON@C467"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events, particularly with ANONYMOUS LOGONs.",
+      "affected_entities": [
+        "C457",
+        "C467",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "Unusual authentication patterns involving ANONYMOUS LOGONs and machine accounts.",
+      "deviation_details": "Multiple ANONYMOUS LOGONs in a short timeframe, potentially indicating a coordinated attack or probing activity."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze timestamps <1071248> and <1071249> for correlation with known attack patterns or external events.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if accounts like C10047$@DOM1 should have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for Pass-the-Hash or Kerberoasting techniques, especially given the presence of NTLM and ANONYMOUS LOGONs."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several high-risk indicators, including multiple ANONYMOUS LOGON events and NTLM usage, suggesting potential unauthorized access attempts or probing activity. The presence of machine account logons and lateral movement patterns further elevates the risk.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON events, particularly focusing on systems C457, C467, and C529. Review access permissions for machine accounts like C10047$@DOM1. Implement stricter authentication controls and monitor for further suspicious activity."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

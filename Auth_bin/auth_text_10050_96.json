@@ -1,0 +1,85 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C457, C467, C586, and C1065 are initiating authentication events. Notably, C586 is associated with ANONYMOUS LOGON events, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C612",
+        "C599"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around the timestamp <96>, with some activity extending into <97>.",
+      "bursts": "There is a noticeable spike in authentication activity at <96>, indicating a potential burst of events.",
+      "off_hours_activity": "The data does not specify business hours, but the clustering of events at specific timestamps suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Several computers, such as C457 and C586, show repetitive authentication patterns, often involving machine accounts.",
+      "lateral_movement": "The sequence of logons from different computers to common targets like C457 and C586 suggests possible lateral movement.",
+      "privilege_escalation": "No clear patterns of privilege escalation are evident, but the presence of ANONYMOUS LOGON could indicate attempts to escalate privileges."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM authentication types are detected, which are suspicious in this context.",
+      "affected_entities": [
+        "C586",
+        "C48"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are frequently authenticating, and ANONYMOUS LOGON events are present, indicating potential misuse.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "C104$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some systems show logon events without corresponding logoff events, and there are multiple TGS/TGT requests.",
+      "affected_entities": [
+        "C586",
+        "C1848"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and NTLM in a potentially Kerberos-preferred environment is anomalous.",
+      "deviation_details": "ANONYMOUS LOGON events on C586 and NTLM usage on C48 deviate from expected Kerberos authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around <96> and <97> to identify potential attack chains or coordinated activity.",
+    "behavioral_context": "Compare the observed authentication patterns with baseline data to identify deviations.",
+    "permission_analysis": "Verify if the accounts involved in ANONYMOUS LOGON and NTLM events should have access to the systems they are targeting.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in the context of ANONYMOUS LOGON and NTLM usage."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several suspicious patterns, including ANONYMOUS LOGON events, NTLM usage, and potential lateral movement. These anomalies suggest a moderate risk of compromise.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON events on C586 and NTLM usage on C48. Review access permissions and monitor for further suspicious activity. Consider implementing stricter authentication protocols."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

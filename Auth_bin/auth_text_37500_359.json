@@ -1,0 +1,111 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C1065, C1115, C586, C486, C1618, C1636, C457, C467, C529, C612, C1085, C1839, C1992, C2097, C2816, C625, C2989, C3035, C3568, C3993, C4137, C4167. These do not show suspicious naming conventions and are consistent with typical machine account patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C586"
+      ],
+      "sporadic_targets": [
+        "C1646",
+        "C625"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around the same timestamp (359), suggesting a batch processing or synchronized task.",
+      "bursts": "No sudden spikes in authentication volume were detected.",
+      "off_hours_activity": "All events appear to occur at the same time, potentially indicating automated processes rather than user-driven actions."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are seen with systems like C457 and C586, which could be indicative of service accounts or automated tasks.",
+      "lateral_movement": "No clear sequential authentication patterns suggesting lateral movement were identified.",
+      "privilege_escalation": "No patterns indicating privilege escalation were observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events have an unknown authentication type (?).",
+      "affected_entities": [
+        "C1065",
+        "C1115",
+        "C586",
+        "C486",
+        "C1636",
+        "C457",
+        "C467",
+        "C529",
+        "C612",
+        "C1839",
+        "C2097",
+        "C3993",
+        "C4137",
+        "C4167"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple machine accounts are authenticating across different systems, which is typical for service accounts.",
+      "affected_accounts": [
+        "C1065$@DOM1",
+        "C1646$@DOM1",
+        "C1231$@DOM1",
+        "C1802$@DOM1",
+        "C1824$@DOM1",
+        "C2757$@DOM1",
+        "C3568$@DOM1",
+        "C4071$@DOM1",
+        "C1570$@DOM1",
+        "C1617$@DOM1",
+        "C1635$@DOM1",
+        "C1708$@DOM1",
+        "C1839$@DOM1",
+        "C2096$@DOM1",
+        "C291$@DOM1",
+        "C2989$@DOM1",
+        "C3035$@DOM1",
+        "C3993$@DOM1",
+        "C4137$@DOM1",
+        "C4167$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Most events have corresponding LogOn and LogOff sequences, indicating complete session cycles.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "The consistent timestamp across all events is unusual but may be benign in a controlled environment.",
+      "deviation_details": "The use of unknown authentication types (?) is a deviation from expected patterns, though not necessarily malicious."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Check for any scheduled tasks or batch processes that could explain the synchronized timestamps.",
+    "behavioral_context": "Compare these patterns to baseline logs to determine if this synchronized activity is normal for this environment.",
+    "permission_analysis": "Verify if the machine accounts involved should have access to the systems they authenticated against.",
+    "ioc_checks": "Consider checking for Pass-the-Hash or other credential-based attacks if unusual patterns are observed in more detailed logs."
+  },
+  "conclusion": {
+    "summary": "The authentication patterns observed do not immediately indicate malicious activity. The synchronized timestamps and use of unknown authentication types are notable but may be explained by benign processes in this environment.",
+    "recommended_actions": "Monitor these patterns to ensure they align with expected operational behavior. Investigate the unknown authentication types to confirm they are not indicative of misconfigurations or potential vulnerabilities."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

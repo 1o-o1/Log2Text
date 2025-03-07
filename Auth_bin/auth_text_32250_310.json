@@ -1,0 +1,97 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers (e.g., C2106, C586, C101) show repeated authentication attempts with unspecified authentication types, which could indicate misconfigurations or attempts to obscure the authentication method.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C3173",
+        "C2327"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most authentication events are clustered around the timestamp 310, indicating a potential batch process or scheduled task.",
+      "bursts": "There are no significant bursts beyond the clustered timestamp 310.",
+      "off_hours_activity": "No specific off-hours activity is noted, as all events are within the same timestamp."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff sequences observed on systems like C586 and C528, suggesting routine operations.",
+      "lateral_movement": "Potential lateral movement indicated by U22@DOM1 accessing multiple systems (C452, C586).",
+      "privilege_escalation": "No clear patterns of privilege escalation detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Unspecified authentication types are present, which could indicate attempts to obscure authentication methods.",
+      "affected_entities": [
+        "C2106",
+        "C586",
+        "C101",
+        "C523",
+        "C1065",
+        "C612",
+        "C467",
+        "C368",
+        "C419",
+        "C1770",
+        "C1879"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and user accounts are authenticating in a manner consistent with expected behavior, though the presence of ANONYMOUS LOGON is noted.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C2106",
+        "C5115$@DOM1",
+        "C5333$@DOM1",
+        "C585$@DOM1",
+        "C743$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events generally have corresponding LogOff events, though some sequences are incomplete due to unspecified authentication types.",
+      "affected_entities": [
+        "C2106",
+        "C586",
+        "C101"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of ANONYMOUS LOGON and unspecified authentication types are notable anomalies.",
+      "deviation_details": "The use of ANONYMOUS LOGON and unspecified authentication types deviate from typical authentication patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the sequence of authentication events around timestamp 310 to determine if they align with scheduled tasks or batch processes.",
+    "behavioral_context": "Compare current authentication patterns with historical data to identify deviations from normal behavior.",
+    "permission_analysis": "Verify if accounts like ANONYMOUS LOGON and machine accounts have legitimate reasons to access the target systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially with the presence of ANONYMOUS LOGON."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some anomalies, particularly the use of ANONYMOUS LOGON and unspecified authentication types, which warrant further investigation. However, the overall pattern is consistent with a benign environment, assuming these are known configurations.",
+    "recommended_actions": "Investigate the use of ANONYMOUS LOGON and unspecified authentication types to ensure they are not indicative of misconfiguration or malicious activity. Validate the legitimacy of machine account access patterns."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

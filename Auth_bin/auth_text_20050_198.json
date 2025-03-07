@@ -1,0 +1,90 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C625, C529, C2375, C586, C2710, C2958, C3202, C3218, C3274, C3314, C528, C360, C4056, C1065, C480, C1927, C55, C523, C585, C1619, C659, C807, C817, C933, C2625, C1710, C5527. Notably, machine accounts (e.g., C2122$, C2183$) are used frequently, which is typical in a domain environment but should be monitored for unusual patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C586",
+        "C528"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C1065",
+        "C599"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a single timestamp <198>, indicating a batch processing or synchronized event logging.",
+      "bursts": "No sudden spikes in authentication volume are observed.",
+      "off_hours_activity": "All authentication events occur at the same timestamp, suggesting synchronized logging rather than true off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon and logoff actions are seen, particularly from machine accounts, which is normal in automated environments.",
+      "lateral_movement": "No clear sequential authentication patterns suggesting lateral movement are identified.",
+      "privilege_escalation": "No patterns indicating privilege escalation are observed."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Suspicious authentication types include unspecified types marked as '?'.",
+      "affected_entities": [
+        "C625",
+        "C529",
+        "C2375",
+        "C586",
+        "C467",
+        "C528",
+        "C1065",
+        "C523"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating frequently, which is typical in domain environments but should be monitored for anomalies.",
+      "affected_accounts": [
+        "C2122$@DOM1",
+        "C2183$@DOM1",
+        "C2374$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Logon and logoff sequences appear normal with corresponding entries for each.",
+      "affected_entities": []
+    },
+    "anomalies": {
+      "description": "No major anomalies detected in the authentication patterns.",
+      "deviation_details": "The use of unspecified authentication types could be a logging artifact or misconfiguration."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the synchronization of event logging to ensure timestamps reflect true event times.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify that machine accounts and services are accessing appropriate resources according to their roles.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting if unusual patterns emerge."
+  },
+  "conclusion": {
+    "summary": "The analysis of authentication events reveals no immediate high-risk anomalies. The use of unspecified authentication types ('?') should be investigated to ensure proper logging configuration.",
+    "recommended_actions": "Investigate the cause of unspecified authentication types and ensure proper logging. Continue monitoring for any deviations from established baselines."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

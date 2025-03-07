@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers such as C1127, C1301, C1319, C1563, C1727, and C1795 are initiating authentication events. C1727 shows a pattern of accessing multiple destinations rapidly, which could indicate lateral movement.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C528",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C586",
+        "C988",
+        "C1085",
+        "C1065"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are aggregated under a single timestamp <141>, indicating a lack of precise temporal data for detailed analysis.",
+      "bursts": "No specific bursts can be identified due to the aggregated timestamp.",
+      "off_hours_activity": "Cannot be determined due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C1727 repeatedly accesses multiple systems, suggesting a pattern of lateral movement.",
+      "lateral_movement": "C1727 accesses C467, C528, C586, and C612 in quick succession, which is indicative of potential lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but the rapid access pattern of C1727 could suggest attempts to access higher privilege systems."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events have unspecified types, and NTLM is used in some cases where Kerberos is also present, which can be suspicious.",
+      "affected_entities": [
+        "C1618",
+        "C27137"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (e.g., C1727$@DOM1) are accessing multiple systems rapidly, which is unusual.",
+      "affected_accounts": [
+        "C1727$@DOM1",
+        "C1794$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Some systems show LogOn events without corresponding LogOff events, particularly with machine accounts.",
+      "affected_entities": [
+        "C1727",
+        "C1795"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of NTLM in a Kerberos environment, rapid access patterns, and unspecified authentication types are notable anomalies.",
+      "deviation_details": "C1727's rapid access to multiple systems, NTLM usage by C1618 and C27137, and unspecified authentication types by several systems."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Further investigate the sequence of events for C1727 to determine if there is a pattern of lateral movement or credential abuse.",
+    "behavioral_context": "Compare the observed patterns of C1727 and other systems with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if the accounts, especially C1727$@DOM1, have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for signs of Pass-the-Hash or other credential abuse techniques, especially in systems using NTLM."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals potential lateral movement by C1727, suspicious NTLM usage in a Kerberos environment, and unspecified authentication types. These patterns suggest a moderate risk of compromise.",
+    "recommended_actions": "Investigate the authentication patterns of C1727 for lateral movement, verify account permissions, and review NTLM usage in the environment. Consider implementing stricter monitoring and logging for authentication events."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

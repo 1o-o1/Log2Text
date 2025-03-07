@@ -1,0 +1,105 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers, such as C1301, C467, C1315, and others, are initiating authentication events. The naming conventions appear typical for machine accounts, and there are no immediate signs of suspicious naming patterns.",
+    "targets": {
+      "frequent_targets": [
+        "C467",
+        "C2106",
+        "C457",
+        "C529"
+      ],
+      "sporadic_targets": []
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around a single timestamp <81>, indicating a batch or automated process.",
+      "bursts": "No sudden spikes in authentication volume are observed, as all events are concentrated at the same timestamp.",
+      "off_hours_activity": "All events occur at the same timestamp, making it difficult to determine if they are outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive LogOn and LogOff actions are seen, particularly on C467 and C457, indicating possible automated processes.",
+      "lateral_movement": "No clear sequential authentication patterns suggesting lateral movement are observed.",
+      "privilege_escalation": "No patterns indicating escalation to higher privilege accounts are detected."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "Several authentication events use an unknown authentication type '?', which could indicate incomplete logging or a misconfiguration.",
+      "affected_entities": [
+        "C467",
+        "C586",
+        "C1527",
+        "C528",
+        "C2106",
+        "C457",
+        "C1065",
+        "C529",
+        "C2285",
+        "C2337",
+        "C2366",
+        "C2931"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating across different systems, which is typical in domain environments. However, the rapid sequence of multiple accounts from a single source, such as C467 and C457, could be indicative of automated processes or scripts.",
+      "affected_accounts": [
+        "C1301$@DOM1",
+        "C2361$@DOM1",
+        "C4061$@DOM1",
+        "C1734$@DOM1",
+        "C2284$@DOM1",
+        "C2608$@DOM1",
+        "C1850$@DOM1",
+        "C2336$@DOM1",
+        "C2365$@DOM1",
+        "C2702$@DOM1",
+        "C2235$@DOM1",
+        "C2598$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are not evident due to the aggregated nature of the data. However, multiple LogOff events are observed, which could indicate batch processing or automated scripts.",
+      "affected_entities": [
+        "C467",
+        "C457",
+        "C1065",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "The use of unknown authentication types and the rapid sequence of events are the primary anomalies detected.",
+      "deviation_details": "The presence of '?' in the auth_type field and the clustering of events at a single timestamp <81> are deviations from expected logging behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence and timing of authentication events to identify any potential attack chains, focusing on systems like C467 and C457.",
+    "behavioral_context": "Compare observed authentication patterns with known baselines to determine if the rapid sequences are typical for the environment.",
+    "permission_analysis": "Verify whether the accounts involved in the rapid sequences have legitimate access to the target systems, especially those frequently targeted like C467 and C457.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, particularly in systems showing unknown authentication types."
+  },
+  "conclusion": {
+    "summary": "The authentication events show some anomalies, such as the use of unknown authentication types and rapid sequences of events, which could indicate automated processes or misconfigurations. However, no clear signs of malicious activity or lateral movement are evident.",
+    "recommended_actions": "Investigate the systems using unknown authentication types to ensure proper configuration and logging. Monitor the systems with frequent and rapid authentication events for signs of automated scripts or batch processes."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

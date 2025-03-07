@@ -1,0 +1,114 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C4388, C105, C1085, C457, C553, C988, C625, C1065, C1115, C586, C1291, C2106, C528, C1618, C1646, C1968, C1795, C1819, C1822, C1878, C2008, C529, C2120, C2478, C2576, C2593, and C2649. Notably, C4388 uses ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C625",
+        "C457",
+        "C553",
+        "C988",
+        "C2106"
+      ],
+      "sporadic_targets": [
+        "C104",
+        "C1042",
+        "C1171",
+        "C1617",
+        "C2593"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are aggregated under a single timestamp <373>, indicating a potential batch processing or log aggregation artifact.",
+      "bursts": "No specific bursts identified due to single timestamp.",
+      "off_hours_activity": "Cannot determine off-hours activity due to lack of specific time data."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repeated LogOff events from the same source computers (e.g., C1085, C457, C553) suggest possible automated processes or batch operations.",
+      "lateral_movement": "Sequential LogOn events from C2478 to C457 and C625 suggest possible lateral movement.",
+      "privilege_escalation": "No clear evidence of privilege escalation based on provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected from C4388, and multiple instances of unknown authentication types.",
+      "affected_entities": [
+        "C4388",
+        "C105",
+        "C1085",
+        "C457",
+        "C553",
+        "C988",
+        "C625",
+        "C586",
+        "C2106",
+        "C529",
+        "C2120",
+        "C2478",
+        "C2649"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) are authenticating across multiple systems, potentially indicating automated tasks or service accounts.",
+      "affected_accounts": [
+        "C104$@DOM1",
+        "C1114$@DOM1",
+        "C1617$@DOM1",
+        "C1708$@DOM1",
+        "C1157$@DOM1",
+        "C2477$@DOM1",
+        "C1042$@DOM1",
+        "C1171$@DOM1",
+        "C2593$@DOM1",
+        "C1357$@DOM1",
+        "C2103$@DOM1",
+        "C2119$@DOM1",
+        "C2649$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Multiple LogOn events without corresponding LogOff events, especially involving Kerberos and unknown types.",
+      "affected_entities": [
+        "C625",
+        "C457",
+        "C988",
+        "C2106"
+      ]
+    },
+    "anomalies": {
+      "description": "Presence of ANONYMOUS LOGON and unknown authentication types, along with failed TGT request from C2649.",
+      "deviation_details": "ANONYMOUS LOGON from C4388 and failed TGT from C2649 are notable deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the aggregation of events at timestamp <373> to determine if this is an artifact or indicative of a batch operation.",
+    "behavioral_context": "Compare current authentication patterns with historical baselines to identify deviations.",
+    "permission_analysis": "Verify if machine accounts and ANONYMOUS LOGON should have legitimate access to targeted systems.",
+    "ioc_checks": "Conduct checks for Pass-the-Hash or Kerberoasting, especially where NTLM and Kerberos are mixed or unknown types are used."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals suspicious ANONYMOUS LOGON activity from C4388, unknown authentication types, and potential lateral movement from C2478. These patterns, while occurring in a benign environment, suggest areas for further investigation.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON from C4388, validate the legitimacy of machine account activities, and examine the failed TGT request from C2649. Consider monitoring for lateral movement from C2478."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

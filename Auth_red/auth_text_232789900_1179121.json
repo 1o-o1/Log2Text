@@ -1,0 +1,88 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Multiple computers are initiating authentication events, with notable activity from C586, C1065, and C1727. The use of ANONYMOUS LOGON from various sources is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C586",
+        "C1065"
+      ],
+      "sporadic_targets": [
+        "C1109",
+        "C625",
+        "C10"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events are clustered around the timestamp 1179121 and 1179122, indicating a concentrated period of activity.",
+      "bursts": "There is a noticeable spike in authentication attempts at timestamp 1179122, particularly with NTLM and ANONYMOUS LOGON.",
+      "off_hours_activity": "The data does not specify exact times, but the clustering suggests potential off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive ANONYMOUS LOGON attempts from different source computers to the same destination computers, such as C586.",
+      "lateral_movement": "Sequential logons from C1727 to multiple destinations (C1065, C2516) suggest lateral movement.",
+      "privilege_escalation": "The use of NTLM in a Kerberos environment and ANONYMOUS LOGON indicates potential privilege escalation attempts."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON and NTLM are used extensively, which is suspicious given the context.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C529"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts are authenticating from a single source, and machine accounts are used in unusual patterns.",
+      "affected_accounts": [
+        "ANONYMOUS LOGON@C586",
+        "C1109$@DOM1",
+        "C1065$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events are observed, especially with ANONYMOUS LOGON.",
+      "affected_entities": [
+        "C586",
+        "C457",
+        "C529"
+      ]
+    },
+    "anomalies": {
+      "description": "The authentication patterns deviate from normal by showing excessive ANONYMOUS LOGON and NTLM usage.",
+      "deviation_details": "The use of NTLM in a Kerberos-preferred environment and the clustering of ANONYMOUS LOGON events are significant deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamps 1179121 and 1179122 to identify potential attack chains.",
+    "behavioral_context": "Compare the observed patterns with baseline authentication behavior to identify anomalies.",
+    "permission_analysis": "Verify if the accounts, especially those using ANONYMOUS LOGON, should have access to the target systems.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash and Kerberoasting given the NTLM and ANONYMOUS LOGON usage."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal significant anomalies, including extensive use of ANONYMOUS LOGON and NTLM, suggesting potential security compromises and lateral movement.",
+    "recommended_actions": "Investigate the source of ANONYMOUS LOGON attempts, review NTLM usage in the environment, and monitor for lateral movement patterns. Consider implementing stricter authentication protocols and reviewing access permissions."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

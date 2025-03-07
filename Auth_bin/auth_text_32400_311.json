@@ -1,0 +1,91 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers are initiating authentication events, with C665 and C1710 showing multiple interactions with different systems, suggesting they are central nodes in the network.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C1710",
+        "C665"
+      ],
+      "sporadic_targets": [
+        "C3173",
+        "C457",
+        "C612",
+        "C625",
+        "C528",
+        "C586",
+        "C1766"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Most events occur at a single timestamp <311>, indicating potential batch processing or synchronized activity.",
+      "bursts": "There is a noticeable spike in activity from C665 and C1710, suggesting automated processes or scripts.",
+      "off_hours_activity": "No specific off-hours activity is noted, as timestamps are not detailed beyond <311> and <312>."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C665 and C1710 show repetitive TGS and TGT requests, which may be normal for service accounts but warrant further investigation.",
+      "lateral_movement": "C665's interactions with multiple destination computers suggest potential lateral movement.",
+      "privilege_escalation": "No clear patterns of privilege escalation are evident from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, and NTLM usage in a potentially Kerberos-preferred environment.",
+      "affected_entities": [
+        "C528",
+        "C105",
+        "C1085"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts and ANONYMOUS LOGON are authenticating, which could be normal for certain operations but should be verified.",
+      "affected_accounts": [
+        "C104$@DOM1",
+        "ANONYMOUS LOGON@C528"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Several LogOn events without corresponding LogOff events, particularly involving C665 and C1710.",
+      "affected_entities": [
+        "C665",
+        "C1710"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unknown authentication types and ANONYMOUS LOGON events are notable.",
+      "deviation_details": "Multiple unknown (?) auth types and ANONYMOUS LOGON events detected, which deviate from expected Kerberos usage."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Examine sequences of events from C665 and C1710 to determine if they align with expected operational patterns or indicate compromise.",
+    "behavioral_context": "Compare current activity from C665 and C1710 against historical baselines to identify deviations.",
+    "permission_analysis": "Verify if ANONYMOUS LOGON and machine accounts like C104$@DOM1 should have access to the systems they are interacting with.",
+    "ioc_checks": "Investigate potential Pass-the-Hash scenarios given the NTLM usage and check for Kerberoasting attempts given the TGS/TGT activity."
+  },
+  "conclusion": {
+    "summary": "The authentication log analysis reveals several potential indicators of compromise, including ANONYMOUS LOGON events, NTLM usage in a Kerberos environment, and possible lateral movement patterns from C665.",
+    "recommended_actions": "Investigate the use of ANONYMOUS LOGON and NTLM in this environment, particularly focusing on C528 and C105. Review access permissions for machine accounts and monitor C665 for potential lateral movement."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events are primarily machine accounts (e.g., C191$, C1993$, C2122$) which is typical in domain environments for service and computer account authentications.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C625"
+      ],
+      "sporadic_targets": [
+        "C529",
+        "C612",
+        "C467"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a single timestamp <276>, indicating a batch processing or synchronized operation.",
+      "bursts": "No specific bursts in the data, as all events are aggregated into a single timestamp.",
+      "off_hours_activity": "No indication of off-hours activity since specific timestamps are not provided."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication patterns are observed with machine accounts accessing multiple systems, which is typical for service accounts.",
+      "lateral_movement": "No clear indication of lateral movement as the same source and destination accounts are used consistently.",
+      "privilege_escalation": "No signs of privilege escalation detected in the provided data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are instances of unspecified authentication types (?), which could be a point of concern if occurring frequently.",
+      "affected_entities": [
+        "C2123",
+        "C2180",
+        "C2426",
+        "C2442",
+        "C2446",
+        "C2450",
+        "C2559",
+        "C3692"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are authenticating across multiple systems, which is expected in domain environments for service accounts.",
+      "affected_accounts": [
+        "C2122$@DOM1",
+        "C2179$@DOM1",
+        "C2425$@DOM1",
+        "C2441$@DOM1",
+        "C2445$@DOM1",
+        "C2449$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events are paired with multiple accounts, indicating shared sessions or batch logoff operations.",
+      "affected_entities": [
+        "C625",
+        "C457",
+        "C612",
+        "C529",
+        "C528",
+        "C586",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The presence of unspecified authentication types and batch logoff operations are the primary anomalies.",
+      "deviation_details": "Unspecified authentication types and multiple logoffs in single events deviate from typical single-session logoff patterns."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around timestamp <276> to ensure no anomalies in timing or sequence.",
+    "behavioral_context": "Compare observed patterns with historical data to determine if the use of unspecified authentication types is normal.",
+    "permission_analysis": "Verify that machine accounts have legitimate access to the systems they are authenticating against.",
+    "ioc_checks": "Check for known attack patterns like Pass-the-Hash or Kerberoasting that might exploit unspecified authentication types."
+  },
+  "conclusion": {
+    "summary": "The analysis reveals typical domain authentication patterns with some anomalies in unspecified authentication types and batch logoff operations. These should be monitored but do not immediately indicate a compromise.",
+    "recommended_actions": "Investigate the use of unspecified authentication types to ensure they are not masking malicious activity. Monitor for any changes in authentication patterns that could indicate emerging threats."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": false,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

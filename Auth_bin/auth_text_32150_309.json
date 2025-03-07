@@ -1,0 +1,87 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers initiating authentication events include C624, C553, C988, C105, C1619, C1709, C574, C7, C832, C229, C1755, C1669, C1732, C2481, C1710, C1727, C1731, C1787, C1816, C113, C1798, C467, C1220, C2106, C101, C1085, C527, and C625. Notably, C1816 is associated with an ANONYMOUS LOGON, which is a potential risk indicator.",
+    "targets": {
+      "frequent_targets": [
+        "C988",
+        "C553"
+      ],
+      "sporadic_targets": [
+        "C599",
+        "C104",
+        "C567",
+        "C1708",
+        "C1881",
+        "C2106"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "Authentication events are clustered around a timestamp labeled <309> and <310>, indicating specific periods of high activity.",
+      "bursts": "No sudden spikes in authentication volume are evident beyond the clustered timestamps.",
+      "off_hours_activity": "The timestamps are not specified as business hours or off-hours, so further context is needed to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive authentication actions are observed from C553 and C988, involving multiple logon and logoff sequences.",
+      "lateral_movement": "Potential lateral movement is suggested by C527 with Kerberos logons to different destinations (C101 and C1085) in quick succession.",
+      "privilege_escalation": "No clear patterns of privilege escalation are evident from the data provided."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, NTLM used in some instances despite Kerberos being present.",
+      "affected_entities": [
+        "C1816"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts like C113$ and C1220$ are involved in multiple authentications, which could be typical for service accounts but should be verified.",
+      "affected_accounts": [
+        "C113$@DOM1",
+        "C1220$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "Multiple logon events without corresponding logoffs, particularly with C527 and C113$ indicating potential session persistence.",
+      "affected_entities": [
+        "C527",
+        "C113$@DOM1"
+      ]
+    },
+    "anomalies": {
+      "description": "ANONYMOUS LOGON and multiple machine account authentications are notable.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and machine accounts like C113$ authenticating to multiple systems could indicate abnormal behavior."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the sequence and timing of authentication events, particularly around timestamps <309> and <310>, to identify patterns of attack or lateral movement.",
+    "behavioral_context": "Compare the observed authentication patterns against historical baselines to determine deviations.",
+    "permission_analysis": "Verify if machine accounts like C113$ and C1220$ should have access to the systems they authenticated against.",
+    "ioc_checks": "Check for known attack techniques such as Pass-the-Hash or Kerberoasting, especially in cases where NTLM and Kerberos are both used."
+  },
+  "conclusion": {
+    "summary": "The authentication logs indicate potential risks associated with ANONYMOUS LOGON events and machine account activities, suggesting possible lateral movement and session persistence.",
+    "recommended_actions": "Investigate the ANONYMOUS LOGON event from C1816, review permissions and activities of machine accounts like C113$ and C1220$, and monitor for any signs of lateral movement or privilege escalation."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": false,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

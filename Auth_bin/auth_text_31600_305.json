@@ -1,0 +1,125 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "The source computers in this dataset include C2106, C467, C1085, C527, C586, C1484, C1641, C1795, C1878, C1923, C2180, C457, C1065, C529, C612, C2675, C2783, C2945, C3526, C3548, C3554, C3699, C3873, C516, C539, C553, and C574. Notably, C574 is initiating multiple authentications to various destinations, which may warrant further examination.",
+    "targets": {
+      "frequent_targets": [
+        "C2106",
+        "C467",
+        "C586",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C1085",
+        "C3395",
+        "C457",
+        "C553"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp, 305, indicating a possible batch processing or synchronized event execution.",
+      "bursts": "There are no distinct bursts as the events are uniformly distributed across the same timestamp.",
+      "off_hours_activity": "All activities are logged at the same timestamp, 305, which does not provide enough context to determine if they are outside business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive logon events are observed from C574 to multiple destinations, which could indicate automated scripts or batch processes.",
+      "lateral_movement": "The pattern of C574 accessing multiple systems (C1085, C2106, C467, C553) in rapid succession suggests potential lateral movement.",
+      "privilege_escalation": "No clear indication of privilege escalation based on the available data."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "The presence of unknown authentication types ('?') is noted, which could indicate misconfigured systems or logging issues.",
+      "affected_entities": [
+        "C2106",
+        "C467",
+        "C1085",
+        "C586",
+        "C1641",
+        "C2180",
+        "C457",
+        "C1065",
+        "C529",
+        "C612",
+        "C553"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts (ending with $) are authenticating frequently, which is typical for automated processes, but should be monitored for unusual patterns.",
+      "affected_accounts": [
+        "C1210$@DOM1",
+        "C1220$@DOM1",
+        "C123$@DOM1",
+        "C1351$@DOM1",
+        "C1484$@DOM1",
+        "C1641$@DOM1",
+        "C1794$@DOM1",
+        "C1878$@DOM1",
+        "C1923$@DOM1",
+        "C2179$@DOM1",
+        "C2545$@DOM1",
+        "C2674$@DOM1",
+        "C2783$@DOM1",
+        "C2945$@DOM1",
+        "C3526$@DOM1",
+        "C3548$@DOM1",
+        "C3554$@DOM1",
+        "C3699$@DOM1",
+        "C3873$@DOM1",
+        "C457$@DOM1",
+        "C538$@DOM1",
+        "C567$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOff events are consistently paired with LogOn events, indicating complete session cycles.",
+      "affected_entities": [
+        "C2106",
+        "C467",
+        "C1085",
+        "C586",
+        "C1641",
+        "C457",
+        "C1065",
+        "C529",
+        "C612",
+        "C553"
+      ]
+    },
+    "anomalies": {
+      "description": "The dataset shows a high volume of LogOn events from C574 to multiple destinations, which is unusual in a benign environment.",
+      "deviation_details": "C574's behavior of accessing multiple systems in a short timeframe is atypical and suggests automated or scripted access."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Review the timestamp 305 to understand its significance and whether it correlates with scheduled tasks or known batch processes.",
+    "behavioral_context": "Compare C574's authentication patterns with historical data to determine if this behavior is typical for this system.",
+    "permission_analysis": "Verify if the accounts used by C574 have legitimate access to all the systems it authenticated against.",
+    "ioc_checks": "Check for known indicators of compromise such as Pass-the-Hash or Kerberoasting, especially given the rapid succession of authentications by C574."
+  },
+  "conclusion": {
+    "summary": "The authentication events show a pattern of synchronized activity at timestamp 305, with C574 exhibiting unusual behavior by accessing multiple systems in rapid succession. This could indicate automated processes or potential lateral movement.",
+    "recommended_actions": "Investigate the purpose of C574's access to multiple systems and verify if these actions are authorized. Review system configurations for anomalies related to unknown authentication types."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": false
+  }
+}

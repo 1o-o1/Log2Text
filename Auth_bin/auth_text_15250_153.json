@@ -1,0 +1,95 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Computers such as C3147 are initiating multiple authentication events across different systems, suggesting potential lateral movement or credential usage across the network.",
+    "targets": {
+      "frequent_targets": [
+        "C457",
+        "C528",
+        "C529"
+      ],
+      "sporadic_targets": [
+        "C467",
+        "C586"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "The events are clustered around the timestamp '153', indicating a possible scripted or automated process.",
+      "bursts": "No significant bursts beyond the clustered timing were observed.",
+      "off_hours_activity": "The data does not specify exact timestamps, making it difficult to determine off-hours activity."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "C3147 shows repetitive authentication actions across multiple systems, which could indicate automated tasks or potential lateral movement.",
+      "lateral_movement": "C3147's authentication to multiple systems like C457, C528, C529, and C586 suggests possible lateral movement.",
+      "privilege_escalation": "No direct evidence of privilege escalation was observed, but the frequent cross-system authentications warrant further investigation."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "There are multiple instances of authentication events with unknown types, which could indicate misconfigured systems or attempts to obfuscate authentication methods.",
+      "affected_entities": [
+        "C467",
+        "C529",
+        "C457",
+        "C612",
+        "C528",
+        "C1065",
+        "C586",
+        "C1085",
+        "C988",
+        "C553"
+      ]
+    },
+    "account_patterns": {
+      "description": "Machine accounts are seen authenticating to multiple systems, which is unusual and might suggest compromised accounts or automated processes.",
+      "affected_accounts": [
+        "C2892$@DOM1",
+        "C3147$@DOM1",
+        "C2960$@DOM1",
+        "C3112$@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "The presence of LogOn events without corresponding LogOff events in some cases could indicate incomplete session handling or potential session hijacking.",
+      "affected_entities": [
+        "C3147",
+        "C1065"
+      ]
+    },
+    "anomalies": {
+      "description": "The authentication patterns exhibit deviations such as unknown authentication types and frequent cross-system authentications by single accounts.",
+      "deviation_details": "The use of unknown authentication types and the frequent authentications by C3147 across multiple systems are notable deviations."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Analyze the sequence of events around the timestamp '153' to identify any patterns of attack chains or automated processes.",
+    "behavioral_context": "Compare the observed patterns of C3147 with baseline behaviors to determine if this is typical for the environment.",
+    "permission_analysis": "Verify if accounts like C3147$@DOM1 and C2892$@DOM1 should have access to the systems they are authenticating to.",
+    "ioc_checks": "Check for known techniques such as Pass-the-Hash or Kerberoasting, especially given the use of NTLM and Kerberos in the environment."
+  },
+  "conclusion": {
+    "summary": "The authentication logs indicate potential anomalies such as unknown authentication types and lateral movement patterns, particularly involving C3147.",
+    "recommended_actions": "Investigate the activities of C3147 for potential lateral movement, review the use of unknown authentication types, and ensure proper session handling to prevent unauthorized access."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": false,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": true,
+    "machine_account_anomalies": true,
+    "multiple_accounts_single_source": false,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": false,
+    "incomplete_session_pairs": true
+  }
+}

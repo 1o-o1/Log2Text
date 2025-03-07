@@ -1,0 +1,164 @@
+{
+  "log_type": "Authentication",
+  "field_descriptions": {
+    "source_computer": "Computer initiating the authentication",
+    "destination_computer": "Target computer for authentication",
+    "auth_type": "Authentication protocol used (Kerberos, NTLM, etc.)",
+    "logon_type": "Type of logon (Network, Interactive, etc.)",
+    "times": "Timestamp(s) of authentication events",
+    "source_users": "User account(s) originating the authentication",
+    "destination_users": "User account(s) targeted for authentication",
+    "orientations": "Authentication operation (LogOn, LogOff, TGS, TGT)",
+    "statuses": "Outcome of authentication attempt (Success, Failure)"
+  },
+  "observations": {
+    "source_actor": "Several computers such as C7097, C1697, C1065, C280, C17693, C9643, C317, C586, C10254, C528, C625, C217, C12951, C12920, C13179, C13916, C14069, C3034, C14670, C2707, C1669, C61, C1795, C527, C1727, C1731, C3322, C1874, C1115, C1619, C457 are initiating authentication events. Notably, C457 is associated with ANONYMOUS LOGON, which is suspicious.",
+    "targets": {
+      "frequent_targets": [
+        "C2327",
+        "C7097",
+        "C1697",
+        "C1065",
+        "C3173",
+        "C586",
+        "C467",
+        "C528",
+        "C625",
+        "C217",
+        "C2327",
+        "C625",
+        "C3173",
+        "C14069",
+        "C3034",
+        "C801",
+        "C1881",
+        "C1669",
+        "C61",
+        "C1794",
+        "C123",
+        "C1640",
+        "C2516",
+        "C10",
+        "C1874",
+        "C1114",
+        "C599",
+        "C457"
+      ],
+      "sporadic_targets": [
+        "C2914",
+        "C317",
+        "C12951",
+        "C12920",
+        "C13179",
+        "C13916",
+        "C14670",
+        "C2707",
+        "C1727",
+        "C1731",
+        "C3322",
+        "C1115",
+        "C1619"
+      ]
+    },
+    "temporal_patterns": {
+      "clusters": "All events are clustered around the same timestamp <754921>, indicating potential batch processing or scripted activity.",
+      "bursts": "No distinct bursts detected beyond the clustered timestamp.",
+      "off_hours_activity": "All events occur at the same timestamp, suggesting activity outside normal business hours."
+    },
+    "behavioral_patterns": {
+      "repetitive_actions": "Repetitive TGS and TGT requests from systems like C7097, C12951, C13179, C14069, C1795, C527, C1727, C1874, indicating potential ticket harvesting.",
+      "lateral_movement": "Sequential authentication events from multiple sources to multiple destinations suggest lateral movement, especially with TGS/TGT patterns.",
+      "privilege_escalation": "No direct evidence of privilege escalation, but repetitive TGS/TGT requests could indicate preparation for such actions."
+    }
+  },
+  "potential_indicators": {
+    "suspicious_auth_types": {
+      "description": "ANONYMOUS LOGON detected, and unspecified authentication types used in multiple events.",
+      "affected_entities": [
+        "C457",
+        "C7097",
+        "C1697",
+        "C1065",
+        "C586",
+        "C528",
+        "C625",
+        "C217",
+        "C14069",
+        "C3034",
+        "C1669",
+        "C1795",
+        "C527",
+        "C1727",
+        "C1731",
+        "C1874"
+      ]
+    },
+    "account_patterns": {
+      "description": "Multiple accounts such as U2497, U24, U251, U314, U3696, U394, U4700, U4749, U5051, U5276, U5466, U5632, U6039, U6230, U6282, U6502, U658, U65, U66, U6730, U78, U79, U8406, U88, U9237 are showing rapid authentication attempts across various systems.",
+      "affected_accounts": [
+        "U2497@DOM1",
+        "U24@DOM1",
+        "U251@DOM1",
+        "U314@DOM1",
+        "U3696@DOM1",
+        "U394@DOM1",
+        "U4700@DOM1",
+        "U4749@DOM1",
+        "U5051@DOM1",
+        "U5276@DOM1",
+        "U5466@DOM1",
+        "U5632@DOM1",
+        "U6039@DOM1",
+        "U6230@DOM1",
+        "U6282@DOM1",
+        "U6502@DOM1",
+        "U658@DOM1",
+        "U65@C1669",
+        "U66@DOM1",
+        "U6730@DOM1",
+        "U78@DOM1",
+        "U79@C1731",
+        "U8406@DOM1",
+        "U88@DOM1",
+        "U9237@DOM1"
+      ]
+    },
+    "logon_logoff_sequences": {
+      "description": "LogOn events without corresponding LogOff events detected, especially with TGS/TGT requests.",
+      "affected_entities": [
+        "C7097",
+        "C12951",
+        "C13179",
+        "C14069",
+        "C1795",
+        "C527",
+        "C1727",
+        "C1874"
+      ]
+    },
+    "anomalies": {
+      "description": "High volume of authentication events with unspecified types and ANONYMOUS LOGON detected.",
+      "deviation_details": "The presence of ANONYMOUS LOGON and unspecified authentication types deviates from expected secure authentication practices."
+    }
+  },
+  "next_steps_for_validation": {
+    "temporal_correlation": "Investigate the clustered timestamp <754921> to determine if these events are part of a coordinated attack or automated script.",
+    "behavioral_context": "Compare current authentication patterns against historical baseline data to identify deviations.",
+    "permission_analysis": "Verify the permissions of accounts involved in TGS/TGT requests to ensure they have legitimate access to the requested resources.",
+    "ioc_checks": "Perform checks for known attack techniques such as Pass-the-Hash or Kerberoasting, given the TGS/TGT activity."
+  },
+  "conclusion": {
+    "summary": "The authentication logs reveal several anomalies, including ANONYMOUS LOGON events, unspecified authentication types, and repetitive TGS/TGT requests, suggesting potential lateral movement and credential harvesting. These patterns indicate a high risk of compromise.",
+    "recommended_actions": "Immediate investigation of ANONYMOUS LOGON events and unspecified authentication types is recommended. Review and restrict permissions for accounts involved in suspicious TGS/TGT requests. Implement monitoring for unusual authentication patterns and consider deploying additional security measures such as multi-factor authentication."
+  },
+  "high_risk_indicators": {
+    "anonymous_logon_detected": true,
+    "unknown_auth_type": true,
+    "ntlm_in_kerberos_env": false,
+    "machine_account_anomalies": false,
+    "multiple_accounts_single_source": true,
+    "lateral_movement_indicators": true,
+    "excessive_ticket_requests": true,
+    "incomplete_session_pairs": true
+  }
+}
