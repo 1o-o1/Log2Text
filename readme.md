@@ -1,6 +1,6 @@
 # DeepSeek GRPO for Authentication Analysis
 
-This project implements a memory-optimized version of DeepSeek's GRPO (Generative Reinforcement from Preference Optimization) for fine-tuning LLMs to analyze authentication logs. The implementation is specifically designed to work on machines with limited GPU memory (8GB) and moderate RAM (16GB).
+This project implements a memory-optimized version of DeepSeek's GRPO (Generative Reinforcement from Preference Optimization) for fine-tuning LLMs to analyze authentication logs. The implementation is specifically designed to work on machines with limited GPU memory (8GB) and moderate RAM (32GB).
 
 ## Training Pipeline Overview
 
