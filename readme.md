@@ -7,53 +7,98 @@ This project implements a memory-optimized version of DeepSeek's GRPO (Generativ
 The training pipeline follows the GRPO methodology with memory optimizations:
 
 ```mermaid
+
 flowchart TD
+    %% Main flow
     start([Start]) --> config[Load Configuration]
-    config --> tokenizer[Initialize Tokenizer]
-    tokenizer --> data_proc[Initialize Data Processor]
+    config --> tokenizer["Initialize DeepSeek Tokenizer"]
+    tokenizer --> data_proc["Initialize Data Processor\nAuth logs + JSON annotations"]
     
-    subgraph SFT["Supervised Fine-Tuning SFT"]
-        sft_data[Prepare SFT Dataset] --> sft_model[Load Base Model]
-        sft_model --> add_lora1[Add LoRA Adapter]
-        add_lora1 --> sft_train[Train with Custom Loop]
-        sft_train -->|"Loss Tracking"| sft_log["Log: avg_epoch_loss"]
-        sft_train --> sft_save[Save SFT Model]
+    %%Memory optimization techniques - global
+    mem_opt[/"Memory Optimization Techniques"/]
+    mem_opt --> quant["4-bit Quantization\nbnb_4bit_use_double_quant=True\nbnb_4bit_quant_type=nf4"]
+    mem_opt --> lora["LoRA with small rank (r=4)\ntarget_modules=q_proj,k_proj,v_proj,o_proj"]
+    mem_opt --> dev_map["Mixed Device Mapping\nCritical layers on GPU\nOther layers on CPU"]
+    mem_opt --> gc["Aggressive GPU Clearing\ngc.collect()\ntorch.cuda.empty_cache()"]
+    mem_opt --> seq_len["Reduced Sequence Length\nmax_seq_length=1024"]
+    
+    %% SFT training section
+    subgraph SFT["Supervised Fine-Tuning (SFT)"]
+        sft_data["Prepare SFT Dataset\nAuth logs + expert annotations"] --> sft_model["Load 4-bit Quantized Base Model\nDeepSeek-8B"]
+        sft_model --> add_lora1["Add LoRA Adapter\nrank=4, target=attention layers"]
+        add_lora1 --> sft_train["Custom Training Loop\nGradient Accumulation Steps=16\nBatch Size=1"]
+        sft_train --> sft_opt["Adafactor Optimizer\nlr=2e-5\nscale_parameter=False\nrelative_step=False"]
+        sft_opt --> sft_loss["Causal LM Loss\noutputs = model(**batch)\nloss = outputs.loss / accumulation_steps"]
+        sft_loss --> sft_track["Loss Tracking\nepoch_loss += loss.item() * accumulation_steps\navg_epoch_loss = epoch_loss / steps"]
+        sft_track --> sft_cache["GPU Memory Clearing\nEvery 5 steps\nclear_gpu_memory()"]
+        sft_cache --> sft_save["Save LoRA Adapter\nmodel.save_pretrained()"]
     end
     
+    %% Reward Model training section
     subgraph RM["Reward Model Training"]
-        pref_data[Prepare Preference Dataset] --> mem_check{Memory Check}
-        mem_check -->|"Sufficient"| rm_model[Load Base Model]
-        mem_check -->|"Limited"| alt_rm[Create Alternative Model]
+        pref_data["Prepare Preference Dataset\nChosen/Rejected Pairs"] --> mem_check{"Memory Check\n≥ 7GB?"}
+        mem_check -->|"Yes"| rm_model["Load Classification Model\nmodel_type='seq_cls'\nnum_labels=1"]
+        mem_check -->|"No"| alt_rm["Alternative Reward Model\nmetadata-based heuristic\npositive keywords: suspicious, anomalous\nnegative keywords: benign, legitimate"]
         
-        rm_model --> add_lora2[Add LoRA Adapter]
-        add_lora2 --> rm_train[Train with Bradley-Terry]
-        rm_train -->|"Loss Tracking"| rm_log["Log: avg_loss"]
-        rm_train --> rm_save[Save Reward Model]
+        rm_model --> add_lora2["Add LoRA Adapter\ntask_type=TaskType.SEQ_CLS"]
+        add_lora2 --> rm_batch["Chunk Processing\nchunk_size=4\nProcess items individually"]
+        rm_batch --> rm_opt["AdamW Optimizer\nlr=2e-5\nweight_decay=0.01"]
+        rm_opt --> rm_loss["Bradley-Terry Loss\n-torch.log(sigmoid(chosen_rewards - rejected_rewards))\nloss = loss.mean() / grad_acc_steps"]
+        rm_loss --> rm_track["Loss Tracking\nepoch_loss += loss.item() * grad_acc_steps\navg_loss = epoch_loss / num_batches"]
+        rm_track --> rm_free["Explicit Memory Freeing\ndel tensors after each item"]
+        rm_free --> rm_save["Save Reward Model"]
         
         alt_rm --> rm_save
     end
     
-    subgraph RL["Reinforcement Learning"]
-        rl_data[Load High-Quality Examples] --> load_sft[Load SFT Model]
-        load_sft --> add_lora3[Add LoRA Adapter]
-        add_lora3 --> direct_ft[Simplified PPO]
-        direct_ft -->|"Loss Tracking"| rl_log["Log: avg_loss"]
-        direct_ft --> rl_save[Save RL Model]
+    %% RL training section
+    subgraph RL["Reinforcement Learning (Simplified PPO)"]
+        rl_data["Load High-Quality Examples\nmax_samples=20"] --> load_sft["Load SFT Model with Adapter"]
+        load_sft --> add_lora3["Load LoRA Adapter\nFallback to new adapter if loading fails"]
+        add_lora3 --> rl_batch["Minimal Batch Processing\nbatch_size=1\naccumulation_steps=4"]
+        rl_batch --> rl_opt["Adafactor with Reduced LR\nlr=learning_rate/2\nscale_parameter=False"]
+        rl_opt --> rl_limit["Limited Training Steps\nsteps=50\nRobust batch processing with try-except"]
+        rl_limit --> rl_loss["Policy Optimization\noutputs = model(**batch)\nloss = outputs.loss / accumulation_steps"]
+        rl_loss --> rl_track["Loss Tracking\ntotal_loss += loss.item() * accumulation_steps\navg_loss = total_loss / step"]
+        rl_track --> rl_save["Save RL Model"]
     end
     
+    %% Inference section
+    subgraph INFER["Inference"]
+        infer_input["Authentication Data Input"] --> model_check{"Model\nAvailability\nCheck"}
+        model_check -->|"RL exists"| use_rl["Use RL Model"]
+        model_check -->|"RL missing"| use_sft["Fallback to SFT Model"]
+        model_check -->|"Both missing"| use_base["Fallback to Base Model"]
+        
+        use_rl --> infer_gen["Generation with Parameters\ntemperature=0.2\ntop_p=0.9\nrepetition_penalty=1.2"]
+        use_sft --> infer_gen
+        use_base --> infer_gen
+        
+        infer_gen --> json_extract["JSON Extraction\nCleanup for valid JSON\nFix trailing commas, nested quotes"]
+        json_extract --> output["Output Structured\nAuthentication Analysis"]
+    end
+    
+    %% Connect main sections
     data_proc --> SFT
     SFT --> RM
     RM --> RL
+    RL --> INFER
     
-    RL --> model_ready([Trained Model Ready])
+    %% Connect memory optimization to relevant parts
+    mem_opt -.-> SFT
+    mem_opt -.-> RM
+    mem_opt -.-> RL
     
-    model_ready --> inference[Run Inference]
-    
-    classDef memory fill:#f9f,stroke:#333,stroke-width:1px;
-    class mem_check memory;
+    %% Styling
+    classDef memoryOpt fill:#f9f,stroke:#333,stroke-width:1px;
+    class mem_opt,quant,lora,dev_map,gc,seq_len memoryOpt;
     
     classDef losses fill:#bbf,stroke:#333,stroke-width:1px;
-    class sft_log,rm_log,rl_log losses;
+    class sft_loss,rm_loss,rl_loss losses;
+    
+    classDef fallbacks fill:#fdd,stroke:#333,stroke-width:1px;
+    class alt_rm,use_sft,use_base fallbacks;
+
 ```
 
 ### Training Steps
