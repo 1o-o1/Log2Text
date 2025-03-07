@@ -15,12 +15,12 @@ flowchart TD
     tokenizer --> data_proc["Initialize Data Processor\nAuth logs + JSON annotations"]
     
     %%Memory optimization techniques - global
-    mem_opt[/"Memory Optimization Techniques"/]
-    mem_opt --> quant["4-bit Quantization\nbnb_4bit_use_double_quant=True\nbnb_4bit_quant_type=nf4"]
-    mem_opt --> lora["LoRA with small rank (r=4)\ntarget_modules=q_proj,k_proj,v_proj,o_proj"]
-    mem_opt --> dev_map["Mixed Device Mapping\nCritical layers on GPU\nOther layers on CPU"]
-    mem_opt --> gc["Aggressive GPU Clearing\ngc.collect()\ntorch.cuda.empty_cache()"]
-    mem_opt --> seq_len["Reduced Sequence Length\nmax_seq_length=1024"]
+    %% mem_opt[/"Memory Optimization Techniques"/]
+    %% mem_opt --> quant["4-bit Quantization\nbnb_4bit_use_double_quant=True\nbnb_4bit_quant_type=nf4"]
+    %% mem_opt --> lora["LoRA with small rank (r=4)\ntarget_modules=q_proj,k_proj,v_proj,o_proj"]
+    %% mem_opt --> dev_map["Mixed Device Mapping\nCritical layers on GPU\nOther layers on CPU"]
+    %% mem_opt --> gc["Aggressive GPU Clearing\ngc.collect()\ntorch.cuda.empty_cache()"]
+    %% mem_opt --> seq_len["Reduced Sequence Length\nmax_seq_length=1024"]
     
     %% SFT training section
     subgraph SFT["Supervised Fine-Tuning (SFT)"]
@@ -98,6 +98,7 @@ flowchart TD
     
     classDef fallbacks fill:#fdd,stroke:#333,stroke-width:1px;
     class alt_rm,use_sft,use_base fallbacks;
+
 
 ```
 
