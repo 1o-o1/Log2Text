@@ -2,6 +2,7 @@ import os
 import json
 import torch
 import logging
+import re
 from config import JSON_SCHEMA_SHORT, load_full_schema
 from model_utils import load_tokenizer, load_adapter_model, clear_gpu_memory
 
@@ -247,15 +248,13 @@ Each field should contain your specific observations and findings from the authe
         clear_gpu_memory()
         
         print(response)
-        # Extract thinking process
+        # Extract thinking process enclosed in <THINKING>...</THINKING> tags
         thinking = ""
-        thinking_start = response.find("</think>")
-        thinking_end = response.find("</think>")
-        
-        if thinking_start != -1 and thinking_end != -1 and thinking_end > thinking_start:
-            thinking = response[thinking_start+10:thinking_end].strip()
-            # Remove the thinking part from the response for JSON parsing
-            response = response[:thinking_start] + response[thinking_end+11:]
+        match = re.search(r"<THINKING>(.*?)</THINKING>", response, re.IGNORECASE | re.DOTALL)
+        if match:
+            thinking = match.group(1).strip()
+            # Remove the thinking section from the response before JSON parsing
+            response = response.replace(match.group(0), "")
         
         # Extract JSON part
         result = self._extract_json(response, thinking)
